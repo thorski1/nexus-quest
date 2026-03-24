@@ -1678,6 +1678,551 @@ ZONES = {
     },
 }
 
+    "environment_chamber": {
+        "id": "environment_chamber",
+        "name": "The Environment Chamber",
+        "subtitle": "Secrets stored in the shell",
+        "color": "green",
+        "icon": "🔑",
+        "commands": ["echo $VAR", "export", "env", "unset", "PATH", "$HOME"],
+        "challenges": [
+            {
+                "id": "env_1",
+                "type": "quiz",
+                "title": "Read the Signal",
+                "flavor": "Every NEXUS Corp process inherits a set of variables when it starts. Credentials, service endpoints, API keys — all sitting in memory. The first step is learning to read them.",
+                "lesson": (
+                    "Environment variables are named values available to every process in the shell session.\n\n"
+                    "Access a variable with the $ prefix:\n"
+                    "  echo $HOME        → /home/ghost\n"
+                    "  echo $USER        → ghost\n"
+                    "  echo $SHELL       → /bin/bash\n\n"
+                    "Variable names are case-sensitive. Convention: use ALL_CAPS for environment variables.\n\n"
+                    "Example: echo $HOME    → prints the path to your home directory"
+                ),
+                "question": "What syntax do you use to read the value of an environment variable named HOME?",
+                "answers": ["$HOME", "echo $HOME"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "You prefix the variable name with a special character.",
+                    "The character is $.",
+                    "The answer is: $HOME",
+                ],
+            },
+            {
+                "id": "env_2",
+                "type": "quiz",
+                "title": "Expose the Environment",
+                "flavor": "You need to dump the entire runtime environment of the compromised service. One command prints every environment variable currently set in the shell.",
+                "lesson": (
+                    "env — prints all environment variables currently set in the shell.\n\n"
+                    "Syntax: env\n\n"
+                    "Each line is NAME=VALUE. Useful for:\n"
+                    "  - Auditing what secrets are loaded in a running process\n"
+                    "  - Debugging why a program can't find a dependency\n"
+                    "  - Viewing what a containerized service inherited at startup\n\n"
+                    "Related commands:\n"
+                    "  printenv         → similar to env, can query a single variable\n"
+                    "  printenv HOME    → prints only the value of HOME\n\n"
+                    "Example: env    → lists all NAME=VALUE pairs"
+                ),
+                "question": "What command prints all environment variables currently set in the shell?",
+                "answers": ["env", "printenv"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's a three-letter command.",
+                    "Think: environment.",
+                    "The answer is: env",
+                ],
+            },
+            {
+                "id": "env_3",
+                "type": "quiz",
+                "title": "Export the Signal",
+                "flavor": "You need a variable to persist into child processes — the service you're about to spawn needs to inherit the credential. Setting a variable alone isn't enough.",
+                "lesson": (
+                    "export — marks a shell variable so it is inherited by child processes.\n\n"
+                    "Without export: a variable exists only in the current shell.\n"
+                    "With export: the variable is placed in the environment and inherited by any\n"
+                    "process started from this shell.\n\n"
+                    "Syntax:\n"
+                    "  export VAR=value          → define and export in one step\n"
+                    "  VAR=value; export VAR     → define first, then export\n\n"
+                    "Example:\n"
+                    "  export API_KEY=abc123\n"
+                    "  → any subprocess you start will see API_KEY=abc123 in its environment"
+                ),
+                "question": "What command makes a shell variable available to child processes?",
+                "answers": ["export"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "You're making the variable available outside the current shell.",
+                    "Think: export — send outward.",
+                    "The answer is: export",
+                ],
+            },
+            {
+                "id": "env_4",
+                "type": "quiz",
+                "title": "Scrub the Leak",
+                "flavor": "The credential is no longer needed. Leaving it in the environment is a liability — any subprocess spawned from this shell could read it. Remove it.",
+                "lesson": (
+                    "unset — removes a variable from the shell environment entirely.\n\n"
+                    "Syntax: unset VARIABLE_NAME\n\n"
+                    "Note: do NOT use $ when unsetting a variable. You reference the name, not the value.\n\n"
+                    "  unset API_KEY    → removes API_KEY from the environment\n"
+                    "  echo $API_KEY    → now prints nothing (empty string)\n\n"
+                    "Use unset when:\n"
+                    "  - A secret should not outlive the operation that needed it\n"
+                    "  - You want to clear a variable that was incorrectly set\n"
+                    "  - Cleaning up a shell session before spawning sensitive subprocesses"
+                ),
+                "question": "What command removes an environment variable from the current shell?",
+                "answers": ["unset"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: undo the set.",
+                    "It's one word.",
+                    "The answer is: unset",
+                ],
+            },
+            {
+                "id": "env_5",
+                "type": "flag_quiz",
+                "title": "The Execution Path",
+                "flavor": "NEXUS Corp's compromised host has a custom binary in /opt/nexus/bin that the attacker planted. It runs because that directory is on the PATH. You need to understand how PATH works.",
+                "lesson": (
+                    "PATH — a colon-separated list of directories the shell searches for executables.\n\n"
+                    "When you type a command, the shell searches each directory in PATH, left to right,\n"
+                    "until it finds a matching executable.\n\n"
+                    "  echo $PATH    → /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\n\n"
+                    "To prepend a directory (making it take priority over system paths):\n"
+                    "  export PATH=/opt/nexus/bin:$PATH\n\n"
+                    "This is how attackers plant backdoors: add their directory first.\n"
+                    "  which python3     → shows which binary PATH resolves to\n"
+                    "  type python3      → also shows the resolved path"
+                ),
+                "question": "What environment variable tells the shell where to find executable programs?",
+                "answers": ["PATH", "$PATH", "echo $PATH"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It's a variable the shell checks every time you run a command.",
+                    "It's four capital letters.",
+                    "The answer is: PATH",
+                ],
+            },
+            {
+                "id": "env_boss",
+                "type": "quiz",
+                "title": "BOSS: The Credential in the Open",
+                "flavor": "Ghost has found it. Buried in the environment of a long-running service process on NEXUS Corp's application server: a database credential stored in plain text as an environment variable. The kind of thing that gets written into systemd service files and forgotten. What variable commonly holds database connection strings or secrets in production systems?",
+                "lesson": (
+                    "Production systems frequently store secrets in environment variables.\n\n"
+                    "Common patterns you'll encounter in real infrastructure:\n"
+                    "  DATABASE_URL=postgres://user:password@host:5432/dbname\n"
+                    "  SECRET_KEY=...          → Django/Flask signing key\n"
+                    "  AWS_ACCESS_KEY_ID=...   → AWS credentials\n"
+                    "  API_KEY=...             → third-party API access\n\n"
+                    "Auditing a running process's environment:\n"
+                    "  cat /proc/<PID>/environ | tr '\\0' '\\n'\n"
+                    "    → reads the actual environment of a running process from /proc\n"
+                    "    → \\0-delimited, so tr converts to newlines for readability\n\n"
+                    "This is a real attack vector. Container breakouts, compromised\n"
+                    "systemd units, and supply chain attacks all target env vars.\n"
+                    "The audit: run env, read /proc/<PID>/environ, know what's exposed."
+                ),
+                "question": "What is the common environment variable used to store a database connection string in production services?",
+                "answers": ["DATABASE_URL", "DB_URL", "DATABASE_URI"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It's a widely adopted convention in web frameworks and 12-factor apps.",
+                    "It usually starts with DATABASE.",
+                    "The answer is: DATABASE_URL",
+                ],
+            },
+        ],
+    },
+
+    "text_processing_forge": {
+        "id": "text_processing_forge",
+        "name": "The Text Processing Forge",
+        "subtitle": "Shape data with cut, sort, uniq, and wc",
+        "color": "yellow",
+        "icon": "⚙",
+        "commands": ["wc", "sort", "uniq", "cut"],
+        "challenges": [
+            {
+                "id": "text_1",
+                "type": "quiz",
+                "title": "Count the Lines",
+                "flavor": "The exfiltrated log file is enormous. Before processing it you need to know exactly how many entries you're dealing with. One command counts lines, words, and bytes.",
+                "lesson": (
+                    "wc — word count — counts lines, words, and bytes in a file.\n\n"
+                    "Syntax: wc [flags] [file]\n\n"
+                    "Flags:\n"
+                    "  -l   count lines\n"
+                    "  -w   count words\n"
+                    "  -c   count bytes\n"
+                    "  -m   count characters\n\n"
+                    "Examples:\n"
+                    "  wc -l access.log        → 48302 access.log\n"
+                    "  wc -l < access.log      → 48302  (no filename in output)\n"
+                    "  cat access.log | wc -l  → 48302  (common in pipelines)"
+                ),
+                "question": "What flag do you pass to wc to count only lines?",
+                "answers": ["-l", "wc -l"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's a single-letter flag.",
+                    "Think: lines.",
+                    "The answer is: -l",
+                ],
+            },
+            {
+                "id": "text_2",
+                "type": "quiz",
+                "title": "Alphabetical Order",
+                "flavor": "The intercepted NEXUS Corp user list is a jumbled mess. To deduplicate it you first need to bring order to the chaos. What command sorts lines of text?",
+                "lesson": (
+                    "sort — sorts lines of text alphabetically (or numerically with -n).\n\n"
+                    "Syntax: sort [flags] [file]\n\n"
+                    "Flags:\n"
+                    "  -r   reverse order (Z→A or largest→smallest)\n"
+                    "  -n   numeric sort (treats content as numbers)\n"
+                    "  -u   unique: output each distinct value once (combines sort + uniq)\n"
+                    "  -k   sort by a specific field (column)\n"
+                    "  -t   field delimiter for -k\n\n"
+                    "Examples:\n"
+                    "  sort users.txt              → alphabetical\n"
+                    "  sort -rn response_times.txt → largest numbers first"
+                ),
+                "question": "What command sorts lines of a text file alphabetically?",
+                "answers": ["sort"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The command name matches exactly what it does.",
+                    "It's four letters.",
+                    "The answer is: sort",
+                ],
+            },
+            {
+                "id": "text_3",
+                "type": "flag_quiz",
+                "title": "Reverse the Sort",
+                "flavor": "The NEXUS Corp error log has timestamps at the front of each line. You want the most recent entries first. Sort in reverse.",
+                "lesson": (
+                    "sort -r — sorts in reverse order.\n\n"
+                    "For text: Z before A.\n"
+                    "For numbers (with -rn): largest first.\n\n"
+                    "Useful patterns:\n"
+                    "  sort -r file.txt             → reverse alphabetical\n"
+                    "  sort -rn numbers.txt          → largest number first\n"
+                    "  sort -t: -k3 -rn /etc/passwd  → sort by UID descending\n\n"
+                    "In investigations: sort -r on timestamp-prefixed logs gives you\n"
+                    "the most recent entries first, without grep or awk."
+                ),
+                "question": "What flag reverses the order of sort output?",
+                "answers": ["-r", "sort -r"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "One letter.",
+                    "Think: reverse.",
+                    "The answer is: -r",
+                ],
+            },
+            {
+                "id": "text_4",
+                "type": "quiz",
+                "title": "Filter Duplicates",
+                "flavor": "After sorting the user list you can see hundreds of duplicate entries. The monitoring system logged every login, but you only need to know which unique accounts accessed the system.",
+                "lesson": (
+                    "uniq — filters out adjacent duplicate lines.\n\n"
+                    "Critical: uniq only removes ADJACENT duplicates.\n"
+                    "You must sort first if you want to deduplicate across the whole file.\n\n"
+                    "Syntax: uniq [flags] [file]\n\n"
+                    "Flags:\n"
+                    "  -c   prefix each line with count of occurrences\n"
+                    "  -d   print only duplicate lines (lines that appear more than once)\n"
+                    "  -u   print only unique lines (lines that appear exactly once)\n\n"
+                    "Classic pipeline:\n"
+                    "  sort users.txt | uniq          → deduplicated list\n"
+                    "  sort users.txt | uniq -c       → count of each unique entry\n"
+                    "  sort users.txt | uniq -c | sort -rn   → most frequent first"
+                ),
+                "question": "What command filters out adjacent duplicate lines from sorted input?",
+                "answers": ["uniq"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "It stands for 'unique'.",
+                    "It's four letters.",
+                    "The answer is: uniq",
+                ],
+            },
+            {
+                "id": "text_5",
+                "type": "flag_quiz",
+                "title": "Extract the Field",
+                "flavor": "The /etc/passwd file has user data in colon-separated fields. You need only the first field — the usernames. cut can extract a specific column from delimited text.",
+                "lesson": (
+                    "cut — extracts specific fields (columns) from each line of text.\n\n"
+                    "Syntax: cut [flags] [file]\n\n"
+                    "Key flags:\n"
+                    "  -d DELIM   set the field delimiter (default is tab)\n"
+                    "  -f N       select field number N (1-indexed)\n"
+                    "  -c N       select character position N\n\n"
+                    "Examples:\n"
+                    "  cut -d: -f1 /etc/passwd          → usernames only\n"
+                    "  cut -d: -f1,3 /etc/passwd        → username and UID\n"
+                    "  cut -d, -f2 report.csv           → second CSV column\n"
+                    "  echo 'a:b:c' | cut -d: -f2      → b\n\n"
+                    "Real use: extract structured fields from logs, /etc/passwd,\n"
+                    "CSV exports, and delimiter-separated config files."
+                ),
+                "question": "What flag combination extracts the first colon-delimited field using cut?",
+                "answers": ["-d: -f1", "-d: -f 1", "cut -d: -f1"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "You need two flags: one sets the delimiter, one selects the field.",
+                    "-d sets the delimiter, -f selects the field number.",
+                    "The answer is: -d: -f1",
+                ],
+            },
+            {
+                "id": "text_boss",
+                "type": "quiz",
+                "title": "BOSS: Unique Username Extraction",
+                "flavor": "Ghost needs to extract a clean list of all unique usernames from /etc/passwd on the compromised NEXUS Corp server. The file uses colons as delimiters. The first field is the username. There will be duplicates in the output after joining multiple /etc/passwd files from different nodes. Build the pipeline.",
+                "lesson": (
+                    "Combining cut, sort, and uniq — a real production pipeline.\n\n"
+                    "Goal: extract unique usernames from /etc/passwd\n\n"
+                    "Step-by-step:\n"
+                    "  1. cut -d: -f1 /etc/passwd      → get only the first field (username)\n"
+                    "  2. | sort                        → bring duplicates adjacent\n"
+                    "  3. | uniq                        → remove duplicates\n\n"
+                    "Full command:\n"
+                    "  cut -d: -f1 /etc/passwd | sort | uniq\n\n"
+                    "Variant with count:\n"
+                    "  cut -d: -f1 /etc/passwd | sort | uniq -c | sort -rn\n"
+                    "  → shows which usernames appear most often (useful for detecting\n"
+                    "    merged /etc/passwd files or provisioning anomalies)"
+                ),
+                "question": "What pipeline extracts unique usernames (first field) from /etc/passwd?",
+                "answers": [
+                    "cut -d: -f1 /etc/passwd | sort | uniq",
+                    "cut -d: -f1 /etc/passwd | sort -u",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "You need cut (to extract field 1), sort (to group duplicates), and uniq (to remove them).",
+                    "The delimiter is colon and you want field 1.",
+                    "The answer is: cut -d: -f1 /etc/passwd | sort | uniq",
+                ],
+            },
+        ],
+    },
+
+    "stream_editor_lab": {
+        "id": "stream_editor_lab",
+        "name": "The Stream Editor Lab",
+        "subtitle": "Transform text at scale",
+        "color": "magenta",
+        "icon": "✦",
+        "commands": ["sed", "awk"],
+        "challenges": [
+            {
+                "id": "sed_1",
+                "type": "quiz",
+                "title": "Global Substitution",
+                "flavor": "NEXUS Corp's log files have a hardcoded hostname that was changed six months ago. You need to update ten thousand log entries. sed can replace every occurrence on every line in one pass.",
+                "lesson": (
+                    "sed 's/old/new/g' — stream editor: substitute 'old' with 'new' globally.\n\n"
+                    "Syntax: sed 's/PATTERN/REPLACEMENT/FLAGS' [file]\n\n"
+                    "The s command: substitute\n"
+                    "  s/old/new/     → replace first occurrence per line\n"
+                    "  s/old/new/g    → replace ALL occurrences per line (global)\n"
+                    "  s/old/new/i    → case-insensitive match\n"
+                    "  s/old/new/2    → replace only the 2nd occurrence per line\n\n"
+                    "To edit in-place (modify the file directly):\n"
+                    "  sed -i 's/old/new/g' file.txt\n"
+                    "  sed -i.bak 's/old/new/g' file.txt   → save backup as file.txt.bak\n\n"
+                    "Example: sed 's/ERROR/WARN/g' app.log    → replaces every ERROR with WARN"
+                ),
+                "question": "What sed command replaces all occurrences of 'ERROR' with 'CRITICAL' in every line?",
+                "answers": ["sed 's/ERROR/CRITICAL/g'", "s/ERROR/CRITICAL/g"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The s command does substitution. The g flag makes it global.",
+                    "Format: sed 's/FIND/REPLACE/g'",
+                    "The answer is: sed 's/ERROR/CRITICAL/g'",
+                ],
+            },
+            {
+                "id": "sed_2",
+                "type": "flag_quiz",
+                "title": "Print Specific Lines",
+                "flavor": "The log file is 100,000 lines. You only want to see specific lines — not the whole file. sed with -n suppresses default output and p prints only what you select.",
+                "lesson": (
+                    "sed -n 'p' — suppress default output and print only selected lines.\n\n"
+                    "By default, sed prints every line. -n suppresses this.\n"
+                    "Combined with p or a line address, you print only what you want.\n\n"
+                    "Address syntax:\n"
+                    "  sed -n '5p'         → print line 5 only\n"
+                    "  sed -n '5,10p'      → print lines 5 through 10\n"
+                    "  sed -n '/ERROR/p'   → print lines matching ERROR (like grep)\n"
+                    "  sed -n '$p'         → print the last line\n\n"
+                    "Combining with tail/head alternative:\n"
+                    "  sed -n '100,200p' large.log   → extracts lines 100-200\n"
+                    "  → useful when head/tail's line count isn't precise enough"
+                ),
+                "question": "What flag suppresses sed's default output so you can print only specific lines?",
+                "answers": ["-n", "sed -n"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's a single-letter flag.",
+                    "Think: no output by default.",
+                    "The answer is: -n",
+                ],
+            },
+            {
+                "id": "sed_3",
+                "type": "quiz",
+                "title": "First Column",
+                "flavor": "The access log has ten space-separated fields per line. awk can extract individual fields without any pre-sorting or cutting. What command prints only the first field from each line?",
+                "lesson": (
+                    "awk '{print $1}' — prints the first whitespace-delimited field of each line.\n\n"
+                    "awk splits each line into fields by whitespace (default).\n"
+                    "Fields are numbered from $1. $0 is the entire line.\n\n"
+                    "Syntax: awk 'PROGRAM' [file]\n\n"
+                    "Field printing:\n"
+                    "  awk '{print $1}'       → first field\n"
+                    "  awk '{print $2}'       → second field\n"
+                    "  awk '{print $NF}'      → last field (NF = Number of Fields)\n"
+                    "  awk '{print $1, $3}'   → first and third field, space-separated\n\n"
+                    "Example:\n"
+                    "  awk '{print $1}' access.log\n"
+                    "  → prints the IP address from each Apache/nginx access log line"
+                ),
+                "question": "What awk program prints only the first field of each line?",
+                "answers": ["awk '{print $1}'", "{print $1}"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Fields in awk are numbered: $1, $2, etc.",
+                    "The print statement goes inside single quotes and curly braces.",
+                    "The answer is: awk '{print $1}'",
+                ],
+            },
+            {
+                "id": "sed_4",
+                "type": "quiz",
+                "title": "Custom Delimiter",
+                "flavor": "The /etc/passwd file is colon-delimited. awk can handle any delimiter with -F. You need to print only usernames (first field) using awk instead of cut.",
+                "lesson": (
+                    "awk -F: '{print $1}' — sets the field delimiter to colon.\n\n"
+                    "The -F flag sets the Field Separator (FS).\n\n"
+                    "Syntax: awk -F DELIM 'PROGRAM' [file]\n\n"
+                    "Examples:\n"
+                    "  awk -F: '{print $1}' /etc/passwd     → usernames\n"
+                    "  awk -F: '{print $1,$3}' /etc/passwd  → username and UID\n"
+                    "  awk -F, '{print $2}' data.csv        → second CSV column\n"
+                    "  awk -F'\\t' '{print $3}' tsv.txt     → third tab-delimited field\n\n"
+                    "awk vs cut:\n"
+                    "  cut -d: -f1      → fast, simple, exact field extraction\n"
+                    "  awk -F: '{print $1}'  → more powerful: conditionals, math, NR, etc."
+                ),
+                "question": "What awk command prints the first field of /etc/passwd using colon as the delimiter?",
+                "answers": [
+                    "awk -F: '{print $1}' /etc/passwd",
+                    "awk -F: '{print $1}'",
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Use -F to set the field separator.",
+                    "The field separator is :, the field is $1.",
+                    "The answer is: awk -F: '{print $1}' /etc/passwd",
+                ],
+            },
+            {
+                "id": "sed_5",
+                "type": "quiz",
+                "title": "Pattern Filter",
+                "flavor": "The NEXUS Corp application log has millions of entries. You need only the lines containing '404'. awk can filter lines by pattern — similar to grep but with the ability to process fields simultaneously.",
+                "lesson": (
+                    "awk '/pattern/' — prints lines matching a regular expression pattern.\n\n"
+                    "Syntax: awk '/REGEX/' [file]\n\n"
+                    "This is equivalent to grep 'REGEX' — but you can combine it with\n"
+                    "field operations in the same command:\n\n"
+                    "  awk '/404/'             → print lines containing 404\n"
+                    "  awk '/404/ {print $1}'  → print only the IP from 404 lines\n"
+                    "  awk '$9 == 404'         → exact match on field 9 (HTTP status)\n"
+                    "  awk '$9 >= 500'         → all server error responses\n\n"
+                    "Example:\n"
+                    "  awk '/FATAL/ {print $1, $2, $NF}' app.log\n"
+                    "  → prints timestamp, date, and last field of every FATAL line"
+                ),
+                "question": "What awk syntax prints only lines that match a pattern?",
+                "answers": ["awk '/pattern/'", "/pattern/"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "The pattern goes between forward slashes.",
+                    "No action block needed — the default action is print.",
+                    "The answer is: awk '/pattern/'",
+                ],
+            },
+            {
+                "id": "sed_boss",
+                "type": "quiz",
+                "title": "BOSS: Field Extraction from a Log",
+                "flavor": "Ghost has a structured application log with pipe-delimited fields. Each line looks like: 2024-01-15|192.168.1.100|ghost_user|GET /api/v2/secrets|200. Ghost needs to extract only the username field (field 3) from every line where the status code (field 5) is 200. Build the awk pipeline.",
+                "lesson": (
+                    "awk with field separator, pattern match, and field print — combined.\n\n"
+                    "Goal: extract field 3 from lines where field 5 equals 200\n\n"
+                    "  awk -F'|' '$5 == 200 {print $3}' access.log\n\n"
+                    "Breaking it down:\n"
+                    "  -F'|'            → pipe-delimited fields\n"
+                    "  $5 == 200        → condition: only process lines where field 5 is 200\n"
+                    "  {print $3}       → action: print field 3 (username)\n\n"
+                    "Adding deduplication:\n"
+                    "  awk -F'|' '$5 == 200 {print $3}' access.log | sort | uniq\n\n"
+                    "This pattern — delimiter + condition + field extraction — is the\n"
+                    "core of real log analysis in production environments."
+                ),
+                "question": "What awk command extracts the third pipe-delimited field from lines where the fifth field equals 200?",
+                "answers": [
+                    "awk -F'|' '$5 == 200 {print $3}'",
+                    "awk -F'|' '$5==200 {print $3}'",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Use -F'|' for the pipe delimiter, a condition on $5, and print $3.",
+                    "Format: awk -F'|' 'CONDITION {ACTION}'",
+                    "The answer is: awk -F'|' '$5 == 200 {print $3}'",
+                ],
+            },
+        ],
+    },
+}
+
 ZONE_ORDER = [
     "antechamber",
     "archive_vaults",
@@ -1688,6 +2233,9 @@ ZONE_ORDER = [
     "scripting_citadel",
     "network_nexus",
     "grand_terminal",
+    "environment_chamber",
+    "text_processing_forge",
+    "stream_editor_lab",
 ]
 
 

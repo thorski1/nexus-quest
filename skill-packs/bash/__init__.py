@@ -41,6 +41,9 @@ SKILL_PACK = SkillPack(
         "scripting_citadel": "scriptor",
         "network_nexus": "networked",
         "grand_terminal": "grandmaster",
+        "environment_chamber": "env_operative",
+        "text_processing_forge": "data_shaper",
+        "stream_editor_lab": "stream_master",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=r"""

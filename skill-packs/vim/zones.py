@@ -1157,6 +1157,257 @@ ZONES = {
     },
 }
 
+    "registers_vault": {
+        "id": "registers_vault",
+        "name": "The Registers Vault",
+        "subtitle": "Named storage for text and macros",
+        "color": "magenta",
+        "icon": "📦",
+        "commands": ['"a', '"ap', ":reg", '"+', ":let @a"],
+        "challenges": [
+            {
+                "id": "rv_1",
+                "type": "fill_blank",
+                "title": "Yank to Named Register",
+                "flavor": "You've found a critical NEXUS credential string. You need to store the current line in register 'a' before it scrolls off. What command yanks the line into register 'a'?",
+                "lesson": (
+                    '"ayy — yank the current line into register \'a\'.\n\n'
+                    "Registers are named storage buckets. vim has 26 named registers: a–z.\n\n"
+                    '  "ayy   → yank the current line into register \'a\'\n'
+                    '  "add   → delete the current line into register \'a\'\n'
+                    '  "ay3j  → yank 3 lines down into register \'a\'\n\n'
+                    "Default (unnamed) register:\n"
+                    "  Yank and delete without a register prefix goes into the unnamed register (\"\")\n"
+                    "  This is what p pastes by default.\n\n"
+                    '  "0  → always holds the last yank (not overwritten by deletes)\n'
+                    "  This is the register to use when you've deleted something after yanking."
+                ),
+                "answer": '"ayy',
+                "hints": ['Start with the register prefix: "a', 'Then the yank command for a full line.', 'The answer is: "ayy'],
+            },
+            {
+                "id": "rv_2",
+                "type": "fill_blank",
+                "title": "Paste from Named Register",
+                "flavor": "Register 'a' holds the credential string you captured. Paste it after the cursor. What command pastes from register 'a'?",
+                "lesson": (
+                    '"ap — paste the contents of register \'a\' after the cursor.\n\n'
+                    '  "ap   → paste after cursor from register \'a\'\n'
+                    '  "aP   → paste before cursor from register \'a\'\n\n'
+                    "Why use named registers?\n"
+                    "  The unnamed register (\"\") is overwritten every time you yank or delete.\n"
+                    "  If you yank something and then delete a line, the unnamed register now\n"
+                    "  holds the deleted line — your yank is gone.\n\n"
+                    '  With named registers ("a, "b, etc.):\n'
+                    "    You control what goes where. The content stays until you write to it again.\n"
+                    "    Essential for multi-step edit operations."
+                ),
+                "answer": '"ap',
+                "hints": ['Register prefix "a, then paste.', '"ap pastes after cursor.', 'The answer is: "ap'],
+            },
+            {
+                "id": "rv_3",
+                "type": "fill_blank",
+                "title": "List All Registers",
+                "flavor": "You've been working through NEXUS files and storing fragments in multiple registers. You need to see what's in all of them. What command lists all registers?",
+                "lesson": (
+                    ":reg — display the contents of all registers.\n\n"
+                    "  :reg       → list all non-empty registers\n"
+                    '  :reg a b   → list only registers \'a\' and \'b\'\n\n'
+                    "Register types shown:\n"
+                    '  ""   → unnamed (last yank/delete)\n'
+                    '  "0   → last explicit yank\n'
+                    '  "1–"9 → last 9 deletes (most recent first)\n'
+                    '  "a–"z → named registers (you control these)\n'
+                    '  "+   → system clipboard\n'
+                    '  "*   → selection clipboard (X11/Wayland)\n'
+                    '  ".   → last inserted text\n'
+                    '  ":   → last command-line command\n'
+                    '  "/   → last search pattern\n\n'
+                    "Reading :reg output helps debug macros — macros are stored in\n"
+                    "named registers and show their contents as text."
+                ),
+                "answer": ":reg",
+                "hints": ["It's a command-line command.", "Three letters.", "The answer is: :reg"],
+            },
+            {
+                "id": "rv_4",
+                "type": "fill_blank",
+                "title": "System Clipboard Register",
+                "flavor": "You've extracted a NEXUS internal IP address in vim and need to paste it into the browser on the same machine. What register prefix accesses the system clipboard?",
+                "lesson": (
+                    '"+ — the system clipboard register.\n\n'
+                    '  "+y   → yank to system clipboard\n'
+                    '  "+yy  → yank current line to system clipboard\n'
+                    '  "+p   → paste from system clipboard\n\n'
+                    "Two clipboard registers:\n"
+                    '  "+  → system clipboard (Ctrl+C / Ctrl+V in other apps)\n'
+                    '  "*  → primary selection (middle-click on Linux/X11)\n\n'
+                    "Requirements:\n"
+                    "  vim must be compiled with +clipboard support.\n"
+                    "  Check with: vim --version | grep clipboard\n\n"
+                    "In Neovim: clipboard integration is built-in via a clipboard provider.\n"
+                    "  Often works automatically with pbcopy (macOS) or xclip (Linux).\n\n"
+                    'The answer is just the register name: "+'
+                ),
+                "answer": '"+',
+                "hints": ["It's the register prefix for the system clipboard.", 'Two characters: " and +', 'The answer is: "+'],
+            },
+            {
+                "id": "rv_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Set Register Programmatically",
+                "flavor": "You need to pre-load register 'a' with the text 'NEXUS_TOKEN' so your macro can paste it across all 417 transaction lines. What command-line command sets register 'a' to that string?",
+                "lesson": (
+                    ":let @a = 'text' — set a register's content from the command line.\n\n"
+                    "  :let @a = 'NEXUS_TOKEN'\n\n"
+                    "This is how you load a register without having to manually yank text.\n"
+                    "Useful for:\n"
+                    "  - Pre-loading a register before a macro run\n"
+                    "  - Editing a macro (read it, modify, write back)\n"
+                    "  - Scripting vim operations\n\n"
+                    "To edit an existing macro in register 'a':\n"
+                    '  1. "ap  → paste the macro content as text\n'
+                    "  2. Edit the text\n"
+                    '  3. "ayy → yank it back into register \'a\'\n\n'
+                    "Or use :let directly:\n"
+                    "  :let @a = @a . ' additional_text'  → append to register 'a'"
+                ),
+                "answer": ":let @a = 'NEXUS_TOKEN'",
+                "hints": [
+                    "Use :let to assign to a register variable.",
+                    ":let @a = '...' — the register is addressed as @a",
+                    ":let @a = 'NEXUS_TOKEN'",
+                ],
+            },
+        ],
+    },
+    "ex_commands_deep": {
+        "id": "ex_commands_deep",
+        "name": "The Ex Commands Deep",
+        "subtitle": "Advanced substitution, filtering & global operations",
+        "color": "yellow",
+        "icon": "⚡",
+        "commands": [":s///g", ":%!sort", ":g/pat/d", ":v/pat/d", ":g/pat/cmd"],
+        "challenges": [
+            {
+                "id": "ex_1",
+                "type": "fill_blank",
+                "title": "Substitute with Flags",
+                "flavor": "The NEXUS routing table uses 'phantom_corp' as a vendor name. You need to replace every occurrence in the entire file with '[FLAGGED]', case-insensitively. Complete: :%s/phantom_corp/[FLAGGED]/___",
+                "lesson": (
+                    ":%s/pattern/replacement/gi — file-wide substitution, case-insensitive.\n\n"
+                    "Substitution flags:\n"
+                    "  g  → global: replace all matches on each line (not just the first)\n"
+                    "  i  → case-insensitive match\n"
+                    "  c  → confirm each replacement interactively\n"
+                    "  e  → suppress 'no match' errors\n\n"
+                    "Range prefixes:\n"
+                    "  :s/…    → current line only\n"
+                    "  :%s/…   → entire file (% = all lines)\n"
+                    "  :1,10s/… → lines 1–10\n"
+                    "  :'<,'>s/… → visual selection\n\n"
+                    "Capture groups:\n"
+                    "  :%s/\\(\\w\\+\\)_id/id_\\1/g  → swap prefix/suffix using \\1 backreference\n"
+                    "  In Neovim with very magic: :%s/\\v(\\w+)_id/id_\\1/g"
+                ),
+                "answer": "gi",
+                "hints": ["Two flags: global and case-insensitive.", "g for global, i for case-insensitive.", "The answer is: gi"],
+            },
+            {
+                "id": "ex_2",
+                "type": "fill_blank",
+                "title": "Sort Lines Through External Command",
+                "flavor": "The NEXUS IP address list is out of order. You want to sort all lines in the current file using the system sort command. Complete: :%___sort",
+                "lesson": (
+                    ":%!sort — filter the entire file through an external command.\n\n"
+                    "  :%!sort           → sort all lines in the file\n"
+                    "  :%!sort -r        → sort in reverse\n"
+                    "  :%!sort -u        → sort and deduplicate\n"
+                    "  :%!column -t      → align columns in a table\n"
+                    "  :%!python3 -m json.tool  → pretty-print JSON\n\n"
+                    "The ! operator:\n"
+                    "  :!command    → run a shell command (output appears below vim)\n"
+                    "  :%!command   → filter the file through the command (replaces content)\n"
+                    "  :10,20!sort  → filter only lines 10–20\n\n"
+                    "This turns vim into a shell pipeline: the buffer is stdin,\n"
+                    "the command's stdout replaces the selected range."
+                ),
+                "answer": "!",
+                "hints": ["The shell filter operator — one character.", "% is the range, then the shell filter prefix.", "The answer is: !"],
+            },
+            {
+                "id": "ex_3",
+                "type": "fill_blank",
+                "title": "Delete Lines Matching Pattern",
+                "flavor": "The NEXUS log has thousands of 'INFO:' lines you don't need. Delete every line that contains the word 'INFO'. Complete: :g/INFO/___",
+                "lesson": (
+                    ":g/pattern/d — delete every line matching a pattern.\n\n"
+                    "  :g/INFO/d       → delete all lines containing 'INFO'\n"
+                    "  :g/^$/d         → delete all blank lines\n"
+                    "  :g/^#/d         → delete all comment lines\n\n"
+                    "The :g command: global execute.\n"
+                    "  :g/pattern/command  → run 'command' on every line matching 'pattern'\n\n"
+                    "Commands beyond delete:\n"
+                    "  :g/TODO/normal yy  → yank every TODO line into the unnamed register\n"
+                    "  :g/pattern/s/old/new/g  → substitute on every matching line\n"
+                    "  :g/^/m0  → reverse the entire file (move each line to top)\n\n"
+                    "Use with regex for power:\n"
+                    "  :g/^\\s*$/d  → delete blank/whitespace-only lines"
+                ),
+                "answer": "d",
+                "hints": ["The delete command — single character.", "d for delete.", "The answer is: d"],
+            },
+            {
+                "id": "ex_4",
+                "type": "fill_blank",
+                "title": "Delete Lines NOT Matching Pattern",
+                "flavor": "You only want to keep lines from the NEXUS audit log that contain 'TRANSFER'. Delete everything else. What command deletes all lines that do NOT match the pattern? Complete: :___/TRANSFER/d",
+                "lesson": (
+                    ":v/pattern/d — delete every line that does NOT match.\n\n"
+                    "  :v/TRANSFER/d   → keep only lines containing 'TRANSFER'\n"
+                    "  :v/^$/d         → keep only blank lines (delete non-blank)\n\n"
+                    ":v is the inverse of :g:\n"
+                    "  :g/pat/cmd  → run cmd on lines that MATCH\n"
+                    "  :v/pat/cmd  → run cmd on lines that DON'T MATCH\n\n"
+                    ":v stands for 'in-Verse' (inverse global).\n\n"
+                    "Practical use:\n"
+                    "  :v/error/d     → keep only error lines — powerful log filter\n"
+                    "  :v/2024/d      → keep only lines from 2024\n\n"
+                    "Combined with :g:\n"
+                    "  First :v to keep relevant lines, then :g to process them."
+                ),
+                "answer": "v",
+                "hints": ["The inverse of :g — single character.", "v for inverse global.", "The answer is: v"],
+            },
+            {
+                "id": "ex_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Global Command with Action",
+                "flavor": "Every line in the NEXUS transaction log that contains 'PHANTOM' needs to have the text ' -- FLAGGED' appended to it. Complete: :g/PHANTOM/___/$/  -- FLAGGED/",
+                "lesson": (
+                    ":g/pattern/s/$/append_text/ — append text to every matching line.\n\n"
+                    "  :g/PHANTOM/s/$/ -- FLAGGED/\n\n"
+                    "Breaking this down:\n"
+                    "  :g/PHANTOM/   → find every line containing 'PHANTOM'\n"
+                    "  s/$/ -- FLAGGED/  → substitute end-of-line with ' -- FLAGGED'\n"
+                    "                     effectively appending to the line\n\n"
+                    "The power of :g is combining it with any ex command:\n"
+                    "  :g/TODO/t$        → copy all TODO lines to end of file\n"
+                    "  :g/^=/normal dd   → delete all heading separator lines\n"
+                    "  :g/SECTION/yank A → append all section headers to register A\n\n"
+                    "This is the vim power-user's toolkit:\n"
+                    ":g turns a single-line operation into a file-wide transformation."
+                ),
+                "answer": "s",
+                "hints": ["The substitution command — what comes after :g/pattern/", "s for substitute.", "The answer is: s"],
+            },
+        ],
+    },
+}
+
 ZONE_ORDER = [
     "normal_vault",
     "insert_protocol",
@@ -1166,4 +1417,6 @@ ZONE_ORDER = [
     "motion_objects",
     "split_network",
     "macro_forge",
+    "registers_vault",
+    "ex_commands_deep",
 ]

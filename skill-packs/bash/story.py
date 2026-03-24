@@ -197,6 +197,61 @@ Every open port is a conversation waiting to happen.
 
 [italic]"The network is the computer. The Shell is the key. The corps are the obstacle."[/italic]
 """,
+    "environment_chamber": """
+[bold cyan]== THE ENVIRONMENT CHAMBER ==[/bold cyan]
+
+The corps build their services to read from the environment. It's twelve-factor
+app doctrine — no hardcoded credentials, no config files in version control.
+Secrets go in environment variables. The runtime reads them. The process inherits them.
+
+It's elegant. It's also a liability. Because every environment variable in every
+running process is readable, transferable, and if you can see the process, you
+can see the secret.
+
+[yellow]$HOME[/yellow]. [yellow]$PATH[/yellow]. [yellow]$DATABASE_URL[/yellow].
+The shell doesn't distinguish between an innocent path variable and a production
+database credential. They're all just NAME=VALUE pairs, sitting in memory,
+waiting to be read by anyone with access to the right process.
+
+[italic]"Security through configuration is only as strong as the developer who
+set up the deployment pipeline at 11 PM before a demo."[/italic]
+""",
+    "text_processing_forge": """
+[bold cyan]== THE TEXT PROCESSING FORGE ==[/bold cyan]
+
+The exfiltrated data is raw. Unstructured. Millions of lines of logs, access records,
+configuration dumps — everything the breach pulled out of NEXUS Corp's systems.
+
+The naive approach is to read it manually. The naive approach takes weeks and
+misses everything that matters. The Shell People built different tools:
+pattern extractors, field cutters, line counters, duplicate filters.
+
+[yellow]wc[/yellow] — count it. [yellow]sort[/yellow] — order it. [yellow]uniq[/yellow] — deduplicate it.
+[yellow]cut[/yellow] — extract the fields you need. Chain them together with pipes and you
+can reduce a gigabyte of noise to a hundred lines of signal in seconds.
+
+[italic]"The question isn't how much data they logged. The question is what the
+data says when you ask it the right questions."[/italic]
+""",
+    "stream_editor_lab": """
+[bold cyan]== THE STREAM EDITOR LAB ==[/bold cyan]
+
+Text transformation at scale. The corps' data doesn't come formatted the way
+you need it. It comes the way the system wrote it — whatever delimiter the
+original developer chose, whatever field order made sense to them at the time,
+whatever log format the framework imposed.
+
+sed and awk exist to bridge that gap. They don't read files into memory and
+process them. They stream — line by line, transformation by transformation,
+output flowing directly to the next stage.
+
+[yellow]sed[/yellow] rewrites. [yellow]awk[/yellow] dissects. Together they handle structured text
+that cut and grep can't touch: conditional field extraction, pattern-matched
+substitution, delimiter-agnostic column operations.
+
+[italic]"The data is in there. sed and awk are the tools that let you reshape it
+into something that means something."[/italic]
+""",
     "grand_terminal": """
 [bold cyan]== THE BLACK ICE ROOM ==[/bold cyan]
 
@@ -319,6 +374,44 @@ It survived the corps too. Just barely.
 [bold cyan]One destination remains. The Black Ice Room.
 This is what you were hired to do.[/bold cyan]
 """,
+    "environment_chamber": """
+[bold green]THE ENVIRONMENT CHAMBER — EXPOSED.[/bold green]
+
+DATABASE_URL. API_KEY. SECRET_KEY. Sitting in plain text in the process environment
+of three different services. The kind of thing that gets written into a deploy script
+once and then inherited by every process running on the host forever.
+
+You know how to read them. You know how to set them, export them, and when necessary,
+unset them before they become someone else's attack vector.
+
+[bold cyan]The Text Processing Forge is ahead. The data is raw. Time to refine it.[/bold cyan]
+""",
+    "text_processing_forge": """
+[bold green]THE TEXT PROCESSING FORGE — OPERATIONAL.[/bold green]
+
+48,000 lines of access logs reduced to 312 unique accounts. The noise floor dropped.
+The signal is clear. cut, sort, uniq — three ancient tools working in sequence,
+and the output is the exact list you needed.
+
+The corps log everything and understand nothing. You understand exactly what the
+logs say when you know how to ask.
+
+[bold cyan]The Stream Editor Lab is next. The data needs reshaping — and sed and awk
+are the tools that do it.[/bold cyan]
+""",
+    "stream_editor_lab": """
+[bold green]THE STREAM EDITOR LAB — COMPLETE.[/bold green]
+
+The pipe-delimited log file that would have taken a data analyst two days to
+process manually: done in one awk command. Field 3, where field 5 equals 200.
+Clean. Accurate. Repeatable.
+
+sed rewrote the hostnames in ten thousand entries. awk extracted exactly the
+fields that mattered. The data is now in the shape you need it.
+
+[bold cyan]The Shell has no more secrets to withhold. You've reached the far end
+of the substrate layer.[/bold cyan]
+""",
     "grand_terminal": """
 [bold yellow]★ ★ ★  THE BLACK ICE ROOM — INSIDE.  ★ ★ ★[/bold yellow]
 
@@ -351,6 +444,9 @@ BOSS_INTROS = {
     "scripting_citadel": "[bold red]⚠  COUNTERMEASURES ACTIVE: The Automation Trial[/bold red]\nThe system is adapting. Only a custom-built script will bypass what the standard tools can't.",
     "network_nexus": "[bold red]⚠  TRAFFIC ANALYSIS: The Network Phantom's Test[/bold red]\nThe corps' network monitoring just woke up. Navigate it cleanly or get burned.",
     "grand_terminal": "[bold red]★  FINAL COUNTERMEASURE: The Black Ice Sequence[/bold red]\nThis is the corps' last line of defense. Everything you know. No hints. No second chances. Go.",
+    "environment_chamber": "[bold red]⚠  CREDENTIAL EXPOSURE: The Live Process Audit[/bold red]\nA service process on NEXUS Corp's application server has a credential in its environment. Read it. Know where to find it in production.",
+    "text_processing_forge": "[bold red]⚠  DATA REDUCTION: The Log Pipeline Trial[/bold red]\n48,000 lines. Colon-delimited fields. One pipeline to extract unique usernames. Build it clean.",
+    "stream_editor_lab": "[bold red]⚠  LOG FORENSICS: The Field Extraction Challenge[/bold red]\nPipe-delimited application log. Conditional field extraction. One awk command. The data doesn't reshape itself.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -372,6 +468,9 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Junior Ghost", "Level 10. You're past the tourist phase. The Shell is starting to feel like home."),
     "level_20": ("Senior Ghost", "Level 20. The terminal is your native environment now. GUIs feel slow and dishonest."),
     "level_30": ("Ghost: Legend", "Maximum level. You've mastered the substrate layer. The corps built everything on top of what you now understand completely."),
+    "env_operative": ("Environment Cleared", "Cracked the Environment Chamber. Every process has secrets. Now you know how to find them."),
+    "data_shaper": ("Data Shaped", "Cleared the Text Processing Forge. wc, sort, uniq, cut — four tools that reduce any dataset to signal."),
+    "stream_master": ("Stream Transformed", "Cleared the Stream Editor Lab. sed rewrites. awk dissects. The data takes the shape you need it to."),
     "completionist": ("Full Extraction", "Every challenge. Every zone. Every command. Complete data extraction achieved. The contract was always just the beginning."),
     "boss_slayer": ("Countermeasure Bypassed", "You beat your first boss challenge. The corps' best automated defense, and you walked through it clean."),
 }

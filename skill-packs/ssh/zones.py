@@ -1042,6 +1042,277 @@ ZONES = {
     },
 }
 
+    "multiplexer_gateway": {
+        "id": "multiplexer_gateway",
+        "name": "The Multiplexer Gateway",
+        "subtitle": "Persistent sessions that outlive the connection",
+        "color": "cyan",
+        "icon": "🖥️",
+        "commands": ["tmux new -s", "tmux attach -t", "tmux ls", "Ctrl+b d", "tmux kill-session"],
+        "challenges": [
+            {
+                "id": "mux_1",
+                "type": "fill_blank",
+                "title": "Create a Named Session",
+                "flavor": "You need a persistent tmux session on the NEXUS jump host that will survive if your SSH connection drops. Name it 'ghost'. What command creates it?",
+                "lesson": (
+                    "tmux new -s session_name — create a new named tmux session.\n\n"
+                    "  tmux new -s ghost\n\n"
+                    "Why named sessions matter:\n"
+                    "  - You can reattach by name: tmux attach -t ghost\n"
+                    "  - Multiple users on the same host can have separate sessions\n"
+                    "  - Scripts can target sessions by name\n\n"
+                    "Shorthand:\n"
+                    "  tmux new -s ghost\n"
+                    "  tmux new-session -s ghost  → long form, same result\n\n"
+                    "The session persists on the remote server even if you close your\n"
+                    "SSH connection. Reconnect and reattach — everything is exactly as you left it.\n\n"
+                    "Long-running processes (data extraction, port scans, compilation)\n"
+                    "should always run inside tmux or screen to survive disconnections."
+                ),
+                "answer": "tmux new -s ghost",
+                "hints": ["tmux new followed by the session name flag.", "The answer is: tmux new -s ghost"],
+            },
+            {
+                "id": "mux_2",
+                "type": "fill_blank",
+                "title": "Reattach to a Session",
+                "flavor": "Your SSH connection to the NEXUS jump host dropped. You reconnect. Your 'ghost' tmux session is still running. What command reattaches to it?",
+                "lesson": (
+                    "tmux attach -t session_name — attach to an existing tmux session.\n\n"
+                    "  tmux attach -t ghost\n\n"
+                    "Shorthand:\n"
+                    "  tmux a -t ghost    → 'a' is short for 'attach'\n"
+                    "  tmux attach        → attach to the most recent session (if only one exists)\n\n"
+                    "What happens on reattach:\n"
+                    "  - The terminal renders the session exactly as it was\n"
+                    "  - Any processes still running continue where they left off\n"
+                    "  - Output that accumulated while you were disconnected is visible\n\n"
+                    "If someone else is already attached to the session:\n"
+                    "  tmux attach -t ghost      → both see the same session (shared screen)\n"
+                    "  tmux attach -t ghost -d   → detach the other user, take the session"
+                ),
+                "answer": "tmux attach -t ghost",
+                "hints": ["tmux attach with the target flag.", "The answer is: tmux attach -t ghost"],
+            },
+            {
+                "id": "mux_3",
+                "type": "fill_blank",
+                "title": "List Active Sessions",
+                "flavor": "You've reconnected to the NEXUS jump host and don't remember the name of your tmux session. What command lists all active sessions?",
+                "lesson": (
+                    "tmux ls — list all active tmux sessions.\n\n"
+                    "  tmux ls\n"
+                    "  tmux list-sessions  → long form\n\n"
+                    "Output format:\n"
+                    "  ghost: 2 windows (created Mon Jan 1 00:00:00 2024) [220x50]\n"
+                    "  ops: 1 window (created Mon Jan 1 01:00:00 2024) [220x50] (attached)\n\n"
+                    "Reading the output:\n"
+                    "  - Session name: 'ghost', 'ops'\n"
+                    "  - Number of windows in the session\n"
+                    "  - Creation time\n"
+                    "  - Terminal dimensions\n"
+                    "  - '(attached)' means another terminal is currently connected\n\n"
+                    "If tmux ls shows no sessions: no sessions exist on this host.\n"
+                    "If the command errors: tmux is not installed or not running."
+                ),
+                "answer": "tmux ls",
+                "hints": ["tmux followed by a two-letter list command.", "The answer is: tmux ls"],
+            },
+            {
+                "id": "mux_4",
+                "type": "quiz",
+                "title": "Detach from a Session",
+                "flavor": "You need to disconnect from your active 'ghost' tmux session without killing it — leaving your processes running. What key sequence detaches from the session?",
+                "lesson": (
+                    "Ctrl+b d — detach from the current tmux session.\n\n"
+                    "The Ctrl+b prefix:\n"
+                    "  tmux uses Ctrl+b as its command prefix (like vim's ESC for mode switching).\n"
+                    "  Press Ctrl+b, release, then press the command key.\n\n"
+                    "Common tmux key bindings (all after Ctrl+b):\n"
+                    "  d    → detach from session (leave it running)\n"
+                    "  c    → create a new window\n"
+                    "  n    → next window\n"
+                    "  p    → previous window\n"
+                    "  %    → split pane vertically\n"
+                    '  "    → split pane horizontally\n'
+                    "  [    → scroll mode (use arrow keys or PgUp/PgDn)\n"
+                    "  ?    → list all key bindings\n\n"
+                    "Detach vs. kill:\n"
+                    "  Ctrl+b d  → session stays alive (processes keep running)\n"
+                    "  exit       → closes the shell; if last window, kills the session"
+                ),
+                "answer": "Ctrl+b d",
+                "hints": ["The tmux prefix key followed by detach.", "Ctrl+b, then d.", "The answer is: Ctrl+b d"],
+            },
+            {
+                "id": "mux_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Kill a Session",
+                "flavor": "The 'ghost' tmux session on the NEXUS jump host needs to be fully terminated — all processes in it killed. What command destroys the session completely?",
+                "lesson": (
+                    "tmux kill-session -t session_name — destroy a session and all its processes.\n\n"
+                    "  tmux kill-session -t ghost\n\n"
+                    "What it does:\n"
+                    "  - Sends SIGHUP to all processes in the session\n"
+                    "  - Closes all windows and panes\n"
+                    "  - The session no longer appears in tmux ls\n\n"
+                    "Other cleanup commands:\n"
+                    "  tmux kill-window -t ghost:1    → kill a specific window\n"
+                    "  tmux kill-pane -t ghost:1.2    → kill a specific pane\n"
+                    "  tmux kill-server               → kill tmux entirely (all sessions)\n\n"
+                    "Use kill-session when:\n"
+                    "  - Wrapping up an operation and cleaning up\n"
+                    "  - A session is stuck and won't respond\n"
+                    "  - Operational security requires leaving no running sessions"
+                ),
+                "answer": "tmux kill-session -t ghost",
+                "hints": [
+                    "tmux kill-session with the target flag.",
+                    "The answer is: tmux kill-session -t ghost",
+                ],
+            },
+        ],
+    },
+    "scp_vault": {
+        "id": "scp_vault",
+        "name": "The SCP Vault",
+        "subtitle": "Move files through encrypted channels",
+        "color": "yellow",
+        "icon": "📁",
+        "commands": ["scp file user@host:/path", "scp -r", "scp user@host:/file .", "sftp user@host", "get/put"],
+        "challenges": [
+            {
+                "id": "scp_1",
+                "type": "fill_blank",
+                "title": "Copy File to Remote",
+                "flavor": "You have a config patch at file.txt that needs to be deployed to the NEXUS server. Copy it to /opt/nexus/ on user@10.0.0.5. What is the scp command?",
+                "lesson": (
+                    "scp file.txt user@host:/path — copy a local file to a remote path.\n\n"
+                    "  scp file.txt user@10.0.0.5:/opt/nexus/\n\n"
+                    "scp syntax:\n"
+                    "  scp [options] source destination\n\n"
+                    "  source/destination can be:\n"
+                    "    local path:  file.txt  or  ./dir/file.txt\n"
+                    "    remote path: user@host:/remote/path\n\n"
+                    "Options:\n"
+                    "  -P 2222         → specify port (uppercase P, unlike ssh's lowercase p)\n"
+                    "  -i ~/.ssh/key   → specify identity file\n"
+                    "  -r              → recursive (copy directories)\n"
+                    "  -C              → compress during transfer\n\n"
+                    "scp uses SSH for transport — all files are encrypted in transit.\n"
+                    "It respects ~/.ssh/config entries and key files."
+                ),
+                "answer": "scp file.txt user@10.0.0.5:/opt/nexus/",
+                "hints": ["scp source destination — remote path uses user@host:/path format.", "The answer is: scp file.txt user@10.0.0.5:/opt/nexus/"],
+            },
+            {
+                "id": "scp_2",
+                "type": "fill_blank",
+                "title": "Recursive Directory Copy",
+                "flavor": "You need to copy the entire 'exfil/' directory from your machine to /tmp/ on the NEXUS server at user@10.0.0.5. What flag enables recursive directory copy?",
+                "lesson": (
+                    "scp -r dir/ user@host:/path — recursively copy a directory.\n\n"
+                    "  scp -r exfil/ user@10.0.0.5:/tmp/\n\n"
+                    "The -r flag:\n"
+                    "  Recursively copies the entire directory tree.\n"
+                    "  Without -r, scp ignores directories entirely.\n\n"
+                    "Trailing slash behavior:\n"
+                    "  scp -r exfil/ user@host:/tmp/   → copies contents into /tmp/exfil/\n"
+                    "  scp -r exfil  user@host:/tmp/   → same result for directories\n\n"
+                    "Limitation of scp:\n"
+                    "  scp copies the whole tree every time — no incremental/delta transfer.\n"
+                    "  For large directories, rsync -avz --progress user@host:/path is better:\n"
+                    "    - Only transfers changed files\n"
+                    "    - Resumable if interrupted\n"
+                    "    - Shows progress"
+                ),
+                "answer": "-r",
+                "hints": ["Single flag for recursive copy.", "The answer is: -r"],
+            },
+            {
+                "id": "scp_3",
+                "type": "fill_blank",
+                "title": "Copy File from Remote",
+                "flavor": "The NEXUS server at user@10.0.0.5 has a private key at /root/.ssh/nexus_rsa that you want to pull to your current directory. What is the scp command?",
+                "lesson": (
+                    "scp user@host:/remote/file . — copy a remote file to the local current directory.\n\n"
+                    "  scp user@10.0.0.5:/root/.ssh/nexus_rsa .\n\n"
+                    "The . as destination means 'current directory' — the file is saved\n"
+                    "with its original filename in the current directory.\n\n"
+                    "Alternatively:\n"
+                    "  scp user@host:/remote/file ./local_name.txt  → rename on arrival\n"
+                    "  scp user@host:/remote/file ~/downloads/      → specify local directory\n\n"
+                    "Copying between two remote hosts:\n"
+                    "  scp user1@host1:/file user2@host2:/path\n"
+                    "  → SSH proxies the transfer through your local machine\n"
+                    "  → Both remote hosts must be accessible from your machine\n\n"
+                    "Security note: be careful about where files land locally —\n"
+                    "pulled private keys need chmod 600 immediately."
+                ),
+                "answer": "scp user@10.0.0.5:/root/.ssh/nexus_rsa .",
+                "hints": ["Remote source, local destination (.) for current directory.", "The answer is: scp user@10.0.0.5:/root/.ssh/nexus_rsa ."],
+            },
+            {
+                "id": "scp_4",
+                "type": "fill_blank",
+                "title": "Open an SFTP Session",
+                "flavor": "You need an interactive file transfer session to explore the NEXUS server at user@10.0.0.5 and selectively pull files. What command starts an SFTP session?",
+                "lesson": (
+                    "sftp user@host — start an interactive SFTP session.\n\n"
+                    "  sftp user@10.0.0.5\n\n"
+                    "SFTP vs scp:\n"
+                    "  scp  → single-shot copy, like cp. Best for known paths.\n"
+                    "  sftp → interactive session. Best for browsing and selective transfer.\n\n"
+                    "Once inside sftp:\n"
+                    "  ls          → list remote directory\n"
+                    "  lls         → list local directory\n"
+                    "  cd /path    → change remote directory\n"
+                    "  lcd /path   → change local directory\n"
+                    "  get file    → download file from remote to local\n"
+                    "  put file    → upload file from local to remote\n"
+                    "  mget *.log  → download multiple files matching pattern\n"
+                    "  quit / exit → close the session\n\n"
+                    "sftp uses the SSH protocol — same keys, same auth, same port."
+                ),
+                "answer": "sftp user@10.0.0.5",
+                "hints": ["sftp followed by user@host.", "The answer is: sftp user@10.0.0.5"],
+            },
+            {
+                "id": "scp_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: SFTP get and put",
+                "flavor": "Inside an SFTP session on the NEXUS server, you need to download the remote file 'audit.log' to your local machine. What SFTP command does this?",
+                "lesson": (
+                    "get filename — download a file in an active SFTP session.\n\n"
+                    "  sftp> get audit.log\n\n"
+                    "The get/put pair:\n"
+                    "  get remote_file          → download to local current directory\n"
+                    "  get remote_file local_name → download and rename\n"
+                    "  put local_file           → upload to remote current directory\n"
+                    "  put local_file /remote/path → upload to specific remote path\n\n"
+                    "Batch transfer:\n"
+                    "  mget *.log   → download all .log files\n"
+                    "  mput *.conf  → upload all .conf files\n\n"
+                    "Non-interactive sftp (scriptable):\n"
+                    "  sftp user@host <<EOF\n"
+                    "  get /var/log/nexus/audit.log\n"
+                    "  EOF\n\n"
+                    "Or with -b batchfile:\n"
+                    "  sftp -b commands.txt user@host"
+                ),
+                "answer": "get audit.log",
+                "hints": [
+                    "The SFTP command for downloading — opposite of put.",
+                    "The answer is: get audit.log",
+                ],
+            },
+        ],
+    },
+}
+
 ZONE_ORDER = [
     "connection_basics",
     "key_vault",
@@ -1051,4 +1322,6 @@ ZONE_ORDER = [
     "jump_chain",
     "agent_protocol",
     "hardening_core",
+    "multiplexer_gateway",
+    "scp_vault",
 ]

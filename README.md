@@ -16,28 +16,39 @@
  ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ```
 
-> *"The terminal is not legacy. It's the only honest interface the machine has. Everything else is theater."*
-
-A cyberpunk hacker RPG for the terminal. Six skill domains. One corporation. One truth.
-
-You are **Ghost** — a contract operative hired to extract fraud evidence from NEXUS Corp. The evidence is buried across four infrastructure layers: terminal access, network pivots, tampered git history, containerized services, and a database holding eleven years of records.
-
-**The catch:** there are no exploit kits. No zero-days. Just skills.
+> *"The terminal is not legacy. It is the only honest interface the machine has.*
+> *Everything else is theater."*
 
 ---
 
-## What You Learn
+You wake up with a contract on your screen. No client name. No callback address. Just:
 
-| Chapter | Domain | Story |
-|---------|--------|-------|
+```
+NEXUS CORP MAINFRAME  //  INTERNAL FRAUD SUSPECTED
+EVIDENCE BURIED ACROSS 4 INFRASTRUCTURE LAYERS
+EXTRACT BEFORE THE MORNING ROTATION
+    — ANONYMOUS
+```
+
+You are **Ghost** — a contract operative with one rule: no exploit kits. No zero-days.
+Just your terminal, your knowledge, and six layers of systems between you and the truth.
+
+**The catch:** every skill you need, you have to learn for real.
+
+---
+
+## What You'll Learn
+
+| Chapter | Domain | The Mission |
+|---------|--------|-------------|
 | 1 | **Bash** | Ghost infiltrates a NEXUS workstation |
-| 2 | **SSH** | Pivot through seven jump hosts |
-| 3 | **Vim** | Edit config files on servers with no GUI |
-| 4 | **Git** | Reconstruct a tampered commit history |
-| 5 | **Docker** | Audit the container infrastructure |
-| 6 | **Postgres** | Extract the primary financial records |
+| 2 | **SSH** | Pivot through seven jump hosts to reach the inner network |
+| 3 | **Vim** | Edit config files on servers with no GUI, no undo history |
+| 4 | **Git** | Reconstruct eleven months of tampered commit history |
+| 5 | **Docker** | Audit the containerized infrastructure for hidden processes |
+| 6 | **Postgres** | Extract the primary financial records from the database |
 
-Over **280 challenges** across 49 zones. Each challenge teaches real, production-grade skills — not toy examples.
+**280+ challenges** across 52 zones. Real commands. Real syntax. Real production skills.
 
 ---
 
@@ -96,17 +107,17 @@ pip install -e ~/.local/share/nexus-quest
 
 ## Gameplay
 
-Each challenge teaches one concept through a short **lesson** and then asks you to demonstrate it:
+Each challenge teaches one concept through a short **lesson**, then asks you to demonstrate it:
 
 - **Knowledge Check** — type the command or answer
-- **Live Challenge** — run an actual command in a sandboxed environment
-- **Flag Quiz** — identify the right flag for a command
+- **Live Challenge** — identify the right command for a real scenario
+- **Flag Quiz** — identify the correct flag or option
 
 ```
   [h] Hint  (-10 XP)   [s] Skip   [q] Menu
 ```
 
-Progress is automatically saved. You can resume anytime.
+Progress saves automatically. Resume any time. The evidence doesn't expire.
 
 ---
 
@@ -118,8 +129,8 @@ Progress is automatically saved. You can resume anytime.
 
 ---
 
-## Credits
+## Built On
 
-Built on [Quest Engine](https://github.com/thorski1/quest-engine) — a generic terminal RPG framework.
+[Quest Engine](https://github.com/thorski1/quest-engine) — a generic terminal RPG framework.
 
 Narrative style inspired by Neal Stephenson's cyberpunk fiction.

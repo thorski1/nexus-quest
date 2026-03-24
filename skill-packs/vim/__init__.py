@@ -38,6 +38,8 @@ SKILL_PACK = SkillPack(
         "motion_objects":  "warden",
         "split_network":   "scriptor",
         "macro_forge":     "grandmaster",
+        "registers_vault": "vault_keeper",
+        "ex_commands_deep": "ex_master",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,

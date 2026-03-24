@@ -209,6 +209,46 @@ record once, replay 416 times. Done in seconds.
 [italic]"A macro is a program inside the editor.
 When the task is repetitive, the answer is always a macro."[/italic]
 """,
+    "registers_vault": """
+[bold cyan]== THE REGISTERS VAULT ==[/bold cyan]
+
+You've been yanking and deleting, but where does the text go?
+
+Everything in vim flows through registers — named storage slots that hold text,
+macros, system clipboard content, and the history of your last nine deletions.
+The unnamed register [yellow]""[/yellow] gets everything by default. But when you're working
+across multiple files pulling together evidence, the unnamed register is a liability:
+one accidental delete and your carefully yanked credential string is gone.
+
+Named registers [yellow]"a[/yellow] through [yellow]"z[/yellow] hold what you tell them to hold, until you
+tell them otherwise. The system clipboard lives at [yellow]"+[/yellow]. Your last yank — the one
+before any delete — is always safe in [yellow]"0[/yellow].
+
+[yellow]:reg[/yellow] — see everything stored across all registers simultaneously.
+[yellow]:let @a = 'text'[/yellow] — pre-load a register programmatically, without yanking.
+
+[italic]"The unnamed register is a single slot. Named registers are a filing system.
+Know the difference before you need it."[/italic]
+""",
+    "ex_commands_deep": """
+[bold cyan]== THE EX COMMANDS DEEP ==[/bold cyan]
+
+The NEXUS audit log is 80,000 lines. The relevant entries — the TRANSFER
+operations tied to the phantom accounts — are scattered through the noise.
+Manual scrolling is not a strategy.
+
+The [yellow]:g[/yellow] command turns a single edit into a file-wide transformation.
+The [yellow]:v[/yellow] command inverts it — act on every line that doesn't match.
+[yellow]:%!command[/yellow] pipes the entire buffer through an external program and replaces
+the content with the output. [yellow]sort[/yellow], [yellow]uniq[/yellow], [yellow]jq[/yellow], [yellow]python3[/yellow] — any Unix
+tool becomes a vim transformation.
+
+Substitution flags [yellow]g[/yellow], [yellow]i[/yellow], [yellow]c[/yellow] control global, case-insensitive,
+and confirmed replacement. Backreferences with [yellow]\\1[/yellow] capture and reuse matched groups.
+
+[italic]"Ex commands are the command line inside the editor.
+When the buffer is the problem space, these are the tools."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -278,9 +318,7 @@ Cross-referenced. Evidence extracted without spawning a single new process.
 [bold cyan]The Macro Forge: 417 annotations, one macro, seconds.[/bold cyan]
 """,
     "macro_forge": """
-[bold yellow]★ ★ ★  THE MACRO FORGE — COMPLETE.  ★ ★ ★[/bold yellow]
-
-[bold white]The vim session is closed.[/bold white]
+[bold green]THE MACRO FORGE — COMPLETE.[/bold green]
 
 417 transactions annotated. The routing table flagged. The audit log rotation
 extended so the logs will survive long enough for the investigators to subpoena
@@ -288,11 +326,32 @@ them. All of it done in one vim session, leaving the minimum possible trace.
 
 [cyan]qa[/cyan] to record. [cyan]q[/cyan] to stop. [cyan]416@a[/cyan] to repeat. Done.
 
-The editor is not the obstacle. The editor is the tool.
-[bold white]You know the tool now.[/bold white]
+[bold cyan]The Registers Vault: named storage that outlives any single operation.[/bold cyan]
+""",
+    "registers_vault": """
+[bold green]THE REGISTERS VAULT — MAPPED.[/bold green]
 
-[bold magenta]"The moment vim stops feeling like fighting and starts feeling like thinking —
-that's when you know you have it."[/bold magenta]
+[cyan]"ayy[/cyan] to yank. [cyan]"ap[/cyan] to paste. [cyan]:reg[/cyan] to inspect.
+The credential string is in register 'a'. The system clipboard is at [cyan]"+[/cyan].
+The unnamed register's contents no longer disappear without warning.
+
+You know where your text lives now.
+
+[bold cyan]The Ex Commands Deep: file-wide transformation from a single prompt.[/bold cyan]
+""",
+    "ex_commands_deep": """
+[bold yellow]★ ★ ★  THE EX COMMANDS DEEP — MASTERED.  ★ ★ ★[/bold yellow]
+
+[bold white]The vim session is closed. The evidence is extracted.[/bold white]
+
+80,000 lines filtered to 23. [cyan]:v/TRANSFER/d[/cyan] removed the noise.
+[cyan]:g/PHANTOM/s/$/ -- FLAGGED/[/cyan] annotated every phantom account entry.
+[cyan]:%!sort -u[/cyan] deduplicated the IP list in one keystroke.
+
+The editor didn't slow you down. It kept pace.
+
+[bold magenta]"Vim is not a text editor. It's a text transformation language
+that happens to run in a terminal."[/bold magenta]
 
 [bold yellow]VIM STATUS: GRANDMASTER. FILES: EDITED. EVIDENCE: PRESERVED.[/bold yellow]
 """,
@@ -307,6 +366,8 @@ BOSS_INTROS = {
     "motion_objects": "[bold red]⚠  GRAMMAR TRIAL: The Config Rewrite[/bold red]\nFour key-value pairs. Change only the values. Do it with text objects — no manual counting, no hunting.",
     "split_network": "[bold red]⚠  MULTI-FILE AUDIT: The Split Session[/bold red]\nThree files open, two need changes cross-referenced from the third. Navigate. Edit. Save. All in one session.",
     "macro_forge": "[bold red]★  MACRO TRIAL: The 417 Annotations[/bold red]\nRecord one macro that annotates a transaction line. Replay it 416 times. The file has 417 flagged entries. You have one shot to get the macro right.",
+    "registers_vault": "[bold red]⚠  REGISTER TRIAL: The Pre-Loaded Macro[/bold red]\nYou need to pre-load register 'a' with a specific string so a macro can paste it across all 417 lines. Set the register programmatically — without yanking.",
+    "ex_commands_deep": "[bold red]★  EX COMMANDS FINAL: The 80K Line Filter[/bold red]\nThe audit log is 80,000 lines. Reduce it to only the relevant entries, annotate the phantom accounts, and sort the output. Three :g and :v commands. No manual scrolling.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -328,6 +389,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Vim Initiate", "Level 10. You can open, edit, and close a file without panicking."),
     "level_20": ("Vim Practitioner", "Level 20. Text objects feel natural. Macros are no longer exotic."),
     "level_30": ("Vim Master", "Maximum level. You think in motions and operators. The mouse is irrelevant."),
+    "vault_keeper": ("Register Specialist", "Cleared the Registers Vault. Named registers, clipboard, :reg — your text goes exactly where you send it."),
+    "ex_master": ("Ex Commands Expert", "Cleared the Ex Commands Deep. :g, :v, :%! — the buffer bends to your will."),
     "completionist": ("Complete Modal Mastery", "Every zone. Every challenge. Total vim fluency achieved."),
     "boss_slayer": ("Boss Challenge Cleared", "Beat your first vim boss. The file yielded."),
 }

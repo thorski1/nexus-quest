@@ -211,6 +211,49 @@ sixty-three days ago. The reflog entries are still there.
 [italic]"The reflog is the ghost history. The history of the history.
 It's not proof — but it's where you start looking for proof."[/italic]
 """,
+    "stash_chamber": """
+[bold cyan]== THE STASH CHAMBER ==[/bold cyan]
+
+Context switches happen constantly in investigative work. A lead opens on a different
+branch while you're mid-analysis on another. A critical fix has to happen on main while
+you're still examining a feature branch. The working tree can't be committed — the
+evidence isn't organized yet, the analysis isn't complete.
+
+The stash is the solution: a stack of temporary saves, completely separate from the
+commit history, that preserves your exact working state so you can switch away and
+come back without losing anything.
+
+[yellow]git stash[/yellow] — save and clean.
+[yellow]git stash pop[/yellow] — restore and clear.
+[yellow]git stash list[/yellow] — see what's waiting.
+[yellow]git stash apply[/yellow] — restore without removing.
+[yellow]git stash drop[/yellow] — discard without applying.
+
+[italic]"Half-finished work is not wasted work. It's parked work.
+The stash is where it waits."[/italic]
+""",
+    "tag_archive": """
+[bold cyan]== THE TAG ARCHIVE ==[/bold cyan]
+
+Every audit trail needs anchor points. Specific moments in the commit history that
+serve as permanent, named references — not branch pointers that move with every new
+commit, but fixed markers that point to exactly one commit forever.
+
+That's what tags are. A release. A milestone. A forensic baseline. A moment that
+mattered enough to name.
+
+The court needs to know: when was the algorithm in question first present in this
+repository? The answer is the commit. The tag is what makes that commit [italic]findable[/italic]
+three years from now when the appeal happens.
+
+[yellow]git tag v1.0[/yellow] — mark the moment.
+[yellow]git tag -a v1.0 -m 'msg'[/yellow] — mark it with metadata.
+[yellow]git push origin v1.0[/yellow] — publish the marker.
+[yellow]git tag -l[/yellow] — enumerate all markers.
+[yellow]git show v1.0[/yellow] — read the full record.
+
+[italic]"A commit is evidence. A tag is how you find it again."[/italic]
+""",
     "forensics_chamber": """
 [bold cyan]== THE FORENSICS CHAMBER ==[/bold cyan]
 
@@ -332,6 +375,30 @@ Signed. Chain-of-custody intact.
 
 [bold cyan]The Forensics Chamber. Final phase. Time to prove it.[/bold cyan]
 """,
+    "stash_chamber": """
+[bold green]THE STASH CHAMBER — CLEARED.[/bold green]
+
+The context switch happened cleanly. Work parked. Branch changed. Emergency handled.
+[cyan]git stash pop[/cyan] brought everything back exactly as it was — staged changes restored,
+modified files restored, working tree clean before and after.
+
+No accidental commits. No lost work. No half-finished analysis contaminating the
+evidence record.
+
+[bold cyan]The Tag Archive is next. Time to mark the moments that matter.[/bold cyan]
+""",
+    "tag_archive": """
+[bold green]THE TAG ARCHIVE — DOCUMENTED.[/bold green]
+
+The release history is visible. The evidence baselines are tagged. Every annotated tag
+carries a tagger name, a timestamp, and a message — separate from the commit metadata,
+stored as its own object in the git database.
+
+The defense claimed the release happened after the contest started.
+[cyan]git show v1.0[/cyan] says otherwise. The tagger timestamp is in the record.
+
+[bold cyan]The full audit trail is complete.[/bold cyan]
+""",
     "forensics_chamber": """
 [bold yellow]★ ★ ★  THE FORENSICS CHAMBER — CASE CLOSED.  ★ ★ ★[/bold yellow]
 
@@ -366,6 +433,8 @@ BOSS_INTROS = {
     "remote_network": "[bold red]⚠  FORCE PUSH DETECTION: The Remote Audit[/bold red]\nA 2:47 AM force push. Reconstructing what the remote looked like before requires understanding how remotes actually work.",
     "recovery_vault": "[bold red]⚠  REFLOG EXCAVATION: The Ghost History[/bold red]\nThe reflog is 63 days old. The entries are still there. Extract the original commit hashes before garbage collection runs.",
     "forensics_chamber": "[bold red]★  FINAL ANALYSIS: The Blame Audit[/bold red]\nEvery line of the contested algorithm. Every commit in its history. One command surfaces who actually wrote it, and when.",
+    "stash_chamber": "[bold red]⚠  CONTEXT SWITCH: The Stash Drill[/bold red]\nAn urgent task just opened on a different branch. Your working tree is dirty. Prove you can park work cleanly and drop what's no longer needed.",
+    "tag_archive": "[bold red]⚠  RELEASE AUDIT: The Tag Evidence Trail[/bold red]\nThe annotated tag is the key evidence. git show will expose the tagger metadata. Prove you understand what it contains.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -387,6 +456,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Junior Auditor", "Level 10. git log is starting to look like a story, not a list."),
     "level_20": ("Senior Auditor", "Level 20. You read reflog entries like other people read email."),
     "level_30": ("Master Auditor", "Maximum level. You understand git from object model to reflog. Courts have accepted your testimony."),
+    "stash_operative": ("Stash Cleared", "Cleared the Stash Chamber. Context switches are clean. Work is never lost. The stash stack is yours."),
+    "tag_archivist": ("Tags Documented", "Cleared the Tag Archive. Annotated tags carry metadata. git show reveals the timestamp that changes the case."),
     "completionist": ("Full Audit Complete", "Every zone. Every challenge. Total repository forensics achieved."),
     "boss_slayer": ("Defense Overruled", "Beat your first boss challenge. The defense attorney's argument didn't survive contact with git log."),
 }

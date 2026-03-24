@@ -1433,6 +1433,304 @@ ZONES = {
             },
         ],
     },
+
+    "health_protocol": {
+        "id": "health_protocol",
+        "name": "The Health Protocol",
+        "subtitle": "Keep containers alive and observable",
+        "color": "cyan",
+        "icon": "💉",
+        "commands": ["docker logs", "docker inspect", "HEALTHCHECK"],
+        "challenges": [
+            {
+                "id": "health_1",
+                "type": "fill_blank",
+                "title": "Read the Container Logs",
+                "flavor": "A container on the compromised host has been running for six hours. Before you can understand what it did, you need to read its output. What command shows a container's log output?",
+                "lesson": (
+                    "docker logs <container> — fetches the log output of a container.\n\n"
+                    "Syntax: docker logs [flags] CONTAINER\n\n"
+                    "The container can be identified by:\n"
+                    "  - Name:  docker logs nginx-prod\n"
+                    "  - ID:    docker logs a3f9c21b7d40\n"
+                    "  - Short ID: docker logs a3f9c21\n\n"
+                    "By default, shows all stdout and stderr since container start.\n\n"
+                    "Common flags:\n"
+                    "  --tail 100        → last 100 lines only\n"
+                    "  -f                → follow (stream new output in real time)\n"
+                    "  --since 1h        → logs from the last hour\n"
+                    "  --timestamps, -t  → add timestamps to each line"
+                ),
+                "answer": "logs",
+                "hints": [
+                    "Think: read the log output of a running container.",
+                    "docker ___",
+                    "The answer is: logs",
+                ],
+            },
+            {
+                "id": "health_2",
+                "type": "fill_blank",
+                "title": "Follow Live Output",
+                "flavor": "The container is still running and actively writing logs. You need to watch the output stream in real time — like tail -f but for a container. What flag keeps the log stream open?",
+                "lesson": (
+                    "docker logs -f — follows the log output in real time.\n\n"
+                    "Syntax: docker logs -f CONTAINER\n\n"
+                    "Behaviour:\n"
+                    "  - Prints existing log output (like docker logs)\n"
+                    "  - Then keeps the stream open and prints new lines as they arrive\n"
+                    "  - Ctrl+C stops following (does NOT stop the container)\n\n"
+                    "Combining flags:\n"
+                    "  docker logs -f --tail 50 mycontainer\n"
+                    "  → starts from the last 50 lines and then follows new output\n\n"
+                    "Equivalent to: tail -f /var/log/app.log for processes inside containers."
+                ),
+                "answer": "-f",
+                "hints": [
+                    "The same flag that tail uses to follow a file.",
+                    "docker logs ___",
+                    "The answer is: -f",
+                ],
+            },
+            {
+                "id": "health_3",
+                "type": "fill_blank",
+                "title": "Limit the Output",
+                "flavor": "The container has been running for months and has gigabytes of logs. You only need the most recent entries. What flag limits docker logs output to the last N lines?",
+                "lesson": (
+                    "docker logs --tail N — shows only the last N lines of log output.\n\n"
+                    "Syntax: docker logs --tail 50 CONTAINER\n\n"
+                    "The --tail flag:\n"
+                    "  --tail 50       → last 50 lines\n"
+                    "  --tail 0        → no existing output (use with -f to follow only new output)\n"
+                    "  --tail all      → all output (default behavior)\n\n"
+                    "Combining with follow:\n"
+                    "  docker logs --tail 100 -f mycontainer\n"
+                    "  → shows last 100 lines, then follows new output\n\n"
+                    "In incident response: start with --tail 200 to get recent context\n"
+                    "without waiting for gigabytes of historical output to scroll past."
+                ),
+                "answer": "--tail",
+                "hints": [
+                    "Think: show only the tail of the log.",
+                    "docker logs ___ 50 mycontainer",
+                    "The answer is: --tail",
+                ],
+            },
+            {
+                "id": "health_4",
+                "type": "fill_blank",
+                "title": "Declare the Healthcheck",
+                "flavor": "A production container should self-report whether it's healthy. Without a HEALTHCHECK, Docker has no way to distinguish a running container from a broken one that happens to still be running. What Dockerfile instruction defines a health check?",
+                "lesson": (
+                    "HEALTHCHECK — Dockerfile instruction that defines how Docker tests container health.\n\n"
+                    "Syntax:\n"
+                    "  HEALTHCHECK [OPTIONS] CMD command\n\n"
+                    "Options:\n"
+                    "  --interval=30s    → how often to run the check (default: 30s)\n"
+                    "  --timeout=10s     → how long before the check times out (default: 30s)\n"
+                    "  --start-period=5s → grace period before checks begin (default: 0s)\n"
+                    "  --retries=3       → failures before marking unhealthy (default: 3)\n\n"
+                    "Example:\n"
+                    "  HEALTHCHECK --interval=30s --timeout=5s \\\n"
+                    "    CMD curl -f http://localhost/health || exit 1\n\n"
+                    "Health states:\n"
+                    "  starting    → within start-period\n"
+                    "  healthy     → last check passed\n"
+                    "  unhealthy   → retries exceeded\n\n"
+                    "View status: docker inspect --format '{{.State.Health.Status}}' CONTAINER"
+                ),
+                "answer": "HEALTHCHECK",
+                "hints": [
+                    "It's a Dockerfile instruction, written in uppercase.",
+                    "DOCKERFILE_INSTRUCTION CMD curl -f http://localhost/health || exit 1",
+                    "The answer is: HEALTHCHECK",
+                ],
+            },
+            {
+                "id": "health_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Inspect Container State",
+                "is_boss": True,
+                "flavor": "The breached container has health check data embedded in its state. docker inspect returns the full JSON metadata for a container — including health status, network config, mounts, and environment. Extract specific fields with --format. What command inspects container metadata?",
+                "lesson": (
+                    "docker inspect — returns detailed JSON metadata about containers, images, or networks.\n\n"
+                    "Syntax: docker inspect [--format TEMPLATE] OBJECT\n\n"
+                    "Without --format: dumps the entire JSON object (verbose).\n\n"
+                    "With --format (Go template syntax):\n"
+                    "  docker inspect --format '{{.State.Status}}' mycontainer\n"
+                    "  → running\n\n"
+                    "  docker inspect --format '{{.State.Health.Status}}' mycontainer\n"
+                    "  → healthy\n\n"
+                    "  docker inspect --format '{{.NetworkSettings.IPAddress}}' mycontainer\n"
+                    "  → 172.17.0.3\n\n"
+                    "  docker inspect --format '{{json .Config.Env}}' mycontainer\n"
+                    "  → JSON array of environment variables\n\n"
+                    "Forensic use: docker inspect is the primary tool for reading\n"
+                    "the full runtime configuration of a container — mounts, networks,\n"
+                    "environment, restart policy, health state, and more."
+                ),
+                "answer": "inspect",
+                "hints": [
+                    "Think: inspect the container's full metadata.",
+                    "docker ___",
+                    "The answer is: inspect",
+                ],
+            },
+        ],
+    },
+
+    "compose_advanced": {
+        "id": "compose_advanced",
+        "name": "The Compose Advanced Lab",
+        "subtitle": "Orchestrate multi-service environments",
+        "color": "yellow",
+        "icon": "🔧",
+        "commands": ["docker-compose up", "docker-compose down", "docker-compose logs", "docker-compose exec"],
+        "challenges": [
+            {
+                "id": "comp_adv_1",
+                "type": "fill_blank",
+                "title": "Launch Detached",
+                "flavor": "The compromised environment runs seven services defined in a compose file. You need to start the full stack in the background so your terminal stays free for investigation. What flag runs docker-compose up in detached mode?",
+                "lesson": (
+                    "docker-compose up -d — starts all services defined in compose.yml in detached mode.\n\n"
+                    "Syntax: docker-compose up [flags]\n\n"
+                    "Without -d: all container output streams to your terminal. Ctrl+C stops everything.\n"
+                    "With -d: containers start in the background. Your terminal stays free.\n\n"
+                    "Additional flags:\n"
+                    "  --build          → rebuild images before starting\n"
+                    "  --force-recreate → recreate containers even if config hasn't changed\n"
+                    "  --scale web=3    → start 3 replicas of the 'web' service\n\n"
+                    "Note: newer Docker versions use 'docker compose' (no hyphen).\n"
+                    "Both forms are widely used in production; know both."
+                ),
+                "answer": "-d",
+                "hints": [
+                    "Detached mode. Same flag as docker run.",
+                    "docker-compose up ___",
+                    "The answer is: -d",
+                ],
+            },
+            {
+                "id": "comp_adv_2",
+                "type": "fill_blank",
+                "title": "Tear Down the Stack",
+                "flavor": "Investigation complete. Time to remove the environment — stop all containers and remove them. docker-compose down does both in one command. What subcommand stops and removes the entire stack?",
+                "lesson": (
+                    "docker-compose down — stops all running services and removes their containers.\n\n"
+                    "Syntax: docker-compose down [flags]\n\n"
+                    "By default, down:\n"
+                    "  - Stops containers\n"
+                    "  - Removes containers\n"
+                    "  - Removes networks created by the compose file\n\n"
+                    "It does NOT remove:\n"
+                    "  - Named volumes (use --volumes to also remove them)\n"
+                    "  - Images (use --rmi all or --rmi local to remove them)\n\n"
+                    "Full cleanup:\n"
+                    "  docker-compose down --volumes --rmi all\n"
+                    "  → removes containers, networks, volumes, and images\n\n"
+                    "Contrast with docker-compose stop:\n"
+                    "  stop  → stops containers but does not remove them\n"
+                    "  down  → stops AND removes containers and networks"
+                ),
+                "answer": "down",
+                "hints": [
+                    "The opposite of up.",
+                    "docker-compose ___",
+                    "The answer is: down",
+                ],
+            },
+            {
+                "id": "comp_adv_3",
+                "type": "fill_blank",
+                "title": "Read the Stack Logs",
+                "flavor": "Seven services are running. You need to watch the combined log output from all of them simultaneously — the way the attacker's activity would have appeared across the full stack. What subcommand shows logs for all compose services?",
+                "lesson": (
+                    "docker-compose logs — shows log output from all services in the compose stack.\n\n"
+                    "Syntax: docker-compose logs [flags] [SERVICE...]\n\n"
+                    "All services:\n"
+                    "  docker-compose logs              → all service logs\n"
+                    "  docker-compose logs -f           → follow all logs in real time\n"
+                    "  docker-compose logs --tail 50    → last 50 lines from each service\n\n"
+                    "Specific service:\n"
+                    "  docker-compose logs web          → only the 'web' service\n"
+                    "  docker-compose logs -f web db    → follow 'web' and 'db' services\n\n"
+                    "Output includes service name prefix on each line so you can\n"
+                    "distinguish which container produced each log entry."
+                ),
+                "answer": "logs",
+                "hints": [
+                    "Think: view the logs of the compose stack.",
+                    "docker-compose ___",
+                    "The answer is: logs",
+                ],
+            },
+            {
+                "id": "comp_adv_4",
+                "type": "fill_blank",
+                "title": "Service Dependency",
+                "flavor": "The compose file for the compromised environment launches an application service before its database is ready — a race condition that caused intermittent failures and may have contributed to the breach window. What compose key declares that one service depends on another?",
+                "lesson": (
+                    "depends_on — declares startup dependencies between services in a compose file.\n\n"
+                    "Syntax in compose.yml:\n"
+                    "  services:\n"
+                    "    web:\n"
+                    "      image: myapp\n"
+                    "      depends_on:\n"
+                    "        - db\n"
+                    "    db:\n"
+                    "      image: postgres\n\n"
+                    "Behaviour:\n"
+                    "  - docker-compose up starts 'db' before 'web'\n"
+                    "  - docker-compose down stops 'web' before 'db'\n\n"
+                    "Important limitation:\n"
+                    "  depends_on only waits for the container to START,\n"
+                    "  NOT for the service to be READY (e.g. database accepting connections).\n\n"
+                    "For readiness: use healthcheck + depends_on condition:\n"
+                    "  depends_on:\n"
+                    "    db:\n"
+                    "      condition: service_healthy"
+                ),
+                "answer": "depends_on",
+                "hints": [
+                    "It's a YAML key that lists services this one relies on.",
+                    "The key is: ___ - db",
+                    "The answer is: depends_on",
+                ],
+            },
+            {
+                "id": "comp_adv_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Execute Inside a Service",
+                "is_boss": True,
+                "flavor": "The 'api' service is running as part of the compose stack. Ghost needs to open an interactive shell inside it to inspect the live filesystem and environment from within the container's namespace. docker-compose exec does this without starting a new container. Complete: docker-compose exec api ___",
+                "lesson": (
+                    "docker-compose exec <service> <command> — runs a command inside a running service container.\n\n"
+                    "Syntax: docker-compose exec [flags] SERVICE COMMAND [ARGS...]\n\n"
+                    "Common uses:\n"
+                    "  docker-compose exec web bash         → interactive shell in 'web'\n"
+                    "  docker-compose exec web sh           → if bash isn't available\n"
+                    "  docker-compose exec db psql -U postgres  → connect to PostgreSQL\n"
+                    "  docker-compose exec web env          → read the container's environment\n\n"
+                    "Flags:\n"
+                    "  -e KEY=VAL   → set an additional environment variable\n"
+                    "  --user USER  → run as a specific user\n"
+                    "  -T           → disable TTY allocation (for non-interactive scripts)\n\n"
+                    "docker-compose exec vs docker exec:\n"
+                    "  docker exec requires the full container ID or name\n"
+                    "  docker-compose exec uses the service name from compose.yml\n"
+                    "  → much easier in multi-service stacks"
+                ),
+                "answer": "bash",
+                "hints": [
+                    "You want an interactive shell inside the container.",
+                    "The most common shell to exec into a container.",
+                    "The answer is: bash",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1445,4 +1743,6 @@ ZONE_ORDER = [
     "build_engine",
     "compose_matrix",
     "registry_core",
+    "health_protocol",
+    "compose_advanced",
 ]

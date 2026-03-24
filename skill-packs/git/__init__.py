@@ -44,6 +44,8 @@ SKILL_PACK = SkillPack(
         "remote_network":     "scriptor",
         "recovery_vault":     "networked",
         "forensics_chamber":  "grandmaster",
+        "stash_chamber":      "stash_operative",
+        "tag_archive":        "tag_archivist",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,

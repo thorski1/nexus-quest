@@ -39,6 +39,8 @@ SKILL_PACK = SkillPack(
         "schema_forge": "warden",
         "index_sanctum": "scriptor",
         "transaction_core": "grandmaster",
+        "window_functions": "window_analyst",
+        "json_forge":       "json_archaeologist",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=r"""

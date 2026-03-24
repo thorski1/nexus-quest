@@ -191,6 +191,44 @@ who can connect, how, and from where.
 [italic]"The attacker learns the misconfiguration to exploit it.
 The defender learns it to prevent it. The knowledge is the same."[/italic]
 """,
+    "multiplexer_gateway": """
+[bold cyan]== THE MULTIPLEXER GATEWAY ==[/bold cyan]
+
+The SSH connection drops. It happens — network instability, idle timeouts,
+a router that kills long-lived sessions. Without tmux, anything running in
+that shell is gone. A database extraction interrupted halfway. A port forward
+closed. Three hours of work wiped.
+
+[yellow]tmux[/yellow] decouples your shell session from the SSH connection.
+The session lives on the server. The connection is just a window into it.
+Drop the connection: the processes keep running. Reconnect: [yellow]tmux attach[/yellow]
+picks up exactly where you left off.
+
+The NEXUS long-haul extraction — pulling the 847MB routing table incrementally —
+was started in a tmux session called 'ghost'. It's still running.
+
+[italic]"tmux is insurance. You run long operations inside it
+so that a broken pipe doesn't become a lost operation."[/italic]
+""",
+    "scp_vault": """
+[bold cyan]== THE SCP VAULT ==[/bold cyan]
+
+Files move through the same encrypted channel as your shell session.
+
+[yellow]scp[/yellow] is copy — single files, single operations, clear source-to-destination
+intent. The syntax mirrors [yellow]cp[/yellow]: source then destination, with remote paths
+formatted as [yellow]user@host:/path[/yellow]. The [yellow]-r[/yellow] flag handles directories.
+
+[yellow]sftp[/yellow] is an interactive session: browse the remote filesystem, pull files
+selectively, push configs without knowing exact paths ahead of time.
+
+The NEXUS sysadmin's home directory has been mapped. Three config files
+need to come out. One credential file is at a path you'll need to navigate
+to interactively — sftp is the right tool.
+
+[italic]"scp when you know the path.
+sftp when you need to look around first."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -258,26 +296,45 @@ no key material ever transmitted, no passphrase ever typed after the first.
 [bold cyan]The Hardening Core: the final zone. The mistakes that made this possible.[/bold cyan]
 """,
     "hardening_core": """
-[bold yellow]★ ★ ★  THE HARDENING CORE — AUDITED.  ★ ★ ★[/bold yellow]
-
-[bold white]The SSH infiltration is complete.[/bold white]
+[bold green]THE HARDENING CORE — AUDITED.[/bold green]
 
 Seven misconfigured servers. Four unnecessary enabled options.
 Three unauthorized keys in [cyan]authorized_keys[/cyan] files. Two servers with
 [cyan]PermitRootLogin yes[/cyan]. One organization that thought SSH was secure
 because they were using it.
 
-SSH [italic]is[/italic] secure. The protocol is sound. The implementations are sound.
-The configurations were not.
-
 You moved through NEXUS's entire server infrastructure using their
 own keys, their own jump hosts, their own agent forwarding setup.
-They handed you the network.
 
-[bold magenta]"SSH is the most powerful protocol ever deployed at scale.
-The misconfiguration rate suggests most organizations don't realize this."[/bold magenta]
+[bold cyan]The Multiplexer Gateway: sessions that survive the connection drop.[/bold cyan]
+""",
+    "multiplexer_gateway": """
+[bold green]THE MULTIPLEXER GATEWAY — ACTIVE.[/bold green]
 
-[bold yellow]SSH SPECIALIST: GRANDMASTER. NETWORK: FULLY TRAVERSED.[/bold yellow]
+[cyan]tmux new -s ghost[/cyan] started the session. [cyan]Ctrl+b d[/cyan] detached cleanly.
+The 847MB pull is running in the background. The connection dropped twice.
+Both times: reconnect, [cyan]tmux attach -t ghost[/cyan], back in the session.
+The extraction completed without interruption.
+
+[bold cyan]The SCP Vault: files move through the encrypted channel.[/bold cyan]
+""",
+    "scp_vault": """
+[bold yellow]★ ★ ★  THE SCP VAULT — CLEARED.  ★ ★ ★[/bold yellow]
+
+[bold white]The SSH infiltration is complete.[/bold white]
+
+Three config files pulled via [cyan]scp[/cyan]. The credential file located via [cyan]sftp[/cyan],
+pulled with [cyan]get[/cyan]. The routing table exfiltrated incrementally through a tmux session
+that outlasted three dropped connections.
+
+SSH [italic]is[/italic] secure. The protocol is sound. The implementations are sound.
+The configurations were not — and the operators left files on the server
+that should have been rotated years ago.
+
+[bold magenta]"scp when you know the path. sftp when you need to look around first.
+Either way, it's the same encrypted channel — only the workflow changes."[/bold magenta]
+
+[bold yellow]SSH SPECIALIST: GRANDMASTER. NETWORK: FULLY TRAVERSED. FILES: EXTRACTED.[/bold yellow]
 """,
 }
 
@@ -290,6 +347,8 @@ BOSS_INTROS = {
     "jump_chain": "[bold red]⚠  MULTI-HOP: The Four-Server Chain[/bold red]\nBastion → internal jump → application server → database. One command. Prove you know ProxyJump.",
     "agent_protocol": "[bold red]⚠  AGENT FORWARDING: The Keyless Hop[/bold red]\nForward the agent. The remote server needs to authenticate onward without a key file present.",
     "hardening_core": "[bold red]★  FINAL AUDIT: The Configuration[/bold red]\nEvery misconfiguration that made this infiltration possible. Name them. Know how to prevent them.",
+    "multiplexer_gateway": "[bold red]⚠  SESSION PERSISTENCE: The 847MB Pull[/bold red]\nThe extraction is running in tmux. The connection will drop. Create the session, run the job, detach cleanly, reattach after the drop. Nothing can interrupt it.",
+    "scp_vault": "[bold red]★  FILE EXTRACTION: The SCP/SFTP Trial[/bold red]\nThree files via scp. One file via sftp — path unknown, requires interactive navigation. Everything must land locally before the session window closes.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -311,6 +370,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Junior Operator", "Level 10. You can connect, transfer, and disconnect without hesitation."),
     "level_20": ("Senior Operator", "Level 20. Tunnels and jump chains are reflexes."),
     "level_30": ("Master SSH Operator", "Maximum level. You understand SSH from the key exchange to the hardening config."),
+    "session_keeper": ("Multiplexer Operator", "Cleared the Multiplexer Gateway. tmux sessions persist. Connection drops are irrelevant."),
+    "data_mover": ("SCP/SFTP Specialist", "Cleared the SCP Vault. scp for known paths, sftp for exploration. Files move when you tell them to."),
     "completionist": ("Full Network Traversal", "Every zone. Every challenge. Complete SSH mastery achieved."),
     "boss_slayer": ("First Barrier Bypassed", "Beat your first SSH boss challenge. The network yielded."),
 }

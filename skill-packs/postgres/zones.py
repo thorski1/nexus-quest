@@ -1299,6 +1299,420 @@ ZONES = {
             },
         ],
     },
+    "window_functions": {
+        "id": "window_functions",
+        "name": "The Window Functions Archive",
+        "subtitle": "Rank, partition, and analyze without collapsing rows",
+        "color": "magenta",
+        "icon": "📊",
+        "commands": ["ROW_NUMBER() OVER", "RANK() OVER (PARTITION BY)", "LAG()", "LEAD()", "SUM() OVER", "NTILE()"],
+        "challenges": [
+            {
+                "id": "wf_1",
+                "type": "fill_blank",
+                "title": "Row Number",
+                "flavor": "The NEXUS transaction archive needs a sequential row number assigned to each transaction ordered by timestamp — without collapsing rows. Which function assigns sequential integers per row?",
+                "lesson": (
+                    "ROW_NUMBER() OVER (ORDER BY col) — assign a sequential integer to each row.\n\n"
+                    "  SELECT id, amount,\n"
+                    "         ROW_NUMBER() OVER (ORDER BY created_at) AS row_num\n"
+                    "  FROM transactions;\n\n"
+                    "Window functions work over a 'window' of rows without collapsing them.\n"
+                    "Unlike GROUP BY aggregations, every row remains in the output.\n\n"
+                    "ROW_NUMBER() vs RANK() vs DENSE_RANK():\n"
+                    "  ROW_NUMBER()  → always unique; ties get different numbers (arbitrary order)\n"
+                    "  RANK()        → ties get same number; gaps exist (1, 2, 2, 4)\n"
+                    "  DENSE_RANK()  → ties get same number; no gaps (1, 2, 2, 3)\n\n"
+                    "Syntax: function() OVER (partition_clause order_clause frame_clause)\n"
+                    "  The OVER() clause is what makes it a window function."
+                ),
+                "question": (
+                    "Complete this query to assign sequential row numbers ordered by amount:\n\n"
+                    "SELECT id, amount, ___ OVER (ORDER BY amount DESC) AS rn\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["ROW_NUMBER()", "row_number()"],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "The function that assigns unique sequential integers to rows.",
+                    "It's two words with parentheses.",
+                    "The answer is: ROW_NUMBER()",
+                ],
+            },
+            {
+                "id": "wf_2",
+                "type": "fill_blank",
+                "title": "Rank Within Partitions",
+                "flavor": "You need to rank transactions by amount within each account — so each account gets its own 1st, 2nd, 3rd largest transaction. Which clause divides the window into per-account groups?",
+                "lesson": (
+                    "RANK() OVER (PARTITION BY x ORDER BY y) — rank rows within each partition.\n\n"
+                    "  SELECT account_id, amount,\n"
+                    "         RANK() OVER (PARTITION BY account_id ORDER BY amount DESC) AS rnk\n"
+                    "  FROM transactions;\n\n"
+                    "PARTITION BY:\n"
+                    "  Divides the result set into partitions (like GROUP BY for window functions)\n"
+                    "  The window function resets for each partition\n"
+                    "  Without PARTITION BY: the entire result set is one window\n\n"
+                    "Common pattern — top N per group:\n"
+                    "  SELECT * FROM (\n"
+                    "    SELECT *, RANK() OVER (PARTITION BY account_id ORDER BY amount DESC) AS rnk\n"
+                    "    FROM transactions\n"
+                    "  ) t WHERE rnk <= 3;\n"
+                    "  → the top 3 transactions per account"
+                ),
+                "question": (
+                    "Complete this query to rank transactions within each department by salary:\n\n"
+                    "SELECT name, dept, salary,\n"
+                    "       RANK() OVER (___ BY dept ORDER BY salary DESC) AS rnk\n"
+                    "FROM employees;"
+                ),
+                "answers": ["PARTITION", "partition"],
+                "xp": 125,
+                "difficulty": "medium",
+                "hints": [
+                    "The clause that splits the window into groups.",
+                    "It comes before BY and specifies the grouping column.",
+                    "The answer is: PARTITION",
+                ],
+            },
+            {
+                "id": "wf_3",
+                "type": "fill_blank",
+                "title": "Access Previous Row",
+                "flavor": "The NEXUS financial audit requires comparing each transaction's amount to the previous transaction's amount in the same account. Which window function accesses the value from the prior row?",
+                "lesson": (
+                    "LAG(col) OVER (ORDER BY ...) — access the value from the previous row.\n\n"
+                    "  SELECT id, amount,\n"
+                    "         LAG(amount) OVER (ORDER BY created_at) AS prev_amount,\n"
+                    "         amount - LAG(amount) OVER (ORDER BY created_at) AS delta\n"
+                    "  FROM transactions;\n\n"
+                    "LAG and LEAD:\n"
+                    "  LAG(col)         → value from 1 row BEFORE current row\n"
+                    "  LAG(col, 2)      → value from 2 rows before\n"
+                    "  LAG(col, 1, 0)   → value from 1 row before; 0 as default if no prior row\n"
+                    "  LEAD(col)        → value from 1 row AFTER current row\n"
+                    "  LEAD(col, 2, 0)  → value from 2 rows ahead; 0 as default\n\n"
+                    "Use cases:\n"
+                    "  - Calculate period-over-period change\n"
+                    "  - Detect gaps in sequences\n"
+                    "  - Compare a row to its neighbor"
+                ),
+                "question": (
+                    "Complete this query to see each row's amount alongside the previous row's amount:\n\n"
+                    "SELECT id, amount, ___(amount) OVER (ORDER BY created_at) AS prev_amount\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["LAG", "lag"],
+                "xp": 125,
+                "difficulty": "medium",
+                "hints": [
+                    "The function that looks backwards one row.",
+                    "Opposite of LEAD.",
+                    "The answer is: LAG",
+                ],
+            },
+            {
+                "id": "wf_4",
+                "type": "fill_blank",
+                "title": "Running Total",
+                "flavor": "The NEXUS compliance report needs a running total of transaction amounts ordered by date — each row should show the cumulative sum up to that point. Which aggregate with OVER clause produces this?",
+                "lesson": (
+                    "SUM() OVER (PARTITION BY ... ORDER BY ...) — running total within a window.\n\n"
+                    "  SELECT id, account_id, amount,\n"
+                    "         SUM(amount) OVER (PARTITION BY account_id ORDER BY created_at) AS running_total\n"
+                    "  FROM transactions;\n\n"
+                    "With ORDER BY in the OVER clause:\n"
+                    "  The default frame is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n"
+                    "  This creates a running/cumulative total up to the current row\n\n"
+                    "Without ORDER BY:\n"
+                    "  SUM(amount) OVER (PARTITION BY account_id) → total for the entire partition\n"
+                    "  The same value appears on every row in the partition\n\n"
+                    "All aggregates work as window functions:\n"
+                    "  COUNT(*) OVER (PARTITION BY dept) → dept headcount on every row\n"
+                    "  AVG(salary) OVER (PARTITION BY dept) → dept avg on every row\n"
+                    "  MAX(amount) OVER (PARTITION BY account_id ORDER BY created_at) → running max"
+                ),
+                "question": (
+                    "Complete this query to compute a running total of amounts per account:\n\n"
+                    "SELECT id, account_id, amount,\n"
+                    "       ___(amount) OVER (PARTITION BY account_id ORDER BY created_at) AS running_total\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["SUM", "sum"],
+                "xp": 125,
+                "difficulty": "medium",
+                "hints": [
+                    "The standard aggregate for totaling numeric values.",
+                    "The answer is: SUM",
+                ],
+            },
+            {
+                "id": "wf_5",
+                "type": "fill_blank",
+                "title": "Access Next Row",
+                "flavor": "The NEXUS audit also requires showing the next transaction's amount alongside the current one for sequence analysis. Which function looks ahead one row?",
+                "lesson": (
+                    "LEAD(col) OVER (ORDER BY ...) — access the value from the next row.\n\n"
+                    "  SELECT id, amount,\n"
+                    "         LEAD(amount) OVER (ORDER BY created_at) AS next_amount\n"
+                    "  FROM transactions;\n\n"
+                    "LEAD vs LAG:\n"
+                    "  LAG  → look back (previous row)\n"
+                    "  LEAD → look ahead (next row)\n\n"
+                    "Both accept optional arguments:\n"
+                    "  LEAD(col, n, default)\n"
+                    "    col     → column to read\n"
+                    "    n       → how many rows ahead (default: 1)\n"
+                    "    default → value when no row exists (NULL by default)\n\n"
+                    "Practical use — detecting jumps:\n"
+                    "  SELECT id, amount,\n"
+                    "         LEAD(amount) OVER (ORDER BY created_at) - amount AS next_delta\n"
+                    "  FROM transactions\n"
+                    "  WHERE next_delta > 100000;  -- unusually large jumps"
+                ),
+                "question": (
+                    "Complete this query to show each transaction alongside the next one's amount:\n\n"
+                    "SELECT id, amount, ___(amount) OVER (ORDER BY created_at) AS next_amount\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["LEAD", "lead"],
+                "xp": 125,
+                "difficulty": "medium",
+                "hints": [
+                    "The function that looks forward one row.",
+                    "Opposite of LAG.",
+                    "The answer is: LEAD",
+                ],
+            },
+            {
+                "id": "wf_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Quartile Bucketing",
+                "flavor": "The NEXUS financial intelligence report requires bucketing all transactions into 4 equal groups by amount — quartiles — for distribution analysis. Which window function splits rows into N equal buckets?",
+                "lesson": (
+                    "NTILE(n) OVER (ORDER BY col) — divide rows into n equal buckets.\n\n"
+                    "  SELECT id, amount,\n"
+                    "         NTILE(4) OVER (ORDER BY amount) AS quartile\n"
+                    "  FROM transactions;\n\n"
+                    "NTILE(4):\n"
+                    "  Assigns each row to bucket 1, 2, 3, or 4\n"
+                    "  Bucket 1 = lowest quartile, bucket 4 = highest quartile\n"
+                    "  Rows distributed as evenly as possible\n"
+                    "  If rows don't divide evenly: earlier buckets get one extra row\n\n"
+                    "Common values:\n"
+                    "  NTILE(2)   → median split (above/below median)\n"
+                    "  NTILE(4)   → quartiles\n"
+                    "  NTILE(10)  → deciles\n"
+                    "  NTILE(100) → percentiles\n\n"
+                    "Use case — filter by quartile:\n"
+                    "  SELECT * FROM (\n"
+                    "    SELECT *, NTILE(4) OVER (ORDER BY amount) AS quartile FROM transactions\n"
+                    "  ) t WHERE quartile = 4;  → top 25% by amount"
+                ),
+                "question": (
+                    "Complete this query to assign quartile buckets to transactions by amount:\n\n"
+                    "SELECT id, amount, ___(4) OVER (ORDER BY amount) AS quartile\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["NTILE", "ntile"],
+                "xp": 250,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The window function that divides rows into equal buckets.",
+                    "Takes the number of buckets as its argument.",
+                    "The answer is: NTILE",
+                ],
+            },
+        ],
+    },
+    "json_forge": {
+        "id": "json_forge",
+        "name": "The JSON Forge",
+        "subtitle": "Query and transform semi-structured data",
+        "color": "yellow",
+        "icon": "🔧",
+        "commands": ["->", "->>", "jsonb_array_elements()", "json_build_object()", "@>"],
+        "challenges": [
+            {
+                "id": "jf_1",
+                "type": "fill_blank",
+                "title": "JSON Key Extraction",
+                "flavor": "The NEXUS metadata column stores a JSONB payload. You need to extract the 'vendor' key as a JSON value (not text). Which operator does this?",
+                "lesson": (
+                    "col->'key' — extract a JSON field, returning JSON.\n\n"
+                    "  SELECT metadata->'vendor' FROM transactions;\n"
+                    "  → returns: \"phantom_corp\"   (with quotes — it's still JSON)\n\n"
+                    "Two extraction operators:\n"
+                    "  ->   → returns JSON (object, array, string with quotes, number)\n"
+                    "  ->>  → returns TEXT (string without quotes, number as text)\n\n"
+                    "When to use each:\n"
+                    "  ->  for further JSON operations, or when value is an object/array\n"
+                    "  ->> when you want a plain text value to compare or display\n\n"
+                    "Nested access:\n"
+                    "  metadata->'address'->'city'    → nested JSON object\n"
+                    "  metadata->'address'->>'city'   → nested, as text\n"
+                    "  metadata->0                    → first element of a JSON array\n"
+                    "  metadata->>0                   → first element, as text"
+                ),
+                "question": (
+                    "Complete this query to extract the 'vendor' field as JSON from the metadata column:\n\n"
+                    "SELECT id, metadata ___ 'vendor' AS vendor_json\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["->", "->"],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "The JSON extraction operator — two characters, arrow shape.",
+                    "Returns JSON, not plain text.",
+                    "The answer is: ->",
+                ],
+            },
+            {
+                "id": "jf_2",
+                "type": "fill_blank",
+                "title": "JSON Key as Text",
+                "flavor": "You need to filter transactions WHERE the vendor in the JSONB metadata field equals 'phantom_corp' — that requires text comparison. Which operator extracts as plain text?",
+                "lesson": (
+                    "col->>'key' — extract a JSON field as text.\n\n"
+                    "  SELECT * FROM transactions WHERE metadata->>'vendor' = 'phantom_corp';\n\n"
+                    "The text extraction operator ->>:\n"
+                    "  Returns a plain TEXT value (no JSON quotes)\n"
+                    "  Suitable for WHERE clause comparisons\n"
+                    "  Suitable for ORDER BY, DISTINCT, JOIN conditions\n\n"
+                    "Comparison:\n"
+                    "  metadata->'vendor' = '\"phantom_corp\"'  → JSON comparison (note quotes inside)\n"
+                    "  metadata->>'vendor' = 'phantom_corp'   → text comparison (cleaner)\n\n"
+                    "Type casting:\n"
+                    "  (metadata->>'amount')::numeric  → extract as text, cast to number\n"
+                    "  (metadata->>'active')::boolean  → extract as text, cast to boolean"
+                ),
+                "question": (
+                    "Complete this query to filter rows where the vendor in metadata is 'phantom_corp':\n\n"
+                    "SELECT * FROM transactions\n"
+                    "WHERE metadata ___ 'vendor' = 'phantom_corp';"
+                ),
+                "answers": ["->>", "->>"],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "The text extraction operator — three characters.",
+                    "Double arrow for text output.",
+                    "The answer is: ->>",
+                ],
+            },
+            {
+                "id": "jf_3",
+                "type": "fill_blank",
+                "title": "Expand JSON Array",
+                "flavor": "Each NEXUS transaction row has a JSONB array of account_ids in the metadata column. You need to expand that array so each element appears as its own row. Which function does this?",
+                "lesson": (
+                    "jsonb_array_elements(col) — expand a JSON array into a set of rows.\n\n"
+                    "  SELECT id, jsonb_array_elements(metadata->'account_ids') AS account_id\n"
+                    "  FROM transactions;\n\n"
+                    "This is a set-returning function: each element of the array becomes a row.\n"
+                    "A transaction with 3 account_ids produces 3 output rows.\n\n"
+                    "Variants:\n"
+                    "  jsonb_array_elements(col)       → returns JSONB elements\n"
+                    "  jsonb_array_elements_text(col)  → returns TEXT elements\n"
+                    "  json_array_elements(col)        → same for json type (not jsonb)\n\n"
+                    "Combine with WITH ORDINALITY to get the array index:\n"
+                    "  SELECT id, elem, pos\n"
+                    "  FROM transactions,\n"
+                    "       jsonb_array_elements(metadata->'account_ids') WITH ORDINALITY AS t(elem, pos);"
+                ),
+                "question": (
+                    "Complete this query to expand the 'tags' JSON array column into individual rows:\n\n"
+                    "SELECT id, ___(tags) AS tag\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["jsonb_array_elements", "JSONB_ARRAY_ELEMENTS"],
+                "xp": 150,
+                "difficulty": "hard",
+                "hints": [
+                    "A set-returning function that expands a JSONB array.",
+                    "Starts with 'jsonb_array'.",
+                    "The answer is: jsonb_array_elements",
+                ],
+            },
+            {
+                "id": "jf_4",
+                "type": "fill_blank",
+                "title": "Build a JSON Object",
+                "flavor": "You need to construct a JSON audit record from individual columns — combining id, amount, and vendor into a single JSON object per row. Which function builds a JSON object from key-value pairs?",
+                "lesson": (
+                    "json_build_object('key', value, ...) — construct a JSON object from arguments.\n\n"
+                    "  SELECT json_build_object(\n"
+                    "    'id', id,\n"
+                    "    'amount', amount,\n"
+                    "    'vendor', metadata->>'vendor'\n"
+                    "  ) AS audit_record\n"
+                    "  FROM transactions;\n\n"
+                    "Arguments: alternating key, value pairs.\n"
+                    "  Keys must be strings. Values can be any SQL expression.\n\n"
+                    "Variants:\n"
+                    "  json_build_object()   → returns json type\n"
+                    "  jsonb_build_object()  → returns jsonb type (usually preferred)\n\n"
+                    "Building JSON arrays:\n"
+                    "  json_build_array(val1, val2, ...)  → [val1, val2, ...]\n\n"
+                    "Row to JSON:\n"
+                    "  row_to_json(t)  → converts an entire row to a JSON object\n"
+                    "  to_jsonb(t)     → same, returns jsonb"
+                ),
+                "question": (
+                    "Complete this query to build a JSON object with 'id' and 'amount' fields:\n\n"
+                    "SELECT ___('id', id, 'amount', amount) AS payload\n"
+                    "FROM transactions;"
+                ),
+                "answers": ["json_build_object", "jsonb_build_object", "JSON_BUILD_OBJECT", "JSONB_BUILD_OBJECT"],
+                "xp": 150,
+                "difficulty": "hard",
+                "hints": [
+                    "The function that creates a JSON object from key-value argument pairs.",
+                    "Starts with 'json_build'.",
+                    "The answer is: json_build_object",
+                ],
+            },
+            {
+                "id": "jf_boss",
+                "type": "fill_blank",
+                "title": "BOSS: JSON Contains Operator",
+                "flavor": "You need to find all NEXUS transactions where the JSONB metadata column contains the key-value pair vendor: 'phantom_corp'. Which JSONB operator tests containment?",
+                "lesson": (
+                    "@> — the JSONB containment operator: left side contains right side.\n\n"
+                    "  SELECT * FROM transactions\n"
+                    "  WHERE metadata @> '{\"vendor\": \"phantom_corp\"}'::jsonb;\n\n"
+                    "This is more efficient than -> / ->> for indexed containment checks.\n"
+                    "With a GIN index on the JSONB column, @> uses the index directly.\n\n"
+                    "JSONB operators:\n"
+                    "  @>  → left contains right (left has all key-value pairs of right)\n"
+                    "  <@  → left is contained by right (right contains all of left)\n"
+                    "  ?   → key exists: metadata ? 'vendor'\n"
+                    "  ?|  → any of these keys exist: metadata ?| ARRAY['vendor','amount']\n"
+                    "  ?&  → all of these keys exist: metadata ?& ARRAY['vendor','amount']\n\n"
+                    "Creating a GIN index for fast containment queries:\n"
+                    "  CREATE INDEX idx_metadata_gin ON transactions USING GIN (metadata);\n"
+                    "  → Makes @>, ?, ?|, ?& all use the index."
+                ),
+                "question": (
+                    "Complete this query to find all transactions where metadata contains vendor 'phantom_corp':\n\n"
+                    "SELECT * FROM transactions\n"
+                    "WHERE metadata ___ '{\"vendor\": \"phantom_corp\"}'::jsonb;"
+                ),
+                "answers": ["@>"],
+                "xp": 250,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The containment operator — two characters.",
+                    "It checks if the left JSONB value contains the right.",
+                    "The answer is: @>",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1310,4 +1724,6 @@ ZONE_ORDER = [
     "schema_forge",
     "index_sanctum",
     "transaction_core",
+    "window_functions",
+    "json_forge",
 ]

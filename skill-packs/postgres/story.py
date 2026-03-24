@@ -193,6 +193,51 @@ Isolation levels: [yellow]READ COMMITTED[/yellow], [yellow]REPEATABLE READ[/yell
 [italic]"Transactions are the database's promise: if I say it happened, it happened.
 Even if the power went out. Even if the disk failed. Even if the building burned down."[/italic]
 """,
+    "window_functions": """
+[bold cyan]== THE WINDOW FUNCTIONS ARCHIVE ==[/bold cyan]
+
+GROUP BY collapses rows. Window functions do not.
+
+You've been aggregating data — summing, counting, averaging. Every time you
+GROUP BY, the individual rows disappear into the aggregate. The department becomes
+a number. The account becomes a total. The data loses its resolution.
+
+Window functions give you aggregation [italic]and[/italic] the original rows simultaneously.
+[yellow]ROW_NUMBER()[/yellow] assigns ranks without collapsing. [yellow]SUM() OVER()[/yellow] computes a running
+total while keeping every transaction visible. [yellow]LAG()[/yellow] and [yellow]LEAD()[/yellow] access
+neighboring rows directly — no self-join required.
+
+The NEXUS transaction archive has 200 billion rows across eleven thousand tables.
+The forensic pattern you're looking for — accounts where the same vendor appears in
+the top 3 transactions across every quarter for five years — requires ranking within
+partitions and comparing across time. GROUP BY can't do this. Window functions can.
+
+[italic]"Window functions are what separate SQL analysis from SQL reporting.
+Reporting collapses data. Analysis preserves it."[/italic]
+""",
+    "json_forge": """
+[bold cyan]== THE JSON FORGE ==[/bold cyan]
+
+Some data refuses to fit the relational model.
+
+The NEXUS archive is mostly structured — tables, columns, foreign keys, constraints.
+But the metadata column in the transactions table is a [yellow]JSONB[/yellow] blob. Every transaction
+carries a variable payload: vendor details, routing codes, authorization chains, flags.
+No consistent schema. No ALTER TABLE that could normalize it without breaking every
+upstream system that writes to it.
+
+[yellow]->[/yellow] and [yellow]->>[/yellow] extract individual fields. [yellow]jsonb_array_elements()[/yellow] explodes arrays
+into rows. [yellow]@>[/yellow] tests containment with index support — the right way to query
+JSONB at scale. [yellow]json_build_object()[/yellow] constructs new JSON from relational data
+for output or intermediate staging.
+
+The phantom_corp pattern lives inside that metadata column. Seventeen transactions.
+Different accounts. Different amounts. Same vendor JSON payload structure — and
+that structure is the signature.
+
+[italic]"Semi-structured data is not an excuse to not query it.
+JSON operators are the bridge between the document and the relation."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -275,21 +320,42 @@ is an index. You know where to put it. You know how to verify it's working.
 [bold cyan]One final layer. The Transaction Core. This is where ACID lives.[/bold cyan]
 """,
     "transaction_core": """
-[bold yellow]★ ★ ★  THE TRANSACTION CORE — MASTERED.  ★ ★ ★[/bold yellow]
+[bold green]THE TRANSACTION CORE — MASTERED.[/bold green]
+
+Every record pulled in the right order, at the right level of isolation,
+committed to the staging table in a single atomic transaction. Clean.
+
+[bold cyan]The Window Functions Archive: analysis without losing the rows.[/bold cyan]
+""",
+    "window_functions": """
+[bold green]THE WINDOW FUNCTIONS ARCHIVE — MAPPED.[/bold green]
+
+[cyan]ROW_NUMBER()[/cyan], [cyan]RANK()[/cyan], [cyan]LAG()[/cyan], [cyan]LEAD()[/cyan], [cyan]SUM() OVER()[/cyan], [cyan]NTILE()[/cyan].
+The forensic pattern emerged: the same phantom vendor ranks #1 by transaction amount
+in every account, every quarter, for five years. No GROUP BY could have shown this.
+Window functions preserved the rows [italic]and[/italic] computed the analysis.
+
+[bold cyan]The JSON Forge: the pattern lives inside the metadata column.[/bold cyan]
+""",
+    "json_forge": """
+[bold yellow]★ ★ ★  THE JSON FORGE — COMPLETE.  ★ ★ ★[/bold yellow]
 
 [bold white]The extraction is complete.[/bold white]
 
-Every record you needed, pulled in the right order, at the right level of isolation,
-committed to your staging table in a single atomic transaction. If anything had
-gone wrong — network failure, disk error, concurrent write — it would have rolled back
-cleanly. No partial state. No corruption. No trace.
+[cyan]metadata @> '{"vendor": "phantom_corp"}'::jsonb[/cyan] — seventeen matching transactions.
+[cyan]jsonb_array_elements()[/cyan] expanded the authorization chains into rows for cross-reference.
+[cyan]json_build_object()[/cyan] formatted the output package exactly as the client specified.
 
-From SELECT to transaction boundaries. Surface Tables to the Transaction Core.
-You've walked every layer of the relational model.
+The pattern was always there. Inside a JSONB blob, inside a transaction table,
+inside a 200-billion-row archive that the corp's own analysts query every day
+without seeing anything unusual.
 
-[bold magenta]The corps think SQL is a reporting tool. You know it's a power tool.[/bold magenta]
+From SELECT to JSONB operators. Surface Tables to the JSON Forge.
+Every layer of the archive walked.
 
-[bold yellow]DATA ARCHAEOLOGIST STATUS: GRANDMASTER.  EXTRACTION: COMPLETE.[/bold yellow]
+[bold magenta]The corps think SQL is a reporting tool. You know it's an intelligence tool.[/bold magenta]
+
+[bold yellow]DATA ARCHAEOLOGIST STATUS: GRANDMASTER.  ARCHIVE: FULLY EXCAVATED.[/bold yellow]
 """,
 }
 
@@ -302,6 +368,8 @@ BOSS_INTROS = {
     "schema_forge": "[bold red]⚠  SCHEMA MODIFICATION LOGGED: The DDL Trial[/bold red]\nYou need a staging table. Create it, constrain it correctly, and populate it in one transaction — before the schema audit runs.",
     "index_sanctum": "[bold red]⚠  QUERY PERFORMANCE ALERT: The Optimization Crisis[/bold red]\nA query is running too long. The monitoring system will flag it in 30 seconds. Read the EXPLAIN output, add the index, verify the speedup.",
     "transaction_core": "[bold red]★  FINAL TRANSACTION: The ACID Test[/bold red]\nEverything you've extracted needs to land in the staging table atomically. BEGIN, do the work, COMMIT. If anything goes wrong, it never happened.",
+    "window_functions": "[bold red]⚠  FORENSIC ANALYSIS: The Pattern Across Quarters[/bold red]\nFive years. Same phantom vendor. Same account ranking pattern. You need ROW_NUMBER, PARTITION, LAG, and NTILE to surface it. No GROUP BY.",
+    "json_forge": "[bold red]★  JSON EXTRACTION: The Metadata Signature[/bold red]\nSeventeen transactions. Phantom vendor hidden in a JSONB column. Use @>, ->>, jsonb_array_elements. Find the pattern before the audit window closes.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -323,6 +391,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Junior Analyst", "Level 10. The database is starting to feel familiar."),
     "level_20": ("Senior Analyst", "Level 20. SQL is your native query language now."),
     "level_30": ("Query Legend", "Maximum level. You understand the relational model from SELECT to ACID. Complete."),
+    "window_analyst": ("Window Function Specialist", "Cleared the Window Functions Archive. ROW_NUMBER, LAG, LEAD, NTILE — you analyze without collapsing."),
+    "json_archaeologist": ("JSON Operator Expert", "Cleared the JSON Forge. ->, ->>, @>, jsonb_array_elements — semi-structured data holds no secrets."),
     "completionist": ("Full Schema Access", "Every challenge. Every zone. Total archive penetration achieved."),
     "boss_slayer": ("Audit Bypassed", "Beat your first boss challenge. The compliance system found nothing unusual."),
 }

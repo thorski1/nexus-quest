@@ -1443,6 +1443,309 @@ ZONES = {
             },
         ],
     },
+
+    "stash_chamber": {
+        "id": "stash_chamber",
+        "name": "The Stash Chamber",
+        "subtitle": "Park your work, pick it up later",
+        "color": "cyan",
+        "icon": "📦",
+        "commands": ["git stash", "git stash pop", "git stash list", "git stash apply", "git stash drop"],
+        "challenges": [
+            {
+                "id": "stash_1",
+                "type": "quiz",
+                "title": "Park the Work",
+                "flavor": "You're mid-investigation on a branch when an urgent request comes in. You need to switch context without committing half-finished work. Git has a temporary holding area for exactly this.",
+                "lesson": (
+                    "git stash — saves uncommitted changes to a temporary stack and restores a clean working tree.\n\n"
+                    "git stash saves:\n"
+                    "  - Staged changes (index)\n"
+                    "  - Modified tracked files\n\n"
+                    "By default it does NOT save:\n"
+                    "  - Untracked files (use git stash -u to include them)\n"
+                    "  - Ignored files (use git stash -a to include everything)\n\n"
+                    "Syntax:\n"
+                    "  git stash               → stash with an auto-generated message\n"
+                    "  git stash push -m 'msg' → stash with a descriptive message\n\n"
+                    "After running git stash, the working tree is clean and you can\n"
+                    "safely switch branches."
+                ),
+                "question": "What command saves uncommitted changes to a temporary stash and cleans the working tree?",
+                "answers": ["git stash", "git stash push"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: stash it away for later.",
+                    "Two words: git and a verb.",
+                    "The answer is: git stash",
+                ],
+            },
+            {
+                "id": "stash_2",
+                "type": "quiz",
+                "title": "Retrieve the Work",
+                "flavor": "The urgent context switch is done. You need to return to the interrupted investigation and restore the changes you parked. Get them back — and remove them from the stash.",
+                "lesson": (
+                    "git stash pop — restores the most recently stashed changes and removes them from the stash stack.\n\n"
+                    "Syntax: git stash pop\n\n"
+                    "Behaviour:\n"
+                    "  - Applies the top stash entry to the working tree\n"
+                    "  - Removes that entry from the stash stack\n"
+                    "  - If there are conflicts, the stash is NOT removed (resolve first)\n\n"
+                    "git stash pop vs git stash apply:\n"
+                    "  pop    → apply + remove from stash (most common)\n"
+                    "  apply  → apply but keep in stash (useful if applying to multiple branches)"
+                ),
+                "question": "What command restores the most recent stash and removes it from the stash stack?",
+                "answers": ["git stash pop"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Pop it off the stack.",
+                    "Two words: git stash and a verb.",
+                    "The answer is: git stash pop",
+                ],
+            },
+            {
+                "id": "stash_3",
+                "type": "quiz",
+                "title": "Audit the Stack",
+                "flavor": "Over the course of this investigation you've stashed changes on multiple branches. Before you restore anything, you need to see what's in the stash stack and when each entry was created.",
+                "lesson": (
+                    "git stash list — shows all entries currently in the stash stack.\n\n"
+                    "Output format:\n"
+                    "  stash@{0}: WIP on main: a3f9c21 Latest commit message\n"
+                    "  stash@{1}: On feature: 8b2d4f3 Another commit message\n\n"
+                    "  stash@{0}  → most recent stash (0 = top of stack)\n"
+                    "  stash@{1}  → one before that\n\n"
+                    "The stash is a stack: new entries go to {0}, older ones shift down.\n\n"
+                    "To see the diff of a specific stash entry:\n"
+                    "  git stash show stash@{1}        → summary\n"
+                    "  git stash show -p stash@{1}     → full diff"
+                ),
+                "question": "What command shows all entries currently saved in the git stash?",
+                "answers": ["git stash list"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: list what's in the stash.",
+                    "The answer is: git stash list",
+                ],
+            },
+            {
+                "id": "stash_4",
+                "type": "quiz",
+                "title": "Apply Without Removing",
+                "flavor": "You need to apply stash@{0} to this branch, but you also want to apply the same changes to another branch — so you cannot let the stash entry be deleted. Use apply instead of pop.",
+                "lesson": (
+                    "git stash apply stash@{N} — applies a specific stash entry without removing it.\n\n"
+                    "Syntax:\n"
+                    "  git stash apply              → applies stash@{0} (most recent)\n"
+                    "  git stash apply stash@{2}    → applies a specific stash entry\n\n"
+                    "Use apply when:\n"
+                    "  - You need the same changes on multiple branches\n"
+                    "  - You want to inspect what applying does before committing to it\n"
+                    "  - You're uncertain and want the stash to remain as a backup\n\n"
+                    "After applying, the stash entry remains in git stash list.\n"
+                    "Remove it manually with git stash drop stash@{N} when done."
+                ),
+                "question": "What command applies a specific stash entry without removing it from the stash stack?",
+                "answers": ["git stash apply", "git stash apply stash@{0}"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "apply, not pop — it keeps the stash entry.",
+                    "The answer is: git stash apply",
+                ],
+            },
+            {
+                "id": "stash_boss",
+                "type": "quiz",
+                "title": "BOSS: Discard the Stash",
+                "flavor": "The investigation is complete. There's a stash entry from three days ago that contains abandoned work from a dead-end branch. It's no longer needed. Remove it from the stack without applying it.",
+                "lesson": (
+                    "git stash drop — removes a stash entry without applying it.\n\n"
+                    "Syntax:\n"
+                    "  git stash drop               → drops stash@{0}\n"
+                    "  git stash drop stash@{2}     → drops a specific entry\n\n"
+                    "To remove ALL stash entries at once:\n"
+                    "  git stash clear    → wipes the entire stash stack\n\n"
+                    "Drop vs pop:\n"
+                    "  pop   → apply + remove (you want the changes)\n"
+                    "  drop  → remove without applying (you don't want them)\n\n"
+                    "Warning: dropped stash entries are not tracked by the reflog\n"
+                    "in older git versions. They are recoverable via git fsck but\n"
+                    "this is not guaranteed. Drop with intent."
+                ),
+                "question": "What command removes a stash entry from the stash stack without applying it?",
+                "answers": ["git stash drop", "git stash drop stash@{0}"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "You want to discard, not apply.",
+                    "Think: drop it.",
+                    "The answer is: git stash drop",
+                ],
+            },
+        ],
+    },
+
+    "tag_archive": {
+        "id": "tag_archive",
+        "name": "The Tag Archive",
+        "subtitle": "Mark the moments that matter",
+        "color": "yellow",
+        "icon": "🏷",
+        "commands": ["git tag", "git push origin", "git show"],
+        "challenges": [
+            {
+                "id": "tag_1",
+                "type": "quiz",
+                "title": "Create a Lightweight Tag",
+                "flavor": "The forensic investigation has reached a stable evidence baseline. You need to mark this exact commit in the history — a permanent reference point to return to. Create a tag.",
+                "lesson": (
+                    "git tag — creates a tag pointing to the current commit.\n\n"
+                    "Two types of tags:\n\n"
+                    "Lightweight tag (a simple named pointer, no metadata):\n"
+                    "  git tag v1.0\n"
+                    "  git tag v1.0 <commit-hash>   → tag a specific commit\n\n"
+                    "Annotated tag (stores tagger name, email, date, and a message):\n"
+                    "  git tag -a v1.0 -m 'Release 1.0'\n\n"
+                    "For production releases and forensic evidence markers,\n"
+                    "use annotated tags — they carry metadata and can be signed.\n\n"
+                    "List all tags:\n"
+                    "  git tag       → all tags\n"
+                    "  git tag -l    → same"
+                ),
+                "question": "What command creates a lightweight tag named 'v1.0' on the current commit?",
+                "answers": ["git tag v1.0"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The command is git tag followed by the tag name.",
+                    "The answer is: git tag v1.0",
+                ],
+            },
+            {
+                "id": "tag_2",
+                "type": "quiz",
+                "title": "Annotate the Release",
+                "flavor": "Lightweight tags carry no metadata. For the evidence archive, you need an annotated tag — one that records who created it, when, and why. Create a signed evidence marker.",
+                "lesson": (
+                    "git tag -a <name> -m 'message' — creates an annotated tag.\n\n"
+                    "Annotated tags are stored as full git objects and contain:\n"
+                    "  - Tagger name and email\n"
+                    "  - Timestamp\n"
+                    "  - Tag message\n"
+                    "  - Optional GPG signature (-s flag)\n\n"
+                    "Syntax:\n"
+                    "  git tag -a v1.0 -m 'Stable release 1.0'\n"
+                    "  git tag -a v1.0 -m 'Evidence baseline' <commit-hash>\n\n"
+                    "Annotated vs lightweight:\n"
+                    "  Lightweight  → just a name pointing to a commit\n"
+                    "  Annotated    → an object in the git database with metadata\n\n"
+                    "Use annotated tags for releases and any marker that matters."
+                ),
+                "question": "What command creates an annotated tag named 'v1.0' with the message 'Release 1.0'?",
+                "answers": [
+                    "git tag -a v1.0 -m 'Release 1.0'",
+                    'git tag -a v1.0 -m "Release 1.0"',
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Use -a for annotated and -m for the message.",
+                    "The answer is: git tag -a v1.0 -m 'Release 1.0'",
+                ],
+            },
+            {
+                "id": "tag_3",
+                "type": "quiz",
+                "title": "Push the Tag",
+                "flavor": "The evidence tag exists locally. But it needs to reach the remote repository to be part of the official forensic record. Tags are not pushed automatically with git push.",
+                "lesson": (
+                    "git push origin <tagname> — pushes a specific tag to the remote.\n\n"
+                    "Tags are NOT pushed automatically when you run git push.\n"
+                    "You must push them explicitly.\n\n"
+                    "Options:\n"
+                    "  git push origin v1.0           → push one tag\n"
+                    "  git push origin --tags         → push all local tags\n"
+                    "  git push origin --follow-tags  → push only annotated tags\n"
+                    "                                   reachable from pushed commits\n\n"
+                    "Recommended: use --follow-tags in CI/CD pipelines to auto-push\n"
+                    "release tags when commits are pushed."
+                ),
+                "question": "What command pushes a tag named 'v1.0' to the remote named 'origin'?",
+                "answers": ["git push origin v1.0"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Tags require an explicit push, unlike branches.",
+                    "The answer is: git push origin v1.0",
+                ],
+            },
+            {
+                "id": "tag_4",
+                "type": "quiz",
+                "title": "List All Tags",
+                "flavor": "The repository has dozens of release tags and evidence markers. You need to enumerate all of them — including release version tags that match a specific pattern.",
+                "lesson": (
+                    "git tag -l — lists all tags, with optional glob pattern filtering.\n\n"
+                    "Syntax:\n"
+                    "  git tag           → list all tags\n"
+                    "  git tag -l        → same (explicit list flag)\n"
+                    "  git tag -l 'v1.*' → list only tags matching the pattern\n"
+                    "  git tag -l --sort=version:refname   → sort by semantic version\n\n"
+                    "Example:\n"
+                    "  git tag -l 'v2.*'\n"
+                    "  → v2.0, v2.0.1, v2.1, v2.3-rc1\n\n"
+                    "In forensic work: listing tags reveals the release history and\n"
+                    "shows whether the team was tagging consistently — or not at all."
+                ),
+                "question": "What command lists all git tags in the repository?",
+                "answers": ["git tag", "git tag -l"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The command is git tag with no arguments, or with -l.",
+                    "The answer is: git tag -l",
+                ],
+            },
+            {
+                "id": "tag_boss",
+                "type": "quiz",
+                "title": "BOSS: Inspect the Tag Object",
+                "flavor": "The defense claims the v1.0 release tag was created before the contested code was committed. If it's an annotated tag, git show will reveal the tagger name, timestamp, and tag message — all part of the permanent record. Inspect it.",
+                "lesson": (
+                    "git show <tag> — displays the full contents of a tag object.\n\n"
+                    "For annotated tags:\n"
+                    "  git show v1.0\n\n"
+                    "Output includes:\n"
+                    "  tag v1.0\n"
+                    "  Tagger: Name <email>\n"
+                    "  Date:   Mon Jan 15 14:32:11 2024 +0000\n\n"
+                    "  Tag message\n\n"
+                    "  commit a3f9c21...\n"
+                    "  ... (the commit the tag points to)\n\n"
+                    "Forensic use: the tagger date is stored in the tag object itself.\n"
+                    "git log shows commit dates. git show <tag> reveals when the tag\n"
+                    "was CREATED — a separate timestamp.\n"
+                    "These two timestamps can differ, and that difference is evidence."
+                ),
+                "question": "What command displays the full metadata and commit of an annotated tag named 'v1.0'?",
+                "answers": ["git show v1.0"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The same command you use to inspect commits also works on tags.",
+                    "The answer is: git show v1.0",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1455,4 +1758,6 @@ ZONE_ORDER = [
     "remote_network",
     "recovery_vault",
     "forensics_chamber",
+    "stash_chamber",
+    "tag_archive",
 ]

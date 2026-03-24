@@ -188,6 +188,48 @@ time someone ran [yellow]docker compose up[/yellow].
 [italic]"The override file was invisible in the repo and omnipresent on the server.
 That's not an accident. That's a methodology."[/italic]
 """,
+    "health_protocol": """
+[bold cyan]== THE HEALTH PROTOCOL ==[/bold cyan]
+
+A container can be running and broken at the same time. The process is up.
+The port is listening. [cyan]docker ps[/cyan] shows STATUS: Up 6 hours. But the application
+inside hasn't responded correctly to a health check in forty minutes.
+
+Without a HEALTHCHECK, orchestrators and operators see a running container.
+With a HEALTHCHECK, they see what the container actually knows about itself:
+healthy, unhealthy, or still starting.
+
+The containers in this breach had no health checks. No one noticed the service
+degradation that preceded the data exfiltration. The logs were there.
+Nobody was following them.
+
+[yellow]docker logs[/yellow] — read what the container wrote.
+[yellow]docker logs -f[/yellow] — follow it live.
+[yellow]docker logs --tail N[/yellow] — read recent entries.
+[yellow]HEALTHCHECK[/yellow] — define what "healthy" means.
+[yellow]docker inspect --format[/yellow] — extract specific fields from metadata.
+
+[italic]"A container you cannot observe is a container you cannot trust."[/italic]
+""",
+    "compose_advanced": """
+[bold cyan]== THE COMPOSE ADVANCED LAB ==[/bold cyan]
+
+Multi-service orchestration at the compose level. Not Kubernetes. Not swarm.
+Just a YAML file and a single command that starts, networks, and manages an
+entire environment with defined dependencies and service relationships.
+
+The compromised stack had seven services. The attacker only needed one entrypoint.
+From there, the default network gave them access to everything else.
+
+[yellow]docker-compose up -d[/yellow] — launch the stack.
+[yellow]docker-compose down[/yellow] — tear it down.
+[yellow]docker-compose logs[/yellow] — watch all services at once.
+[yellow]depends_on[/yellow] — declare service ordering.
+[yellow]docker-compose exec[/yellow] — operate inside a running service.
+
+[italic]"The compose file is the blueprint. The override is the modification.
+The exec is how you see what's actually running inside."[/italic]
+""",
     "registry_core": """
 [bold cyan]== THE REGISTRY CORE ==[/bold cyan]
 
@@ -319,6 +361,37 @@ The override was the mechanism. The registry push was the payload.
 
 [bold cyan]The Registry Core. Final phase. Complete the picture.[/bold cyan]
 """,
+    "health_protocol": """
+[bold green]THE HEALTH PROTOCOL — DOCUMENTED.[/bold green]
+
+[cyan]docker logs --tail 200[/cyan] on the api container: the health check endpoint started returning
+500s forty-three minutes before the exfiltration event. The HEALTHCHECK was not defined.
+The orchestrator kept routing traffic to a broken service. Nobody was watching.
+
+[cyan]docker inspect --format '{{json .Config.Env}}'[/cyan] surfaced three environment variables
+that shouldn't have been there. All documented.
+
+[bold cyan]The Compose Advanced Lab is the final phase of the investigation.[/bold cyan]
+""",
+    "compose_advanced": """
+[bold yellow]★ ★ ★  THE COMPOSE ADVANCED LAB — COMPLETE.  ★ ★ ★[/bold yellow]
+
+[bold white]The breach is fully understood.[/bold white]
+
+[cyan]docker-compose exec api bash[/cyan] revealed the live filesystem state.
+[cyan]docker-compose logs -f[/cyan] showed the cross-service propagation in real time.
+[cyan]depends_on[/cyan] misconfiguration confirmed the race condition that opened the window.
+
+Seven services. One misconfigured HEALTHCHECK. One missing depends_on condition.
+One default network with no segmentation. One unrotated credential in an environment variable.
+
+All preventable. All documented.
+
+[bold magenta]The environment is down. The report is complete.
+Compose orchestration is not complexity — it's clarity, if you read it correctly.[/bold magenta]
+
+[bold yellow]CONTAINMENT SPECIALIST: ADVANCED PROTOCOL CLEARED.[/bold yellow]
+""",
     "registry_core": """
 [bold yellow]★ ★ ★  THE REGISTRY CORE — BREACH FULLY RECONSTRUCTED.  ★ ★ ★[/bold yellow]
 
@@ -356,6 +429,8 @@ BOSS_INTROS = {
     "build_engine": "[bold red]⚠  DOCKERFILE ANALYSIS: The Confession[/bold red]\nCredentials baked into layer 5. Removed in layer 6. Still readable. Prove you know how.",
     "compose_matrix": "[bold red]⚠  COMPOSE OVERRIDE: The Silent Configuration[/bold red]\ndocker compose up reads the override automatically. Prove you know the full compose command set.",
     "registry_core": "[bold red]★  REGISTRY AUDIT: The Final Phase[/bold red]\nThe backdoored image was pushed six hours before the breach. Complete the picture — registry operations, system audit, and the commands that close the case.",
+    "health_protocol": "[bold red]⚠  OBSERVABILITY AUDIT: The Container Health Exam[/bold red]\nThe container was running but broken for forty-three minutes before the breach. docker inspect will surface what the health check recorded. Read it.",
+    "compose_advanced": "[bold red]⚠  COMPOSE FORENSICS: The Multi-Service Exec[/bold red]\nSeven services. One entry point. Prove you can exec into the right service container and read what's running inside it.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -377,6 +452,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "level_10": ("Junior Specialist", "Level 10. docker ps is starting to feel like reading the news."),
     "level_20": ("Senior Specialist", "Level 20. You read Dockerfiles the way other people read error messages — quickly and without surprise."),
     "level_30": ("Master Containment Specialist", "Maximum level. You understand containers from image layers to compose orchestration. Courts have accepted your audit reports."),
+    "health_auditor": ("Health Verified", "Cleared the Health Protocol. docker logs, HEALTHCHECK, docker inspect — you see what the container knows about itself."),
+    "compose_specialist": ("Compose Mastered", "Cleared the Compose Advanced Lab. up, down, logs, exec — you orchestrate multi-service environments and read what's running inside them."),
     "completionist": ("Full Environment Audited", "Every zone. Every challenge. Total container forensics achieved."),
     "boss_slayer": ("Misconfiguration Found", "Beat your first boss challenge. The container thought it was hidden. It wasn't."),
 }

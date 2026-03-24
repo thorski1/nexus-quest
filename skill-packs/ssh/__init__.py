@@ -38,6 +38,8 @@ SKILL_PACK = SkillPack(
         "jump_chain":        "warden",
         "agent_protocol":    "scriptor",
         "hardening_core":    "grandmaster",
+        "multiplexer_gateway": "session_keeper",
+        "scp_vault":         "data_mover",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,

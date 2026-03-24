@@ -1040,8 +1040,6 @@ ZONES = {
             },
         ],
     },
-}
-
     "multiplexer_gateway": {
         "id": "multiplexer_gateway",
         "name": "The Multiplexer Gateway",

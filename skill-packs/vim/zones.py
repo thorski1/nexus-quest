@@ -1155,8 +1155,6 @@ ZONES = {
             },
         ],
     },
-}
-
     "registers_vault": {
         "id": "registers_vault",
         "name": "The Registers Vault",

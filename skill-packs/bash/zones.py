@@ -1676,7 +1676,6 @@ ZONES = {
             },
         ],
     },
-}
 
     "environment_chamber": {
         "id": "environment_chamber",

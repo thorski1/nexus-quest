@@ -35,6 +35,8 @@ Just your terminal, your knowledge, and eight layers of systems between you and 
 
 **The catch:** every skill you need, you have to learn for real.
 
+> **Keywords:** terminal RPG, learn bash, learn git, learn docker, learn vim, learn SQL, learn Python, command line tutorial, hacker game, cyberpunk learning game, DevOps training, terminal game
+
 ---
 
 ## What You'll Learn

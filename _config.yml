@@ -1,0 +1,6 @@
+title: NEXUS Quest
+description: Learn bash, SSH, vim, git, docker, postgres, python, and regex through a cyberpunk terminal RPG
+url: https://thorski1.github.io/nexus-quest
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-seo-tag

@@ -1309,6 +1309,311 @@ ZONES = {
             },
         ],
     },
+    "port_forwarding": {
+        "id": "port_forwarding",
+        "name": "The Port Forwarding Relay",
+        "subtitle": "Local Forwards, Remote Forwards & SOCKS Proxies",
+        "color": "yellow",
+        "icon": "🔀",
+        "commands": ["ssh -L", "ssh -R", "ssh -D", "ssh -N -f", "ssh -J"],
+        "challenges": [
+            {
+                "id": "pf_1",
+                "type": "quiz",
+                "title": "Local Port Forward",
+                "flavor": "The NEXUS financial server only listens on localhost:80 behind the firewall. Ghost sets up: ssh -L 8080:localhost:80 user@host. What does -L do?",
+                "lesson": (
+                    "-L — local port forwarding: forward a local port through the SSH tunnel.\n\n"
+                    "  ssh -L [local_port]:[remote_host]:[remote_port] user@host\n\n"
+                    "What happens:\n"
+                    "  - SSH listens on local_port on your machine\n"
+                    "  - Any traffic sent to localhost:local_port is forwarded through\n"
+                    "    the encrypted SSH tunnel to the remote host\n"
+                    "  - The remote host then connects to remote_host:remote_port\n\n"
+                    "Example: ssh -L 8080:localhost:80 user@host\n"
+                    "  → localhost:8080 on your machine reaches localhost:80 on the remote host\n"
+                    "  → The firewall sees a legitimate SSH connection on port 22\n"
+                    "  → It does not see port 80 traffic\n\n"
+                    "Useful for: reaching services that only listen on the remote's localhost,\n"
+                    "databases behind firewalls, internal web UIs."
+                ),
+                "answer": "forwards a local port through the SSH connection",
+                "hints": [
+                    "L stands for Local — it makes a local port accessible through the tunnel.",
+                    "The answer is: forwards a local port through the SSH connection",
+                ],
+            },
+            {
+                "id": "pf_2",
+                "type": "quiz",
+                "title": "Remote Port Forward",
+                "flavor": "Ghost needs to expose a local service to the remote NEXUS host. The command: ssh -R 9090:localhost:3000 user@host. What does -R do?",
+                "lesson": (
+                    "-R — remote port forwarding: expose a local port on the remote host.\n\n"
+                    "  ssh -R [remote_port]:[local_host]:[local_port] user@host\n\n"
+                    "What happens:\n"
+                    "  - SSH opens remote_port on the remote server\n"
+                    "  - Any traffic hitting that remote port is tunneled back through\n"
+                    "    the SSH connection to your local machine\n"
+                    "  - Your machine forwards it to local_host:local_port\n\n"
+                    "Example: ssh -R 9090:localhost:3000 user@host\n"
+                    "  → Port 9090 on the remote host reaches localhost:3000 on your machine\n\n"
+                    "Use cases:\n"
+                    "  - Exposing a local dev server to a remote host\n"
+                    "  - Reverse shell callbacks\n"
+                    "  - Bypassing NAT when you can initiate outbound but not receive inbound\n\n"
+                    "The asymmetry: -L pulls remote resources to you; -R pushes local resources out."
+                ),
+                "answer": "exposes a local port on the remote host",
+                "hints": [
+                    "R stands for Remote — the port opens on the remote side.",
+                    "The answer is: exposes a local port on the remote host",
+                ],
+            },
+            {
+                "id": "pf_3",
+                "type": "quiz",
+                "title": "Dynamic SOCKS Proxy",
+                "flavor": "Ghost needs a single tunnel that can route to any host on the NEXUS internal network. The command: ssh -D 1080 user@host. What does -D create?",
+                "lesson": (
+                    "-D — dynamic port forwarding: creates a SOCKS proxy on the specified local port.\n\n"
+                    "  ssh -D [local_port] user@host\n\n"
+                    "What it creates:\n"
+                    "  - A SOCKS4/SOCKS5 proxy listening on local_port\n"
+                    "  - Any application configured to use this proxy routes its traffic\n"
+                    "    through the SSH tunnel\n"
+                    "  - The remote SSH server acts as the exit point — it makes the\n"
+                    "    actual outbound connections on behalf of the SOCKS client\n\n"
+                    "Example: ssh -D 1080 user@host\n"
+                    "  → Configure your browser or tool to use SOCKS5 proxy at localhost:1080\n"
+                    "  → All traffic routes through the remote host's network context\n\n"
+                    "Difference from -L:\n"
+                    "  -L: forwards one specific port to one specific destination\n"
+                    "  -D: forwards any port to any destination — dynamic routing\n\n"
+                    "Use with proxychains to route arbitrary commands through the tunnel:\n"
+                    "  proxychains nmap 10.20.30.0/24"
+                ),
+                "answer": "a SOCKS proxy on the specified local port",
+                "hints": [
+                    "D stands for Dynamic — it dynamically routes to any destination through one tunnel.",
+                    "The answer is: a SOCKS proxy on the specified local port",
+                ],
+            },
+            {
+                "id": "pf_4",
+                "type": "quiz",
+                "title": "Background Tunnel",
+                "flavor": "Ghost needs: ssh -N -f -L 5432:db.nexus.corp:5432 user@jumphost — a persistent background tunnel with no shell. What does -N mean?",
+                "lesson": (
+                    "-N — do not execute a remote command (tunnel only).\n\n"
+                    "  ssh -N user@host  → establishes the SSH connection but doesn't open a shell\n\n"
+                    "Used with -f to background the tunnel:\n"
+                    "  ssh -N -f -L 5432:db.nexus.corp:5432 user@jumphost\n\n"
+                    "Breaking it down:\n"
+                    "  -N  → no remote command; just maintain the tunnel\n"
+                    "  -f  → fork to background before executing; hands control back to terminal\n"
+                    "  -L  → local port forward (5432 on localhost → db.nexus.corp:5432)\n\n"
+                    "Without -N:\n"
+                    "  SSH would open an interactive shell on the remote host\n"
+                    "  The tunnel would only exist as long as you're in that shell\n\n"
+                    "With -N -f:\n"
+                    "  The tunnel runs silently in the background\n"
+                    "  Your terminal is free; the port forward persists\n"
+                    "  Kill it with: kill $(pgrep -f 'ssh -N')"
+                ),
+                "answer": "do not execute a remote command (tunnel only)",
+                "hints": [
+                    "N means no shell — the connection exists purely for the tunnel.",
+                    "The answer is: do not execute a remote command (tunnel only)",
+                ],
+            },
+            {
+                "id": "pf_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: ProxyJump Through Two Hosts",
+                "flavor": "The financial server sits behind two jump hosts. Ghost needs one command to chain through both. Complete: ssh ___ user@target.nexus.corp",
+                "lesson": (
+                    "ssh -J — ProxyJump: chain through one or more jump hosts.\n\n"
+                    "  ssh -J jump1.nexus.corp,jump2.nexus.corp user@target.nexus.corp\n\n"
+                    "How it works:\n"
+                    "  1. SSH connects to jump1.nexus.corp\n"
+                    "  2. From jump1, SSH connects to jump2.nexus.corp\n"
+                    "  3. From jump2, SSH connects to target.nexus.corp\n"
+                    "  4. Your terminal session runs on target.nexus.corp\n\n"
+                    "The chain is comma-separated. Each host is a hop.\n"
+                    "SSH negotiates the full chain — no manual chaining, no nested ssh commands.\n\n"
+                    "Equivalent in ~/.ssh/config:\n"
+                    "  Host target\n"
+                    "    HostName target.nexus.corp\n"
+                    "    ProxyJump jump1.nexus.corp,jump2.nexus.corp\n\n"
+                    "The firewall sees two connections: one to jump1, one to jump2.\n"
+                    "It does not see the final connection to the target — that traverses\n"
+                    "the tunnel established through the chain."
+                ),
+                "answer": "-J jump1.nexus.corp,jump2.nexus.corp",
+                "hints": [
+                    "Use -J with comma-separated jump hosts.",
+                    "The answer is: -J jump1.nexus.corp,jump2.nexus.corp",
+                ],
+            },
+        ],
+    },
+    "key_management": {
+        "id": "key_management",
+        "name": "The Key Management Vault",
+        "subtitle": "Key Rotation, Installation & authorized_keys",
+        "color": "magenta",
+        "icon": "🔑",
+        "commands": ["ssh-keygen -t ed25519", "ssh-copy-id", "authorized_keys", "ssh-keygen -R"],
+        "challenges": [
+            {
+                "id": "km_1",
+                "type": "quiz",
+                "title": "Generate Ed25519 Key",
+                "flavor": "Ghost needs to generate a fresh key pair to establish a new identity on the NEXUS infrastructure. What command generates an Ed25519 key with the comment 'ghost@nexus'?",
+                "lesson": (
+                    "ssh-keygen -t ed25519 -C 'comment' — generate an Ed25519 SSH key pair.\n\n"
+                    "  ssh-keygen -t ed25519 -C 'ghost@nexus'\n\n"
+                    "Flags:\n"
+                    "  -t ed25519  → key type (Ed25519 is the modern recommendation)\n"
+                    "  -C          → comment field; embedded in the public key\n"
+                    "                typically user@host, but can be anything\n"
+                    "  -f          → specify output filename (default: ~/.ssh/id_ed25519)\n"
+                    "  -N ''       → empty passphrase (for automation; not ideal for personal keys)\n\n"
+                    "Key types:\n"
+                    "  ed25519  → best: small (68 chars), fast, strong, modern\n"
+                    "  ecdsa    → good, but some implementations are weaker\n"
+                    "  rsa      → widely compatible; use 4096-bit minimum\n"
+                    "  dsa      → deprecated; do not use\n\n"
+                    "Output:\n"
+                    "  ~/.ssh/id_ed25519      → private key (never share; chmod 600)\n"
+                    "  ~/.ssh/id_ed25519.pub  → public key (this goes on the server)"
+                ),
+                "answer": "ssh-keygen -t ed25519 -C \"ghost@nexus\"",
+                "hints": [
+                    "Use ssh-keygen with the type flag and a comment flag.",
+                    "The answer is: ssh-keygen -t ed25519 -C \"ghost@nexus\"",
+                ],
+            },
+            {
+                "id": "km_2",
+                "type": "quiz",
+                "title": "Install Public Key",
+                "flavor": "Ghost has a key pair. The next step is installing the public key on a remote NEXUS host to enable key-based login. What command automates this?",
+                "lesson": (
+                    "ssh-copy-id — install your public key on a remote server's authorized_keys.\n\n"
+                    "  ssh-copy-id user@host\n"
+                    "  ssh-copy-id -i ~/.ssh/id_ed25519.pub user@host  → specify key file\n\n"
+                    "What it does:\n"
+                    "  1. Reads your public key (default: ~/.ssh/id_*.pub)\n"
+                    "  2. SSHs into the server using current authentication (password or key)\n"
+                    "  3. Appends the public key to ~/.ssh/authorized_keys on the server\n"
+                    "  4. Sets correct permissions (700 on ~/.ssh, 600 on authorized_keys)\n\n"
+                    "After ssh-copy-id:\n"
+                    "  You can authenticate with the corresponding private key\n"
+                    "  Password authentication is no longer required for that key\n\n"
+                    "Manual equivalent:\n"
+                    "  cat ~/.ssh/id_ed25519.pub | ssh user@host 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys'"
+                ),
+                "answer": "ssh-copy-id",
+                "hints": [
+                    "The command name describes exactly what it does: copy an SSH ID to the server.",
+                    "The answer is: ssh-copy-id",
+                ],
+            },
+            {
+                "id": "km_3",
+                "type": "fill_blank",
+                "title": "Manual Key Installation",
+                "flavor": "ssh-copy-id isn't available on the target. Ghost must manually append the public key to authorized_keys. Complete: cat ~/.ssh/id_ed25519.pub ___ ~/.ssh/authorized_keys",
+                "lesson": (
+                    "cat key.pub >> ~/.ssh/authorized_keys — manually append a key.\n\n"
+                    "  cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys\n\n"
+                    "The >> operator appends to the file without overwriting existing keys.\n"
+                    "Using > instead would destroy all previously authorized keys.\n\n"
+                    "Post-installation checklist:\n"
+                    "  chmod 700 ~/.ssh                   → directory must not be world-readable\n"
+                    "  chmod 600 ~/.ssh/authorized_keys   → file must not be world-readable\n"
+                    "  chown user:user ~/.ssh -R           → owned by the correct user\n\n"
+                    "authorized_keys format:\n"
+                    "  One key per line\n"
+                    "  Each line: [options] keytype base64key [comment]\n"
+                    "  Example: ssh-ed25519 AAAA... ghost@nexus\n\n"
+                    "Forensic note: check authorized_keys for unexpected entries.\n"
+                    "Backdoors often land here — a key added by an attacker that survives\n"
+                    "password rotation because nobody audited the file."
+                ),
+                "answer": ">>",
+                "hints": [
+                    "You want to append, not overwrite. Which shell operator appends?",
+                    "The answer is: >>",
+                ],
+            },
+            {
+                "id": "km_4",
+                "type": "quiz",
+                "title": "Remove Compromised Host Key",
+                "flavor": "A NEXUS server was rebuilt after compromise. Ghost's known_hosts still has the old key — SSH will now refuse to connect with a host key mismatch warning. What command removes a host's entry from known_hosts?",
+                "lesson": (
+                    "ssh-keygen -R hostname — remove a host from ~/.ssh/known_hosts.\n\n"
+                    "  ssh-keygen -R nexus-server.corp\n"
+                    "  ssh-keygen -R 10.20.30.40\n\n"
+                    "Why this is necessary:\n"
+                    "  When you first connect to a host, SSH stores its public key fingerprint\n"
+                    "  in ~/.ssh/known_hosts. On every subsequent connection, SSH verifies\n"
+                    "  the fingerprint matches.\n\n"
+                    "  If the server is rebuilt (new host key), SSH will refuse:\n"
+                    "    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!\n"
+                    "    This is designed to prevent MITM attacks.\n\n"
+                    "  After verifying the rebuild is legitimate, remove the old entry:\n"
+                    "    ssh-keygen -R hostname\n"
+                    "  Then reconnect — SSH will prompt to accept the new fingerprint.\n\n"
+                    "Key rotation workflow:\n"
+                    "  1. Server is rebuilt / keys are rotated\n"
+                    "  2. ssh-keygen -R on every client that connected to the old host\n"
+                    "  3. Reconnect and verify the new fingerprint out-of-band"
+                ),
+                "answer": "ssh-keygen -R",
+                "hints": [
+                    "Use ssh-keygen with a flag that means 'remove'.",
+                    "The answer is: ssh-keygen -R",
+                ],
+            },
+            {
+                "id": "km_5",
+                "type": "quiz",
+                "is_boss": True,
+                "title": "Boss: The authorized_keys File",
+                "flavor": "Ghost needs to verify which server-side file controls which public keys are allowed to authenticate. What file contains the public keys that are authorized to connect?",
+                "lesson": (
+                    "~/.ssh/authorized_keys — the file that controls key-based authentication.\n\n"
+                    "Location: ~/.ssh/authorized_keys on the server being connected to.\n\n"
+                    "How it works:\n"
+                    "  When you connect with a private key, the server checks authorized_keys\n"
+                    "  for the corresponding public key. If found: authentication succeeds.\n"
+                    "  If not found: authentication fails (falls back to password if enabled).\n\n"
+                    "Security implications:\n"
+                    "  Anyone who can append to this file can grant themselves persistent access\n"
+                    "  Privilege escalation → write to root's authorized_keys → root SSH access\n"
+                    "  Backdoors survive password changes — keys are independent of passwords\n\n"
+                    "Audit command:\n"
+                    "  cat ~/.ssh/authorized_keys   → list every key authorized to connect\n"
+                    "  Each line is one authorized identity\n\n"
+                    "Key management hygiene:\n"
+                    "  Audit authorized_keys regularly\n"
+                    "  Remove keys for departed staff\n"
+                    "  Remove keys for decommissioned systems\n"
+                    "  Each key should be traceable to an active identity"
+                ),
+                "answer": "~/.ssh/authorized_keys",
+                "hints": [
+                    "It's a file in the ~/.ssh/ directory. The name describes its purpose.",
+                    "The answer is: ~/.ssh/authorized_keys",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1322,4 +1627,6 @@ ZONE_ORDER = [
     "hardening_core",
     "multiplexer_gateway",
     "scp_vault",
+    "port_forwarding",
+    "key_management",
 ]

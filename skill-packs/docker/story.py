@@ -251,6 +251,25 @@ The final zone. The complete picture.
 [italic]"The registry is not just storage. It's the distribution mechanism.
 Whoever controls the registry controls what runs."[/italic]
 """,
+    "docker_networks": """
+[bold cyan]== THE DOCKER NETWORK GRID ==[/bold cyan]
+
+The fraud containers don't communicate through the host network.
+They communicate through Docker networks — invisible to standard monitoring,
+invisible to host-level firewall rules, invisible unless you know to look.
+
+[yellow]docker network ls[/yellow] — see the full network topology.
+[yellow]docker network create[/yellow] — create isolated communication channels.
+[yellow]docker run --network[/yellow] — attach a container to a specific network at launch.
+[yellow]docker network inspect[/yellow] — map every container connected to a network.
+[yellow]docker network connect[/yellow] — attach a running container to a new network silently.
+
+Two containers have been sharing a network for eight months.
+Nothing in the logs flagged it. The only way to see it is with inspect.
+
+[italic]"The firewall audits the host. It knows nothing about what's
+flowing between containers on the same bridge."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -392,6 +411,21 @@ Compose orchestration is not complexity — it's clarity, if you read it correct
 
 [bold yellow]CONTAINMENT SPECIALIST: ADVANCED PROTOCOL CLEARED.[/bold yellow]
 """,
+    "docker_networks": """
+[bold green]THE DOCKER NETWORK GRID — MAPPED.[/bold green]
+
+The hidden mesh is fully charted.
+
+[cyan]docker network ls[/cyan] revealed three custom networks that didn't appear
+in any architecture diagram. [cyan]docker network inspect[/cyan] showed the fraud
+container connected to the same network as the payment processor.
+[cyan]docker network connect[/cyan] was used to attach the compromised container
+to the internal network without restarting it — no startup logs, no new image pull.
+
+The connection had been live for eight months. Silently.
+
+[bold cyan]The breach picture is complete. File the network segment finding.[/bold cyan]
+""",
     "registry_core": """
 [bold yellow]★ ★ ★  THE REGISTRY CORE — BREACH FULLY RECONSTRUCTED.  ★ ★ ★[/bold yellow]
 
@@ -431,6 +465,7 @@ BOSS_INTROS = {
     "registry_core": "[bold red]★  REGISTRY AUDIT: The Final Phase[/bold red]\nThe backdoored image was pushed six hours before the breach. Complete the picture — registry operations, system audit, and the commands that close the case.",
     "health_protocol": "[bold red]⚠  OBSERVABILITY AUDIT: The Container Health Exam[/bold red]\nThe container was running but broken for forty-three minutes before the breach. docker inspect will surface what the health check recorded. Read it.",
     "compose_advanced": "[bold red]⚠  COMPOSE FORENSICS: The Multi-Service Exec[/bold red]\nSeven services. One entry point. Prove you can exec into the right service container and read what's running inside it.",
+    "docker_networks": "[bold red]⚠  NETWORK INFILTRATION: The Hidden Mesh[/bold red]\nA running container needs to be silently connected to the internal network. No restart. No logs. Prove you know how to connect a live container to an existing network.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -456,4 +491,5 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "compose_specialist": ("Compose Mastered", "Cleared the Compose Advanced Lab. up, down, logs, exec — you orchestrate multi-service environments and read what's running inside them."),
     "completionist": ("Full Environment Audited", "Every zone. Every challenge. Total container forensics achieved."),
     "boss_slayer": ("Misconfiguration Found", "Beat your first boss challenge. The container thought it was hidden. It wasn't."),
+    "network_infiltrator": ("Network Grid Mapped", "Cleared The Docker Network Grid. The hidden mesh is charted. No container talks in secret."),
 }

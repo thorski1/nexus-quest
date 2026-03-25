@@ -1404,6 +1404,288 @@ ZONES = {
             },
         ],
     },
+    "motion_mastery": {
+        "id": "motion_mastery",
+        "name": "The Motion Mastery Chamber",
+        "subtitle": "Minimal Motion, Maximum Efficiency",
+        "color": "yellow",
+        "icon": "⚡",
+        "commands": ["w/b", "f<char>", "t<char>", "%", "ci\""],
+        "challenges": [
+            {
+                "id": "mm_1",
+                "type": "quiz",
+                "title": "Word Forward",
+                "flavor": "You're at the beginning of a long identifier in the NEXUS config. Move forward one word at a time. What key moves forward to the start of the next word?",
+                "lesson": (
+                    "w — move forward to the beginning of the next word.\n\n"
+                    "Word motion pair:\n"
+                    "  w  → forward to the start of the next word\n"
+                    "  b  → backward to the start of the previous word\n\n"
+                    "Word boundary definition:\n"
+                    "  w treats punctuation as word boundaries\n"
+                    "  W treats only whitespace as word boundaries (WORD motion)\n\n"
+                    "Example: cursor on 'phantom' in 'phantom_corp = \"active\"'\n"
+                    "  w → lands on '_' (punctuation boundary)\n"
+                    "  W → lands on '=' (whitespace boundary)\n\n"
+                    "Count prefix: 3w moves forward 3 words. 5b moves back 5 words.\n"
+                    "Combine with operators: dw deletes to next word, cw changes to next word."
+                ),
+                "answer": "w",
+                "hints": ["Think: word forward. Single lowercase letter.", "w for word.", "The answer is: w"],
+            },
+            {
+                "id": "mm_2",
+                "type": "quiz",
+                "title": "Word Backward",
+                "flavor": "You've overshot. The cursor is three words past the target. Move backward one word at a time. What key moves back to the start of the previous word?",
+                "lesson": (
+                    "b — move backward to the start of the previous word.\n\n"
+                    "  w  → forward one word\n"
+                    "  b  → backward one word\n"
+                    "  e  → forward to the END of the current/next word\n"
+                    "  ge → backward to the END of the previous word\n\n"
+                    "Uppercase variants (WORD motions — whitespace boundaries only):\n"
+                    "  W  → forward one WORD\n"
+                    "  B  → backward one WORD\n"
+                    "  E  → forward to end of WORD\n\n"
+                    "Practical: in 'key_name = \"value\"'\n"
+                    "  b from '=' → lands on 'k' (start of key_name)\n"
+                    "  B from '=' → same result (only one WORD before it)\n\n"
+                    "Count: 3b moves back 3 words."
+                ),
+                "answer": "b",
+                "hints": ["Think: backward. Single lowercase letter.", "b for backward.", "The answer is: b"],
+            },
+            {
+                "id": "mm_3",
+                "type": "quiz",
+                "title": "Jump to Character",
+                "flavor": "You need to move to the semicolon at the end of the current line. The line is long. Instead of pressing l repeatedly, you jump directly to it. What key does this?",
+                "lesson": (
+                    "f{char} — jump forward to the next occurrence of a character on the line.\n\n"
+                    "  f;   → jump forward, landing ON the next semicolon\n"
+                    "  F;   → jump backward, landing ON the previous semicolon\n\n"
+                    "Repeat the jump:\n"
+                    "  ;    → repeat the last f/t/F/T in the same direction\n"
+                    "  ,    → repeat in the opposite direction\n\n"
+                    "Example: 'SELECT id, name, email FROM users;'\n"
+                    "  f,   → lands on the first comma\n"
+                    "  ;    → jumps to the second comma\n"
+                    "  ;    → jumps to the third comma\n\n"
+                    "f is the Ghost Operative's sniper shot — one keystroke to any character on the line."
+                ),
+                "answer": "f",
+                "hints": ["Think: 'find' a character on the line. Single lowercase letter.", "f for find.", "The answer is: f"],
+            },
+            {
+                "id": "mm_4",
+                "type": "quiz",
+                "title": "Jump Till Character",
+                "flavor": "You want to delete everything up to (but not including) a closing parenthesis. You use dt) — the t motion stops just before the target char. What key is the 'till' motion?",
+                "lesson": (
+                    "t{char} — jump forward to just BEFORE the next occurrence of a character.\n\n"
+                    "f vs t:\n"
+                    "  f{char} → lands ON the character\n"
+                    "  t{char} → lands one character BEFORE it\n\n"
+                    "The difference matters with operators:\n"
+                    "  df)   → delete from cursor through the closing paren (inclusive)\n"
+                    "  dt)   → delete from cursor up to but NOT including the closing paren\n\n"
+                    "Backward variants:\n"
+                    "  T{char} → jump backward to just after the previous occurrence\n\n"
+                    "Practical example: cursor on 'p' in 'process(phantom_data)'\n"
+                    "  dt)  → deletes 'process(phantom_data' — leaves ')' in place\n"
+                    "  df)  → deletes 'process(phantom_data)' — removes the paren too\n\n"
+                    "t is ideal for 'change everything up to this delimiter.'"
+                ),
+                "answer": "t",
+                "hints": ["Think: 'till' — up to but not including. Single lowercase letter.", "t for till.", "The answer is: t"],
+            },
+            {
+                "id": "mm_5",
+                "type": "quiz",
+                "title": "Jump to Matching Bracket",
+                "flavor": "The cursor is on an opening brace in a deeply nested config block. You need to jump to its matching closing brace to see where the block ends. What single key does this?",
+                "lesson": (
+                    "% — jump to the matching bracket, parenthesis, or brace.\n\n"
+                    "Supported pairs:\n"
+                    "  ()  → parentheses\n"
+                    "  []  → square brackets\n"
+                    "  {}  → curly braces\n\n"
+                    "Works in both directions:\n"
+                    "  On (  → jumps to matching )\n"
+                    "  On )  → jumps back to matching (\n\n"
+                    "Power combinations:\n"
+                    "  v%   → visually select from here to the matching bracket\n"
+                    "  d%   → delete from cursor through the matching bracket\n"
+                    "  y%   → yank from cursor to the matching bracket\n\n"
+                    "Use % to verify nested structures are balanced — jump to the open,\n"
+                    "then % to the close, then % back. If it misses, something is unbalanced."
+                ),
+                "answer": "%",
+                "hints": ["The percent key — also the 'match' key in vim.", "Single character: %", "The answer is: %"],
+            },
+            {
+                "id": "mm_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Change Inner Quotes",
+                "flavor": "Config line: vendor = \"phantom_corp\". Cursor is anywhere on the line. You need to delete the value inside the quotes and type a replacement. What command deletes the content inside double quotes and drops you into insert mode?",
+                "lesson": (
+                    "ci\" — change inside double quotes: delete the content, keep the quotes, enter insert mode.\n\n"
+                    "This combines:\n"
+                    "  c   → the change operator (delete + enter insert mode)\n"
+                    "  i   → inner modifier (content only, not the delimiters)\n"
+                    "  \"   → double-quote text object\n\n"
+                    "The cursor does NOT need to be inside the quotes —\n"
+                    "vim finds the nearest matching pair on the current line.\n\n"
+                    "Related commands:\n"
+                    "  ca\"  → change AROUND quotes (deletes the quotes too)\n"
+                    "  di\"  → delete inside quotes (no insert mode)\n"
+                    "  yi\"  → yank inside quotes\n"
+                    "  ci'  → change inside single quotes\n"
+                    "  ci(  → change inside parentheses\n"
+                    "  ci{  → change inside curly braces\n\n"
+                    "This is the canonical vim workflow for changing config values:\n"
+                    "navigate to the line, ci\", type the new value, ESC."
+                ),
+                "answer": "ci\"",
+                "hints": ["Change (c) + inner (i) + double-quote (\").", "Three characters: c, i, then the quote character.", "The answer is: ci\""],
+            },
+        ],
+    },
+    "split_navigation": {
+        "id": "split_navigation",
+        "name": "The Split Navigation Hub",
+        "subtitle": "Multiple Files, One Session",
+        "color": "blue",
+        "icon": "🪟",
+        "commands": [":split/:vsplit", "Ctrl+W w", "Ctrl+W hjkl", ":resize", ":windo"],
+        "challenges": [
+            {
+                "id": "sn_1",
+                "type": "quiz",
+                "title": "Vertical Split",
+                "flavor": "Ghost needs two files open side by side. The processor config on the left, the routing table on the right. What command creates a vertical split?",
+                "lesson": (
+                    ":vsplit — open a vertical split (side by side).\n\n"
+                    "Split commands:\n"
+                    "  :vsplit filename  → vertical split, open file on the right\n"
+                    "  :split filename   → horizontal split, open file below\n"
+                    "  :vs               → shorthand for :vsplit\n"
+                    "  :sp               → shorthand for :split\n\n"
+                    "Without a filename:\n"
+                    "  :vsplit  → split current buffer into two panes\n"
+                    "  :split   → same, horizontally\n\n"
+                    "Keyboard equivalents:\n"
+                    "  Ctrl+W v  → vertical split current buffer\n"
+                    "  Ctrl+W s  → horizontal split current buffer\n\n"
+                    "Use :vsplit for files that need side-by-side comparison.\n"
+                    "Use :split for files that need top-bottom reference."
+                ),
+                "answer": ":vsplit",
+                "hints": ["The command that splits the window vertically.", "Starts with a colon. The answer is: :vsplit"],
+            },
+            {
+                "id": "sn_2",
+                "type": "fill_blank",
+                "title": "Cycle Between Splits",
+                "flavor": "Three splits are open. You want to move to the next one without specifying direction. Complete the command: Ctrl+W ___",
+                "lesson": (
+                    "Ctrl+W w — cycle to the next split window.\n\n"
+                    "Split cycling:\n"
+                    "  Ctrl+W w  → move to next split (clockwise)\n"
+                    "  Ctrl+W W  → move to previous split (counterclockwise)\n\n"
+                    "When you have two splits, Ctrl+W w just toggles between them.\n"
+                    "With more splits, it cycles through in order.\n\n"
+                    "Direct navigation (faster with many splits):\n"
+                    "  Ctrl+W h  → move LEFT\n"
+                    "  Ctrl+W l  → move RIGHT\n"
+                    "  Ctrl+W j  → move DOWN\n"
+                    "  Ctrl+W k  → move UP\n\n"
+                    "Jump to specific split:\n"
+                    "  Ctrl+W t  → top-left split\n"
+                    "  Ctrl+W b  → bottom-right split\n"
+                    "  Ctrl+W p  → previous split (last visited)"
+                ),
+                "answer": "w",
+                "hints": ["The key that cycles through windows — lowercase letter.", "w for window cycle.", "The answer is: w"],
+            },
+            {
+                "id": "sn_3",
+                "type": "fill_blank",
+                "title": "Navigate Directionally",
+                "flavor": "Three vertical splits: audit log (left), processor config (center), routing table (right). Cursor is in the center. Move to the rightmost split. Complete: Ctrl+W ___",
+                "lesson": (
+                    "Ctrl+W l — move to the split on the right.\n\n"
+                    "Directional split navigation (mirrors cursor movement):\n"
+                    "  Ctrl+W h  → LEFT split\n"
+                    "  Ctrl+W j  → BELOW split\n"
+                    "  Ctrl+W k  → ABOVE split\n"
+                    "  Ctrl+W l  → RIGHT split\n\n"
+                    "The same hjkl keys used for cursor movement work for split navigation.\n"
+                    "This is intentional — vim uses a consistent directional vocabulary.\n\n"
+                    "Moving splits (reordering):\n"
+                    "  Ctrl+W H  → move current split to far LEFT (uppercase)\n"
+                    "  Ctrl+W J  → move current split to bottom\n"
+                    "  Ctrl+W K  → move current split to top\n"
+                    "  Ctrl+W L  → move current split to far RIGHT\n\n"
+                    "Uppercase H/J/K/L moves the split itself; lowercase h/j/k/l moves the cursor."
+                ),
+                "answer": "l",
+                "hints": ["Same key as 'move cursor right' in normal mode.", "l moves right.", "The answer is: l"],
+            },
+            {
+                "id": "sn_4",
+                "type": "fill_blank",
+                "title": "Resize a Split",
+                "flavor": "The left split is too narrow to read the audit log. Make it 5 columns wider. Complete: :resize ___",
+                "lesson": (
+                    ":resize +N — increase the size of the current split by N lines/columns.\n\n"
+                    "Resize commands:\n"
+                    "  :resize +5     → increase height by 5 lines (horizontal splits)\n"
+                    "  :resize -5     → decrease height by 5 lines\n"
+                    "  :resize 20     → set height to exactly 20 lines\n"
+                    "  :vertical resize +5   → increase width by 5 columns (vertical splits)\n"
+                    "  :vertical resize -5   → decrease width by 5 columns\n\n"
+                    "Keyboard shortcuts:\n"
+                    "  Ctrl+W +  → increase height by 1\n"
+                    "  Ctrl+W -  → decrease height by 1\n"
+                    "  Ctrl+W >  → increase width by 1\n"
+                    "  Ctrl+W <  → decrease width by 1\n"
+                    "  Ctrl+W =  → equalize all splits\n\n"
+                    "For a 5-unit increase, :resize +5 is faster than pressing Ctrl+W + five times."
+                ),
+                "answer": "+5",
+                "hints": ["Increase by 5. Use the +N syntax.", "The answer is: +5"],
+            },
+            {
+                "id": "sn_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Global Substitution Across All Windows",
+                "flavor": "NEXUS is uppercase throughout all open files. It needs to be lowercase. Run a substitution across every open window simultaneously. Complete: :windo %s/NEXUS/nexus/___",
+                "lesson": (
+                    ":windo {cmd} — run an ex command in every open window.\n\n"
+                    "  :windo %s/NEXUS/nexus/g\n\n"
+                    "Breaking this down:\n"
+                    "  :windo           → execute the following command in each window\n"
+                    "  %s/NEXUS/nexus/  → substitute NEXUS → nexus in the entire buffer\n"
+                    "  g                → global flag: replace all occurrences per line\n\n"
+                    "Related multi-window/buffer commands:\n"
+                    "  :bufdo %s/old/new/g    → run command in every open buffer\n"
+                    "  :tabdo %s/old/new/g    → run command in every tab\n"
+                    "  :argdo %s/old/new/ge   → run command on every file in the argument list\n\n"
+                    "The 'e' flag at the end suppresses errors when no match is found —\n"
+                    "useful with :bufdo/:windo so one file without the pattern doesn't abort the rest.\n\n"
+                    ":windo is the Ghost Operative's broadcast command:\n"
+                    "one operation, every open file, simultaneously."
+                ),
+                "answer": "g",
+                "hints": ["The flag that replaces ALL occurrences on each line (not just the first).", "Single letter: global flag.", "The answer is: g"],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1417,4 +1699,6 @@ ZONE_ORDER = [
     "macro_forge",
     "registers_vault",
     "ex_commands_deep",
+    "motion_mastery",
+    "split_navigation",
 ]

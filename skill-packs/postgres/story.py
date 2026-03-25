@@ -215,6 +215,26 @@ partitions and comparing across time. GROUP BY can't do this. Window functions c
 [italic]"Window functions are what separate SQL analysis from SQL reporting.
 Reporting collapses data. Analysis preserves it."[/italic]
 """,
+    "transactions_vault": """
+[bold cyan]== THE TRANSACTIONS VAULT ==[/bold cyan]
+
+The fraud involved carefully crafted transactions that bypassed audit logs.
+
+Ghost has the raw timeline. The next step is understanding [bold white]how[/bold white] the
+manipulation worked — and that requires understanding PostgreSQL transaction
+isolation at a level the fraudsters didn't expect anyone to reach.
+
+[yellow]BEGIN[/yellow] starts the boundary. [yellow]COMMIT[/yellow] makes it permanent. [yellow]ROLLBACK[/yellow] undoes everything.
+[yellow]SAVEPOINT[/yellow] creates partial checkpoints — partial rollback without losing the whole transaction.
+[yellow]SET TRANSACTION ISOLATION LEVEL[/yellow] controls what concurrent transactions can see.
+
+The fraud used phantom reads to read rows that didn't officially exist yet —
+transactions that were in-flight but not committed, giving the illusion of
+authorized balances. The isolation level that prevents this is not the default.
+
+[italic]"The database is a crime scene. The transactions are the evidence.
+Read them correctly and the manipulation becomes obvious."[/italic]
+""",
     "json_forge": """
 [bold cyan]== THE JSON FORGE ==[/bold cyan]
 
@@ -337,6 +357,22 @@ Window functions preserved the rows [italic]and[/italic] computed the analysis.
 
 [bold cyan]The JSON Forge: the pattern lives inside the metadata column.[/bold cyan]
 """,
+    "transactions_vault": """
+[bold green]THE TRANSACTIONS VAULT — DECRYPTED.[/bold green]
+
+[cyan]BEGIN[/cyan]. [cyan]COMMIT[/cyan]. [cyan]ROLLBACK[/cyan]. [cyan]SAVEPOINT sp1[/cyan]. [cyan]ROLLBACK TO SAVEPOINT sp1[/cyan].
+[cyan]SET TRANSACTION ISOLATION LEVEL SERIALIZABLE[/cyan] — the level that closes the phantom read window.
+
+The fraud timeline is reconstructed. The manipulation exploited READ COMMITTED —
+the default — where phantom rows could slip into a transaction window before the
+audit trigger fired. SERIALIZABLE would have caught it. They knew this. They counted on
+no one running at that isolation level.
+
+Now you know why they were right to count on it. And why they were wrong to think
+no one would eventually reconstruct the sequence.
+
+[bold cyan]The JSON Forge: the signature is inside the metadata column.[/bold cyan]
+""",
     "json_forge": """
 [bold yellow]★ ★ ★  THE JSON FORGE — COMPLETE.  ★ ★ ★[/bold yellow]
 
@@ -370,6 +406,7 @@ BOSS_INTROS = {
     "transaction_core": "[bold red]★  FINAL TRANSACTION: The ACID Test[/bold red]\nEverything you've extracted needs to land in the staging table atomically. BEGIN, do the work, COMMIT. If anything goes wrong, it never happened.",
     "window_functions": "[bold red]⚠  FORENSIC ANALYSIS: The Pattern Across Quarters[/bold red]\nFive years. Same phantom vendor. Same account ranking pattern. You need ROW_NUMBER, PARTITION, LAG, and NTILE to surface it. No GROUP BY.",
     "json_forge": "[bold red]★  JSON EXTRACTION: The Metadata Signature[/bold red]\nSeventeen transactions. Phantom vendor hidden in a JSONB column. Use @>, ->>, jsonb_array_elements. Find the pattern before the audit window closes.",
+    "transactions_vault": "[bold red]★  ISOLATION TRIAL: The Phantom Read Window[/bold red]\nThe fraud exploited a gap in transaction isolation. Identify the isolation level that closes the phantom read window. SET TRANSACTION ISOLATION LEVEL — which level makes concurrent transactions appear serial?",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -395,4 +432,5 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "json_archaeologist": ("JSON Operator Expert", "Cleared the JSON Forge. ->, ->>, @>, jsonb_array_elements — semi-structured data holds no secrets."),
     "completionist": ("Full Schema Access", "Every challenge. Every zone. Total archive penetration achieved."),
     "boss_slayer": ("Audit Bypassed", "Beat your first boss challenge. The compliance system found nothing unusual."),
+    "isolation_expert": ("Transaction Isolation Specialist", "Cleared the Transactions Vault. BEGIN, COMMIT, ROLLBACK, SAVEPOINT, SERIALIZABLE — the fraud timeline is yours to read."),
 }

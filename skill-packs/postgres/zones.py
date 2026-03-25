@@ -1713,6 +1713,209 @@ ZONES = {
             },
         ],
     },
+    "transactions_vault": {
+        "id": "transactions_vault",
+        "name": "The Transactions Vault",
+        "subtitle": "Transaction Isolation & Fraud Analysis",
+        "color": "red",
+        "icon": "🔐",
+        "commands": ["BEGIN", "COMMIT", "ROLLBACK", "SAVEPOINT", "ROLLBACK TO SAVEPOINT", "SET TRANSACTION ISOLATION LEVEL"],
+        "challenges": [
+            {
+                "id": "tv_1",
+                "type": "quiz",
+                "title": "Open the Vault",
+                "flavor": "The fraud involved a sequence of writes that bypassed audit logs. To understand how, Ghost needs to model the exact transaction boundaries. What command starts an explicit transaction?",
+                "lesson": (
+                    "BEGIN — starts an explicit transaction block.\n\n"
+                    "Without BEGIN, every SQL statement is its own auto-committed transaction.\n"
+                    "BEGIN groups multiple statements into a single atomic unit:\n\n"
+                    "  BEGIN;\n"
+                    "  UPDATE ledger SET balance = balance - 50000 WHERE account_id = 99;\n"
+                    "  INSERT INTO transfer_log (account_id, amount) VALUES (99, 50000);\n"
+                    "  COMMIT;\n\n"
+                    "If anything fails between BEGIN and COMMIT, issue ROLLBACK to undo everything.\n\n"
+                    "Aliases: START TRANSACTION is equivalent to BEGIN.\n"
+                    "In PostgreSQL, every statement outside an explicit transaction runs\n"
+                    "in an implicit single-statement transaction."
+                ),
+                "question": "What SQL command starts an explicit transaction block?",
+                "answers": ["BEGIN", "begin", "START TRANSACTION", "start transaction"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It marks the beginning of a transaction.",
+                    "Five letters — the first word in any explicit transaction.",
+                    "The answer is: BEGIN",
+                ],
+            },
+            {
+                "id": "tv_2",
+                "type": "quiz",
+                "title": "Seal the Evidence",
+                "flavor": "The reconstruction transaction succeeded. All four writes are correct. Make them permanent so the evidence is preserved even if the connection drops.",
+                "lesson": (
+                    "COMMIT — makes all changes in the current transaction permanent.\n\n"
+                    "After COMMIT:\n"
+                    "  - Changes are durable (survive crashes and power loss)\n"
+                    "  - Other transactions can now see the changes\n"
+                    "  - The transaction is complete and closed\n\n"
+                    "What happens without COMMIT:\n"
+                    "  - If the connection drops, PostgreSQL automatically rolls back\n"
+                    "  - Uncommitted changes are invisible to other transactions\n"
+                    "  - Locks held by the transaction are released only after COMMIT\n\n"
+                    "Syntax:\n"
+                    "  BEGIN;\n"
+                    "  -- your writes --\n"
+                    "  COMMIT;"
+                ),
+                "question": "What SQL command makes a transaction's changes permanent?",
+                "answers": ["COMMIT", "commit"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It finalizes the transaction and saves all changes.",
+                    "Six letters.",
+                    "The answer is: COMMIT",
+                ],
+            },
+            {
+                "id": "tv_3",
+                "type": "quiz",
+                "title": "Abort and Erase",
+                "flavor": "The reconstruction hit a constraint violation on the third write. The data is now inconsistent. Undo everything and restore the database to the state before BEGIN.",
+                "lesson": (
+                    "ROLLBACK — undoes all changes made since the last BEGIN.\n\n"
+                    "ROLLBACK restores the database to the exact state before BEGIN.\n"
+                    "No partial changes. No intermediate states. Complete reversal.\n\n"
+                    "When to use ROLLBACK:\n"
+                    "  - Explicit: you detect an error and decide to abort\n"
+                    "  - Implicit: connection drops without COMMIT (auto-rollback)\n"
+                    "  - Error abort: a statement error puts the transaction in\n"
+                    "    an aborted state — you must ROLLBACK before issuing new statements\n\n"
+                    "In PostgreSQL, once a transaction hits an error, ALL subsequent\n"
+                    "statements are rejected with 'ERROR: current transaction is aborted'\n"
+                    "until you ROLLBACK and start a new transaction."
+                ),
+                "question": "What SQL command undoes all changes in the current transaction?",
+                "answers": ["ROLLBACK", "rollback"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: rolling back to the previous state.",
+                    "Eight letters.",
+                    "The answer is: ROLLBACK",
+                ],
+            },
+            {
+                "id": "tv_4",
+                "type": "fill_blank",
+                "title": "Mark a Recovery Point",
+                "flavor": "Ghost is reconstructing a complex fraud sequence: 6 writes, some risky. Rather than rolling back the entire transaction on any error, a checkpoint is needed after the first 3 succeed. Complete: ___ sp1",
+                "lesson": (
+                    "SAVEPOINT name — create a named checkpoint within a transaction.\n\n"
+                    "  BEGIN;\n"
+                    "  UPDATE accounts SET status = 'flagged' WHERE id = 1;\n"
+                    "  UPDATE accounts SET status = 'flagged' WHERE id = 2;\n"
+                    "  SAVEPOINT sp1;  -- checkpoint here\n"
+                    "  UPDATE accounts SET status = 'flagged' WHERE id = 3;\n"
+                    "  -- if this fails: ROLLBACK TO SAVEPOINT sp1\n"
+                    "  -- only the third UPDATE is undone; first two are preserved\n"
+                    "  COMMIT;\n\n"
+                    "Key properties:\n"
+                    "  - Multiple savepoints allowed in one transaction\n"
+                    "  - Names must be unique within the transaction\n"
+                    "  - RELEASE SAVEPOINT name destroys it (frees resources)\n"
+                    "  - Savepoints nest: rolling back to an earlier one\n"
+                    "    destroys all savepoints created after it"
+                ),
+                "question": (
+                    "Complete this command to create a savepoint named 'sp1':\n\n"
+                    "___ sp1"
+                ),
+                "answers": ["SAVEPOINT", "savepoint"],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "The command that creates a named checkpoint within a transaction.",
+                    "One word: SAVEPOINT.",
+                    "The answer is: SAVEPOINT",
+                ],
+            },
+            {
+                "id": "tv_5",
+                "type": "fill_blank",
+                "title": "Partial Rollback",
+                "flavor": "The fourth write failed. Ghost needs to undo only the work done after savepoint sp1, keeping the first three writes intact. Complete: ___ TO SAVEPOINT sp1",
+                "lesson": (
+                    "ROLLBACK TO SAVEPOINT name — undo changes back to the savepoint, stay in transaction.\n\n"
+                    "  ROLLBACK TO SAVEPOINT sp1;\n\n"
+                    "Key distinction:\n"
+                    "  ROLLBACK               → aborts the ENTIRE transaction\n"
+                    "  ROLLBACK TO SAVEPOINT  → undoes back to the checkpoint, transaction stays OPEN\n\n"
+                    "After ROLLBACK TO SAVEPOINT:\n"
+                    "  - The transaction is still active (not aborted)\n"
+                    "  - Work before the savepoint is preserved\n"
+                    "  - Work after the savepoint is undone\n"
+                    "  - You can continue issuing statements, then COMMIT or ROLLBACK\n\n"
+                    "Practical pattern:\n"
+                    "  BEGIN;\n"
+                    "  -- safe writes --\n"
+                    "  SAVEPOINT checkpoint;\n"
+                    "  -- risky write --\n"
+                    "  -- if it fails: ROLLBACK TO SAVEPOINT checkpoint;\n"
+                    "  -- retry or skip, then COMMIT;"
+                ),
+                "question": (
+                    "Complete this command to roll back only to savepoint sp1:\n\n"
+                    "___ TO SAVEPOINT sp1"
+                ),
+                "answers": ["ROLLBACK", "rollback"],
+                "xp": 125,
+                "difficulty": "medium",
+                "hints": [
+                    "It starts with the same command used to abort a full transaction.",
+                    "ROLLBACK — but with TO SAVEPOINT after it.",
+                    "The answer is: ROLLBACK",
+                ],
+            },
+            {
+                "id": "tv_boss",
+                "type": "quiz",
+                "title": "BOSS: Isolation Level & Phantom Reads",
+                "flavor": "The fraud bypassed audit detection by exploiting phantom reads — Transaction B saw rows inserted by Transaction A before A committed. Ghost must understand which isolation level prevents this. SET TRANSACTION ISOLATION LEVEL ___. Which level prevents phantom reads?",
+                "lesson": (
+                    "SET TRANSACTION ISOLATION LEVEL — controls concurrency anomalies.\n\n"
+                    "The four isolation levels (weakest to strongest):\n\n"
+                    "  READ UNCOMMITTED  — dirty reads possible (sees uncommitted changes)\n"
+                    "                      PostgreSQL treats this as READ COMMITTED\n\n"
+                    "  READ COMMITTED    — dirty reads prevented; non-repeatable reads possible\n"
+                    "                      (default in PostgreSQL)\n\n"
+                    "  REPEATABLE READ   — dirty + non-repeatable reads prevented\n"
+                    "                      phantom reads possible in standard SQL\n"
+                    "                      (PostgreSQL's REPEATABLE READ actually prevents phantoms too)\n\n"
+                    "  SERIALIZABLE      — all anomalies prevented; transactions appear serial\n"
+                    "                      strictest; most locking overhead\n\n"
+                    "Concurrency anomalies:\n"
+                    "  dirty read         — read uncommitted data from another transaction\n"
+                    "  non-repeatable read — same row read twice gives different values\n"
+                    "  phantom read       — same query returns different rows (inserts/deletes)\n\n"
+                    "Per the SQL standard, SERIALIZABLE is the level that prevents phantom reads.\n"
+                    "Syntax: SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+                ),
+                "question": "Which transaction isolation level (per the SQL standard) prevents phantom reads?",
+                "answers": ["SERIALIZABLE", "serializable"],
+                "xp": 250,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The strictest isolation level — transactions appear to execute one at a time.",
+                    "It's the highest level in the SQL standard isolation hierarchy.",
+                    "The answer is: SERIALIZABLE",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1726,4 +1929,5 @@ ZONE_ORDER = [
     "transaction_core",
     "window_functions",
     "json_forge",
+    "transactions_vault",
 ]

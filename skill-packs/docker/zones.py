@@ -1731,6 +1731,160 @@ ZONES = {
             },
         ],
     },
+    "docker_networks": {
+        "id": "docker_networks",
+        "name": "The Docker Network Grid",
+        "subtitle": "Bridge Networks, Custom Nets & Container Connectivity",
+        "color": "cyan",
+        "icon": "🕸️",
+        "commands": ["docker network ls", "docker network create", "docker run --network", "docker network inspect", "docker network connect"],
+        "challenges": [
+            {
+                "id": "dn_1",
+                "type": "quiz",
+                "title": "List All Networks",
+                "flavor": "The fraud containers are communicating through hidden Docker networks. First step: see what networks exist on the host. What command lists all Docker networks?",
+                "lesson": (
+                    "docker network ls — list all Docker networks on the host.\n\n"
+                    "Output columns:\n"
+                    "  NETWORK ID   truncated hash identifying the network\n"
+                    "  NAME         network name\n"
+                    "  DRIVER       network driver (bridge, host, overlay, none, macvlan)\n"
+                    "  SCOPE        local (single host) or swarm (multi-host)\n\n"
+                    "Default networks always present:\n"
+                    "  bridge   → the default network; all containers join this unless specified\n"
+                    "  host     → container uses the host network stack directly (no isolation)\n"
+                    "  none     → no network; fully isolated container\n\n"
+                    "Custom networks show up alongside the defaults.\n"
+                    "In a compromised environment, unknown custom networks are a finding —\n"
+                    "containers that should be isolated may be sharing a network."
+                ),
+                "answer": "network ls",
+                "hints": [
+                    "Think: docker network and then the subcommand that lists things.",
+                    "The answer is: network ls",
+                ],
+            },
+            {
+                "id": "dn_2",
+                "type": "fill_blank",
+                "title": "Create a Custom Network",
+                "flavor": "Ghost needs to create a custom bridge network named 'nexus-net' to control container connectivity. Complete: docker network ___",
+                "lesson": (
+                    "docker network create — create a custom Docker network.\n\n"
+                    "  docker network create nexus-net\n\n"
+                    "By default, this creates a bridge network.\n\n"
+                    "Why use custom networks instead of the default bridge:\n"
+                    "  1. Automatic DNS: containers on the same custom network can reach\n"
+                    "     each other by container name — no IP addresses needed\n"
+                    "  2. Isolation: containers on different custom networks cannot talk\n"
+                    "     to each other by default\n"
+                    "  3. The default bridge network does NOT provide automatic DNS resolution\n\n"
+                    "Additional options:\n"
+                    "  docker network create --driver bridge nexus-net  → explicit bridge (default)\n"
+                    "  docker network create --subnet 172.20.0.0/16 nexus-net  → custom subnet\n"
+                    "  docker network create --driver overlay nexus-net  → multi-host (Swarm)\n\n"
+                    "Forensic note: custom network names reveal intent.\n"
+                    "A network named 'payment-internal' that connects the fraud container\n"
+                    "to the payment service is not an accident."
+                ),
+                "answer": "create nexus-net",
+                "hints": [
+                    "The subcommand creates, and you pass the network name as the argument.",
+                    "The answer is: create nexus-net",
+                ],
+            },
+            {
+                "id": "dn_3",
+                "type": "fill_blank",
+                "title": "Connect Container at Launch",
+                "flavor": "Ghost needs to start a container and immediately attach it to nexus-net. Complete: docker run ___ alpine sh",
+                "lesson": (
+                    "docker run --network — connect a container to a specific network at launch.\n\n"
+                    "  docker run --network nexus-net alpine sh\n\n"
+                    "Without --network:\n"
+                    "  The container joins the default bridge network\n"
+                    "  It gets a random IP; no automatic DNS with other containers\n\n"
+                    "With --network nexus-net:\n"
+                    "  The container joins nexus-net\n"
+                    "  It can reach other containers on nexus-net by name\n"
+                    "  It is isolated from containers on other networks\n\n"
+                    "A container can join multiple networks:\n"
+                    "  docker run --network nexus-net ... → primary network at launch\n"
+                    "  docker network connect other-net container → add after launch\n\n"
+                    "In compose:\n"
+                    "  networks:\n"
+                    "    - nexus-net\n\n"
+                    "Forensic pattern: a container connected to both a public-facing network\n"
+                    "and an internal payment network is a lateral movement path."
+                ),
+                "answer": "--network nexus-net",
+                "hints": [
+                    "Use the flag that specifies which network to join.",
+                    "The answer is: --network nexus-net",
+                ],
+            },
+            {
+                "id": "dn_4",
+                "type": "quiz",
+                "title": "Inspect Network",
+                "flavor": "Ghost has found nexus-net. The next step is mapping every container on it and its IP configuration. What does docker network inspect nexus-net show?",
+                "lesson": (
+                    "docker network inspect — show detailed JSON metadata for a network.\n\n"
+                    "  docker network inspect nexus-net\n\n"
+                    "What inspect reveals:\n"
+                    "  Name / ID / Driver / Scope\n"
+                    "  IPAM.Config → IP ranges and subnets assigned to the network\n"
+                    "  Containers  → every container currently connected, with:\n"
+                    "                  name, ID, MAC address, IPv4/IPv6 address\n"
+                    "  Options     → driver-specific configuration\n"
+                    "  Labels      → metadata attached to the network\n\n"
+                    "Forensic use:\n"
+                    "  docker network inspect reveals the full mesh — who is talking to whom.\n"
+                    "  A payment container and a fraud container on the same network means\n"
+                    "  unrestricted layer-3 connectivity between them.\n\n"
+                    "Filter with --format:\n"
+                    "  docker network inspect --format '{{json .Containers}}' nexus-net\n"
+                    "  → JSON output of just the connected containers"
+                ),
+                "answer": "IP ranges, connected containers, network config",
+                "hints": [
+                    "Inspect shows the subnet, which containers are attached, and how the network is configured.",
+                    "The answer is: IP ranges, connected containers, network config",
+                ],
+            },
+            {
+                "id": "dn_5",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Connect Running Container",
+                "flavor": "A container is already running and needs to be connected to nexus-net without restarting it. Complete: docker network ___ existing-container",
+                "lesson": (
+                    "docker network connect — connect a running container to an existing network.\n\n"
+                    "  docker network connect nexus-net existing-container\n\n"
+                    "This is the live-attach operation:\n"
+                    "  - No restart required\n"
+                    "  - The container immediately gains a new network interface\n"
+                    "  - It receives an IP on nexus-net\n"
+                    "  - It can now reach all other containers on nexus-net by name\n\n"
+                    "The inverse — disconnect:\n"
+                    "  docker network disconnect nexus-net existing-container\n\n"
+                    "Why this matters in a breach context:\n"
+                    "  An attacker who gains docker socket access can connect any running\n"
+                    "  container to any network. A compromised container that was isolated\n"
+                    "  can be silently granted access to payment or database networks\n"
+                    "  without restarting it — no image change, no compose update, no logs\n"
+                    "  from the container's startup sequence.\n\n"
+                    "  docker network ls && docker network inspect → the only way to detect it."
+                ),
+                "answer": "connect nexus-net",
+                "hints": [
+                    "The subcommand connects an existing container to a network.",
+                    "The answer is: connect nexus-net",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1745,4 +1899,5 @@ ZONE_ORDER = [
     "registry_core",
     "health_protocol",
     "compose_advanced",
+    "docker_networks",
 ]

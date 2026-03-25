@@ -2235,6 +2235,8 @@ ZONE_ORDER = [
     "environment_chamber",
     "text_processing_forge",
     "stream_editor_lab",
+    "process_control",
+    "network_recon",
 ]
 
 

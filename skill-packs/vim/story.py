@@ -249,6 +249,47 @@ and confirmed replacement. Backreferences with [yellow]\\1[/yellow] capture and 
 [italic]"Ex commands are the command line inside the editor.
 When the buffer is the problem space, these are the tools."[/italic]
 """,
+    "motion_mastery": """
+[bold cyan]== THE MOTION MASTERY CHAMBER ==[/bold cyan]
+
+Deep inside the NEXUS network, every keystroke counts.
+
+The Ghost Operative moves through files the way a blade moves through air —
+no wasted motion, no hunting, no hesitation. [yellow]w[/yellow] and [yellow]b[/yellow] navigate by word.
+[yellow]f[/yellow] snipes to any character on the line in a single keystroke. [yellow]t[/yellow] places the
+cursor precisely before a target — perfect for operator combinations.
+[yellow]%[/yellow] jumps instantly to the matching bracket no matter how deeply nested.
+
+These are not shortcuts. They are the grammar of efficient movement.
+An operator without a precise motion is just noise.
+A motion without an operator is half a thought.
+
+[yellow]w / b[/yellow] — word forward and backward.
+[yellow]f{char}[/yellow] — jump to next occurrence of char on the current line.
+[yellow]t{char}[/yellow] — jump to just before char (till).
+[yellow]%[/yellow] — jump to matching bracket, parenthesis, or brace.
+[yellow]ci"[/yellow] — the boss move: change inner quotes in a single motion.
+
+[italic]"Minimal motion, maximum efficiency — this is the Ghost Operative way."[/italic]
+""",
+    "split_navigation": """
+[bold cyan]== THE SPLIT NAVIGATION HUB ==[/bold cyan]
+
+Multiple encrypted files need simultaneous analysis. Ghost splits the screen.
+
+The audit log. The processor config. The routing table. Three files,
+one terminal, one vim session — no additional processes logged,
+no context switching, no state lost. The intelligence is in the
+[bold white]relationships between the files[/bold white], not in any one of them alone.
+
+[yellow]:split[/yellow] / [yellow]:vsplit[/yellow] — open files in horizontal or vertical splits.
+[yellow]Ctrl+W w[/yellow] — cycle between splits without lifting your hands from the keyboard.
+[yellow]Ctrl+W hjkl[/yellow] — navigate directionally, same keys as cursor movement.
+[yellow]:resize +N[/yellow] — expand a split when a file needs more screen real estate.
+[yellow]:windo %s/…/…/g[/yellow] — the boss move: broadcast a command to every open window.
+
+[italic]"The screen is a workspace. Split it to match the structure of the problem."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -355,6 +396,30 @@ that happens to run in a terminal."[/bold magenta]
 
 [bold yellow]VIM STATUS: GRANDMASTER. FILES: EDITED. EVIDENCE: PRESERVED.[/bold yellow]
 """,
+    "motion_mastery": """
+[bold green]THE MOTION MASTERY CHAMBER — CLEARED.[/bold green]
+
+[cyan]w[/cyan] and [cyan]b[/cyan] through words. [cyan]f,[/cyan] to the comma. [cyan]t)[/cyan] to just before the paren.
+[cyan]%[/cyan] to the matching bracket. [cyan]ci"[/cyan] to change the value inside quotes —
+cursor anywhere on the line, one command, done.
+
+The config values are updated. The operator-motion grammar is internalized.
+No more character-by-character navigation. No more hunting.
+
+[bold cyan]The Split Navigation Hub: multiple files, one session.[/bold cyan]
+""",
+    "split_navigation": """
+[bold green]THE SPLIT NAVIGATION HUB — ACTIVE.[/bold green]
+
+Three panes. [cyan]Ctrl+W w[/cyan] cycles between them. [cyan]Ctrl+W l[/cyan] goes right.
+[cyan]:resize +5[/cyan] expanded the audit log pane to fit the evidence.
+[cyan]:windo %s/NEXUS/nexus/g[/cyan] — one command, every open file updated simultaneously.
+
+The session is clean. No extra processes. No context switches.
+The screen holds the entire investigation.
+
+[bold cyan]Motion mastered. Navigation mastered. The network is yours.[/bold cyan]
+""",
 }
 
 BOSS_INTROS = {
@@ -368,6 +433,8 @@ BOSS_INTROS = {
     "macro_forge": "[bold red]★  MACRO TRIAL: The 417 Annotations[/bold red]\nRecord one macro that annotates a transaction line. Replay it 416 times. The file has 417 flagged entries. You have one shot to get the macro right.",
     "registers_vault": "[bold red]⚠  REGISTER TRIAL: The Pre-Loaded Macro[/bold red]\nYou need to pre-load register 'a' with a specific string so a macro can paste it across all 417 lines. Set the register programmatically — without yanking.",
     "ex_commands_deep": "[bold red]★  EX COMMANDS FINAL: The 80K Line Filter[/bold red]\nThe audit log is 80,000 lines. Reduce it to only the relevant entries, annotate the phantom accounts, and sort the output. Three :g and :v commands. No manual scrolling.",
+    "motion_mastery": "[bold red]⚡  MOTION TRIAL: The Operator-Motion Combo[/bold red]\nA config value is buried in a quoted string. No manual positioning — one motion, one operator, one keystroke sequence. Change the content inside the quotes from anywhere on the line.",
+    "split_navigation": "[bold red]⚠  MULTI-WINDOW BROADCAST: The Global Substitution[/bold red]\nNEXUS needs to become nexus across every open file simultaneously. :windo turns a single substitution into a window-wide operation. One command. All panes. Done.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -393,4 +460,6 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "ex_master": ("Ex Commands Expert", "Cleared the Ex Commands Deep. :g, :v, :%! — the buffer bends to your will."),
     "completionist": ("Complete Modal Mastery", "Every zone. Every challenge. Total vim fluency achieved."),
     "boss_slayer": ("Boss Challenge Cleared", "Beat your first vim boss. The file yielded."),
+    "motion_ghost": ("Motion Efficiency Expert", "Cleared the Motion Mastery Chamber. w, b, f, t, %, ci\" — the cursor goes exactly where you send it."),
+    "split_master": ("Split Session Specialist", "Cleared the Split Navigation Hub. Multiple panes, one session, :windo broadcasting to every open file."),
 }

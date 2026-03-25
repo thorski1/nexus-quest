@@ -210,6 +210,40 @@ was started in a tmux session called 'ghost'. It's still running.
 [italic]"tmux is insurance. You run long operations inside it
 so that a broken pipe doesn't become a lost operation."[/italic]
 """,
+    "port_forwarding": """
+[bold cyan]== THE PORT FORWARDING RELAY ==[/bold cyan]
+
+The NEXUS financial server is locked behind a firewall.
+Direct access is impossible. But SSH doesn't care about firewalls —
+it tunnels through them.
+
+[yellow]ssh -L[/yellow] — forward a local port through the tunnel to something behind the firewall.
+[yellow]ssh -R[/yellow] — expose a local service on the remote host.
+[yellow]ssh -D[/yellow] — spin up a SOCKS proxy and route everything through the tunnel.
+[yellow]ssh -N -f[/yellow] — background the tunnel, no shell required.
+[yellow]ssh -J[/yellow] — chain through multiple jump hosts in a single command.
+
+The financial server is four hops behind this bastion.
+
+[italic]"The firewall sees port 22. It doesn't see what's flowing through port 22."[/italic]
+""",
+    "key_management": """
+[bold cyan]== THE KEY MANAGEMENT VAULT ==[/bold cyan]
+
+A NEXUS sysadmin's key was compromised. The security team will rotate it —
+but Ghost needs to move faster. Keys need to be generated, installed,
+and the old host fingerprint needs to be purged before anyone notices.
+
+[yellow]ssh-keygen -t ed25519[/yellow] — generate a modern key pair.
+[yellow]ssh-copy-id[/yellow] — install the public key on a remote host automatically.
+[yellow]cat >> ~/.ssh/authorized_keys[/yellow] — install manually when tools aren't available.
+[yellow]ssh-keygen -R[/yellow] — remove a stale host key from known_hosts.
+
+The authorized_keys file is the source of truth.
+Know it better than the people who maintain it.
+
+[italic]"Every key is a door. The question is which doors are still open."[/italic]
+""",
     "scp_vault": """
 [bold cyan]== THE SCP VAULT ==[/bold cyan]
 
@@ -318,6 +352,33 @@ The extraction completed without interruption.
 
 [bold cyan]The SCP Vault: files move through the encrypted channel.[/bold cyan]
 """,
+    "port_forwarding": """
+[bold green]THE PORT FORWARDING RELAY — ACTIVE.[/bold green]
+
+The financial server is reachable. The firewall is irrelevant.
+
+[cyan]-L[/cyan] pulled port 80 through the tunnel to localhost.
+[cyan]-R[/cyan] pushed a local port out to the remote host.
+[cyan]-D[/cyan] created a SOCKS proxy — the entire internal network is now routable.
+[cyan]-N -f[/cyan] backgrounded the tunnel silently.
+[cyan]-J[/cyan] chained through two jump hosts in a single command.
+
+The port forwarder is running. The connection is invisible.
+
+[bold cyan]The Key Management Vault: rotating keys before anyone notices.[/bold cyan]
+""",
+    "key_management": """
+[bold green]THE KEY MANAGEMENT VAULT — CLEARED.[/bold green]
+
+The compromised key is rotated. The new key is installed.
+The stale host fingerprint is purged from known_hosts.
+The [cyan]authorized_keys[/cyan] file has been audited — three entries
+that should have been removed six months ago. They're still there.
+
+Ghost added one more.
+
+[bold cyan]The SCP Vault: files move through the encrypted channel.[/bold cyan]
+""",
     "scp_vault": """
 [bold yellow]★ ★ ★  THE SCP VAULT — CLEARED.  ★ ★ ★[/bold yellow]
 
@@ -349,6 +410,8 @@ BOSS_INTROS = {
     "hardening_core": "[bold red]★  FINAL AUDIT: The Configuration[/bold red]\nEvery misconfiguration that made this infiltration possible. Name them. Know how to prevent them.",
     "multiplexer_gateway": "[bold red]⚠  SESSION PERSISTENCE: The 847MB Pull[/bold red]\nThe extraction is running in tmux. The connection will drop. Create the session, run the job, detach cleanly, reattach after the drop. Nothing can interrupt it.",
     "scp_vault": "[bold red]★  FILE EXTRACTION: The SCP/SFTP Trial[/bold red]\nThree files via scp. One file via sftp — path unknown, requires interactive navigation. Everything must land locally before the session window closes.",
+    "port_forwarding": "[bold red]⚠  TUNNEL CONSTRUCTION: The ProxyJump Chain[/bold red]\nTwo jump hosts between Ghost and the financial server. One command. Chain them with -J and prove you know the full forwarding syntax.",
+    "key_management": "[bold red]⚠  KEY ROTATION: The authorized_keys Audit[/bold red]\nThe compromised key is being rotated across the NEXUS infrastructure. Prove you know every step — generate, install, purge stale fingerprints, and identify the file that controls access.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -374,4 +437,6 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "data_mover": ("SCP/SFTP Specialist", "Cleared the SCP Vault. scp for known paths, sftp for exploration. Files move when you tell them to."),
     "completionist": ("Full Network Traversal", "Every zone. Every challenge. Complete SSH mastery achieved."),
     "boss_slayer": ("First Barrier Bypassed", "Beat your first SSH boss challenge. The network yielded."),
+    "relay_operator": ("Port Forwarding Specialist", "Cleared The Port Forwarding Relay. -L, -R, -D, -N -f, -J — the tunnel toolkit is fully loaded."),
+    "key_rotator": ("Key Management Expert", "Cleared The Key Management Vault. Keys generated, installed, rotated. authorized_keys audited."),
 }

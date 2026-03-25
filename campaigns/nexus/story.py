@@ -417,25 +417,42 @@ without a human at the keyboard. The investigator's secure drop expects a script
 [bold cyan]The Automation Layer is next. Python awaits.[/bold cyan]
 """,
     "linux": """
-The regex passed. The evidence cleared the filter.
+The filesystem is mapped. Users audited. Processes catalogued.
+Network interfaces traced. Log rotation configured.
 
-Now it needs somewhere to land — and the drop site server is
-a hardened Linux box with no web interface, no GUI, and a very
-impatient investigator on the other end.
+The drop server is fully understood — from the kernel version to
+the shell startup sequence. The evidence transfer completed without
+triggering any monitoring.
 
-CIPHER has a login. One user account with limited privileges.
-The rest has to come from understanding the system: who runs on it,
-what's running on it, where the disk space is, what the network
-looks like, and what the logs will say about you afterward.
+But the operation isn't over.
 
-[bold cyan]"This is the full stack of a production Linux server.
-Own every layer — from the user table to the shell config.
-The evidence delivery depends on it."[/bold cyan]
+NEXUS's infrastructure doesn't run on bare metal. It runs on [bold white]Kubernetes[/bold white] —
+a container orchestration cluster with three nodes, dozens of namespaces,
+and somewhere inside it, the live fraud-processing pipeline still running.
 
-[bold white]The operating system is the final layer. Know it completely.[/bold white]
+CIPHER: [bold cyan]"We have a kubeconfig. Cached in /root/.kube/config.
+The cluster is accessible. The evidence trail leads inside it."[/bold cyan]
 
-[italic]"Every system is just a collection of files. The art is knowing
-which ones matter, who owns them, and what they're doing."[/italic]
+[bold white]The container orchestration layer is next. Navigate the cluster.[/bold white]
+""",
+    "kubernetes": """
+The cluster acknowledged the connection.
+
+Three nodes. Hundreds of pods. Namespaces labeled with department names
+that match the subsidiaries in the fraud trail: [yellow]finance-core[/yellow],
+[yellow]disbursement-engine[/yellow], [yellow]audit-services[/yellow].
+
+The audit-services namespace has a pod called [yellow]audit-eraser[/yellow].
+That's not a legitimate workload name. And it's been running for 847 days.
+
+[bold cyan]"Every artifact of the fraud is running as a containerized service,"[/bold cyan]
+CIPHER says quietly. [bold cyan]"The cluster is the crime scene.
+And we just got kubectl access."[/bold cyan]
+
+[bold white]Map the cluster. Read the secrets. Trace the RBAC chain.
+Find out what audit-eraser has been doing for two and a half years.[/bold white]
+
+[italic]"In Kubernetes, nothing is really deleted. It's just restarted."[/italic]
 """,
     "python": """
 The script ran clean.
@@ -451,6 +468,68 @@ old security theater that blocks known exfiltration signatures.
 The filter runs on regex. And to defeat regex, you need to understand it.
 
 [bold cyan]The Signal Analysis is next. Every byte of the evidence archive is a pattern.[/bold cyan]
+""",
+    "aws": """
+The cluster connection established. The kubeconfig leads deeper.
+
+Environment variables in the fraud pods pointed outward — not to each other,
+but to something upstream. AWS credentials cached from a three-year-old
+deployment that nobody cleaned up.
+
+The Kubernetes cluster was the processor. [bold white]AWS is the vault.[/bold white]
+
+S3 buckets holding archived financial records. An RDS cluster with eleven
+years of primary data. Lambda functions that automated the transfers.
+And IAM roles connected to entities that don't appear anywhere in the
+official corporate structure.
+
+[bold cyan]CIPHER: "The cloud environment is the final layer.
+Everything we've found so far is a shadow of what's stored there."[/bold cyan]
+
+[bold white]Navigate the AWS infrastructure. The evidence trail ends here.[/bold white]
+""",
+    "kubernetes": """
+The cluster acknowledged the connection.
+
+847 days of systematically deleting audit trail entries — every disbursement
+to a phantom subsidiary, every anomalous transaction flag, every automated
+compliance check that would have triggered review. All of it erased on a schedule.
+
+But Kubernetes kept the previous container logs. The pod restarted seventeen
+times. The logs from each restart survive. And in the logs from restart eleven:
+a stack trace, an exception, an accidental print statement containing the full
+SQL query that was being executed to erase the audit trail.
+
+[bold white]The query names the accounts. The accounts name the people.[/bold white]
+
+Evidence package updated. Chain of custody extended through the cluster logs.
+
+But the pods pulled their data from somewhere. AWS credentials in the environment.
+A three-year-old IAM user with AdministratorAccess and no rotation policy.
+
+[bold cyan]CIPHER: "The cloud environment is the final layer. Go deeper."[/bold cyan]
+""",
+    "aws": """
+The Lambda logs are complete.
+
+9,847 executions. Each one moving money through the phantom subsidiary structure
+on a schedule that correlates perfectly with federal contract payment cycles.
+The signatory metadata from the RDS snapshot names the accounts.
+The IAM audit trail connects those accounts to real individuals.
+
+S3 preserved the modified compliance reports — and the originals.
+The VPC misconfiguration was intentional. The `ops-temp` instances
+were infrastructure, not temporary.
+
+Every layer of the NEXUS infrastructure was part of the fraud architecture.
+And every layer left evidence behind.
+
+Evidence package: complete.
+Chain of custody: intact.
+
+[bold cyan]CIPHER: "That's everything. Make the delivery."[/bold cyan]
+
+[bold white]Case complete.[/bold white]
 """,
 }
 

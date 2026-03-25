@@ -51,8 +51,11 @@ Just your terminal, your knowledge, and eight layers of systems between you and 
 | 6 | **Postgres** | Extract 417 fraudulent transactions from the primary database |
 | 7 | **Python** | Script the evidence packager — automate the delivery chain |
 | 8 | **Regex** | Defeat the pattern filter between you and the drop site |
+| 9 | **Linux** | Own the delivery server — users, permissions, processes, logs |
+| 10 | **Kubernetes** | Navigate the container orchestration cluster — pods, RBAC, Helm |
+| 11 | **AWS** | Breach the cloud layer — IAM, S3, RDS, Lambda, VPC |
 
-**450+ challenges** across 70+ zones. Real commands. Real syntax. Real production skills.
+**600+ challenges** across 90+ zones. Real commands. Real syntax. Real production skills.
 
 ---
 

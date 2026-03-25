@@ -104,5 +104,17 @@ CAMPAIGN = Campaign(
             intro_bridge=CHAPTER_INTROS["linux"],
             outro_bridge=CHAPTER_OUTROS["linux"],
         ),
+        ChapterDef(
+            pack_name="kubernetes",
+            title="The Cluster",
+            intro_bridge=CHAPTER_INTROS["kubernetes"],
+            outro_bridge=CHAPTER_OUTROS["kubernetes"],
+        ),
+        ChapterDef(
+            pack_name="aws",
+            title="The Cloud Layer",
+            intro_bridge=CHAPTER_INTROS["aws"],
+            outro_bridge=CHAPTER_OUTROS["aws"],
+        ),
     ],
 )

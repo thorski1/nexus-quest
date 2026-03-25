@@ -160,6 +160,51 @@ Understand how the fraud ran without triggering an audit.[/bold white]
 [italic]"A container is not a vault. It's an isolation boundary.
 The difference matters when someone is determined to find where the boundary is weak."[/italic]
 """,
+    "python": """
+The evidence is assembled. The queries ran. The data is accurate.
+
+But evidence that lives only in a terminal session isn't evidence —
+it's notes. To deliver it, to package it, to make it reproducible
+and verifiable by an independent party, you need a script.
+
+Python is the operative's language for automation. Not because it's
+the fastest or the most powerful, but because it's the one that lets
+you go from idea to working tool in a single session. File I/O,
+JSON marshaling, HTTP requests, subprocess calls, exception handling —
+the full stack for turning terminal knowledge into deliverable artifacts.
+
+CIPHER's voice cuts through: [bold cyan]"The investigator's drop site expects
+a signed archive with a manifest. Build the packager. Automate the delivery."[/bold cyan]
+
+[bold white]Write the code. Make the evidence portable.[/bold white]
+
+[italic]"The best shell scripts eventually grow up to become Python programs.
+The best Python programs started as shell scripts."[/italic]
+""",
+    "regex": """
+The pattern filter stands between the evidence package and the drop site.
+
+NEXUS's security team deployed it three years ago to block automated
+exfiltration of large structured datasets. It scans every outbound package
+for patterns: IP address ranges, structured JSON keys, timestamp formats,
+anything that looks like a database dump.
+
+Your evidence archive looks exactly like a database dump. Because it is one.
+
+To get it through, you need to understand the filter at the regex level —
+what it matches, what it misses, and how to structure output that passes
+the filter without losing evidentiary integrity. That means understanding
+regular expressions from the ground up: syntax, character classes,
+anchors, quantifiers, lookarounds, and the real-world patterns that
+security systems depend on.
+
+[bold cyan]"Learn the syntax," CIPHER says, "and you'll see every pattern — and every gap."[/bold cyan]
+
+[bold white]Decode the signal. Route the evidence through the noise.[/bold white]
+
+[italic]"Regular expressions are not code. They are notation.
+A language for describing what you're looking for."[/italic]
+""",
     "postgres": """
 Everything leads here.
 
@@ -261,6 +306,38 @@ every inflated disbursement — ended up in one place.
 
 [bold cyan]The database is next. The primary records. The proof.[/bold cyan]
 """,
+    "python": """
+The packager ran without error.
+
+A signed archive: [yellow]evidence_package_v3.tar.gz[/yellow]. SHA-256 checksum generated.
+Manifest embedded. Chain-of-custody log appended. The whole thing built
+from a 200-line Python script that can be re-run on any machine with
+a standard Python install.
+
+The investigator's system accepted the upload.
+
+Confirmation token received at 03:47 AM.
+
+But the drop site's pattern filter logged a warning flag on one of
+the archived query results — a structured output that matches a
+known exfiltration signature. The filter didn't block it, but it
+logged it. If NEXUS's security team checks those logs in the next
+twelve hours, the operation is burned.
+
+[bold cyan]Understand the filter. Understand the pattern. Route the evidence through it.[/bold cyan]
+""",
+    "regex": """
+The archive passed through clean.
+
+The filter's regex checked for structured database output: specific JSON keys,
+IP address formats in the wrong fields, timestamp patterns without offset encoding.
+You restructured the manifest to pass every check without losing a single
+byte of evidentiary data.
+
+Zero flags. Zero alerts. The evidence is in the investigator's hands.
+
+[bold cyan]Evidence package delivered. Report complete.[/bold cyan]
+""",
     "postgres": """
 The queries returned.
 
@@ -276,7 +353,25 @@ The financial trail is complete. Every disbursement, every vendor,
 every timestamp. The data was always there. It just needed someone
 who knew how to ask for it.
 
-[bold cyan]Evidence package assembled. Report complete.[/bold cyan]
+But the evidence package needs to be delivered — automatically, reliably,
+without a human at the keyboard. The investigator's secure drop expects a script.
+
+[bold cyan]The Automation Layer is next. Python awaits.[/bold cyan]
+""",
+    "python": """
+The script ran clean.
+
+Every transaction pulled, formatted, hashed, and packaged into the evidence archive
+in 4.2 seconds. No manual export. No GUI. No human error in the chain of custody.
+
+The investigator's intake system parsed the JSON, verified the SHA-256 checksums,
+and returned a confirmation token. Fully automated. Fully reproducible.
+
+But the drop site uses a pattern-matching filter to screen incoming packages —
+old security theater that blocks known exfiltration signatures.
+The filter runs on regex. And to defeat regex, you need to understand it.
+
+[bold cyan]The Signal Analysis is next. Every byte of the evidence archive is a pattern.[/bold cyan]
 """,
 }
 

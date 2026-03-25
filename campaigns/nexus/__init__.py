@@ -86,5 +86,17 @@ CAMPAIGN = Campaign(
             intro_bridge=CHAPTER_INTROS["postgres"],
             outro_bridge=CHAPTER_OUTROS["postgres"],
         ),
+        ChapterDef(
+            pack_name="python",
+            title="The Automation Layer",
+            intro_bridge=CHAPTER_INTROS["python"],
+            outro_bridge=CHAPTER_OUTROS["python"],
+        ),
+        ChapterDef(
+            pack_name="regex",
+            title="The Signal Analysis",
+            intro_bridge=CHAPTER_INTROS["regex"],
+            outro_bridge=CHAPTER_OUTROS["regex"],
+        ),
     ],
 )

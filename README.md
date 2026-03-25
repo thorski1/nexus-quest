@@ -61,58 +61,52 @@ Just your terminal, your knowledge, and eight layers of systems between you and 
 
 ## Install
 
-### Mac / Linux
+### The easy way (recommended)
 
+**Mac / Linux:**
+```bash
+pip install nexus-quest
+```
+
+**Windows** — open PowerShell and run:
+```powershell
+pip install nexus-quest
+```
+
+> **If `nexus-quest` is not found after install:** Open a new terminal window. If still missing, run `python -m nexus_quest.main` as a fallback.
+
+> **Best experience on Windows:** Use [Windows Terminal](https://aka.ms/terminal) (free, Microsoft Store). The default `cmd.exe` may display characters incorrectly.
+
+### One-liner installer (no pip? start here)
+
+**Mac / Linux:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/thorski1/nexus-quest/main/install.sh | bash
 ```
 
-Then run:
-```bash
-nexus-quest
-```
-
-### Windows
-
-**Requirements:** [Python 3.10+](https://python.org/downloads) (check "Add Python to PATH" during install) and [git](https://git-scm.com/download/win)
-
-Open **PowerShell** and run:
+**Windows (PowerShell):**
 ```powershell
 powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/thorski1/nexus-quest/main/install.ps1 | iex"
 ```
 
-Then **open a new terminal window** and run:
+Then open a new terminal and run `nexus-quest`.
+
+### Auto-updates
+
+The game checks for updates automatically at startup. When a new version is available you'll see:
+
 ```
-nexus-quest
-```
-
-> **Best experience:** Use [Windows Terminal](https://aka.ms/terminal) (free, Microsoft Store). The default `cmd.exe` may display characters incorrectly.
-
-> **If you see "running scripts is disabled":** The one-liner above bypasses this automatically. If it still fails, run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` first.
-
-> **If `nexus-quest` is not found after install:** The installer adds Python's Scripts folder to your PATH — open a new terminal window and try again. If still not found, run `python -m nexus_quest.main` as a fallback.
-
-### Manual Install (Mac / Linux / Windows)
-
-Requires Python 3.10+ and git.
-
-**Mac / Linux:**
-```bash
-git clone https://github.com/thorski1/quest-engine ~/.local/share/quest-engine
-git clone https://github.com/thorski1/nexus-quest ~/.local/share/nexus-quest
-
-python3 -m pip install -e ~/.local/share/quest-engine
-python3 -m pip install -e ~/.local/share/nexus-quest
+╭──────────────────────────────╮
+│      SOFTWARE UPDATE         │
+│                              │
+│  Update available!           │
+│  Installed : v1.0.0          │
+│  Latest    : v1.1.0          │
+╰──────────────────────────────╯
+  Install update now? [y/N]
 ```
 
-**Windows (PowerShell):**
-```powershell
-git clone https://github.com/thorski1/quest-engine "$env:LOCALAPPDATA\QuestEngine\quest-engine"
-git clone https://github.com/thorski1/nexus-quest "$env:LOCALAPPDATA\QuestEngine\nexus-quest"
-
-python -m pip install -e "$env:LOCALAPPDATA\QuestEngine\quest-engine"
-python -m pip install -e "$env:LOCALAPPDATA\QuestEngine\nexus-quest"
-```
+Type `y` and the game installs the update and restarts itself.
 
 ---
 

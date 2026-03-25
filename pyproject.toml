@@ -4,22 +4,54 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-quest"
-version = "0.1.0"
+version = "1.0.0"
+description = "A cyberpunk terminal RPG for learning Bash, Git, Docker, Postgres, Vim, SSH, Python, Regex, Linux, Kubernetes, and AWS."
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "thorski1" }]
+keywords = [
+    "terminal", "game", "rpg", "hacker", "cyberpunk", "bash", "linux",
+    "git", "docker", "kubernetes", "aws", "learning", "education", "cli",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Topic :: Education",
+    "Topic :: Terminals",
+]
 dependencies = [
     "rich>=13.0.0",
-    "quest-engine",
+    "quest-engine>=1.0.0",
 ]
 
+[project.urls]
+Homepage      = "https://github.com/thorski1/nexus-quest"
+Repository    = "https://github.com/thorski1/nexus-quest"
+"Bug Tracker" = "https://github.com/thorski1/nexus-quest/issues"
+
 [project.scripts]
-nexus-quest     = "nexus_quest.main:main_nexus"
-terminal-quest  = "nexus_quest.main:main_bash"
-git-quest       = "nexus_quest.main:main_git"
-docker-quest    = "nexus_quest.main:main_docker"
-postgres-quest  = "nexus_quest.main:main_postgres"
-vim-quest       = "nexus_quest.main:main_vim"
-ssh-quest       = "nexus_quest.main:main_ssh"
+nexus-quest      = "nexus_quest.main:main_nexus"
+terminal-quest   = "nexus_quest.main:main_bash"
+ssh-quest        = "nexus_quest.main:main_ssh"
+vim-quest        = "nexus_quest.main:main_vim"
+git-quest        = "nexus_quest.main:main_git"
+docker-quest     = "nexus_quest.main:main_docker"
+postgres-quest   = "nexus_quest.main:main_postgres"
+python-quest     = "nexus_quest.main:main_python"
+regex-quest      = "nexus_quest.main:main_regex"
+linux-quest      = "nexus_quest.main:main_linux"
+kubernetes-quest = "nexus_quest.main:main_kubernetes"
+aws-quest        = "nexus_quest.main:main_aws"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where   = ["."]
 include = ["nexus_quest*"]

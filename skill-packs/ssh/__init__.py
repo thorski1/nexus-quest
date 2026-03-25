@@ -9,12 +9,12 @@ from .story import INTRO_STORY, ZONE_INTROS, ZONE_COMPLETIONS, BOSS_INTROS, ACHI
 from .zones import ZONES, ZONE_ORDER
 
 BANNER_ASCII = r"""
-  ██████╗ ██████╗ ██╗  ██╗     ██████╗ ██╗   ██╗███████╗███████╗████████╗
- ██╔════╝██╔════╝ ██║  ██║    ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝
- ╚█████╗ ╚█████╗ ███████║    ██║   ██║██║   ██║█████╗  ███████╗   ██║
-  ╚═══██╗ ╚═══██╗██╔══██║    ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║
- ██████╔╝██████╔╝██║  ██║    ╚██████╔╝╚██████╔╝███████╗███████║   ██║
- ╚═════╝ ╚═════╝ ╚═╝  ╚═╝     ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝
+ _____ _____ _   _
+/  ___/  ___| | | |
+\ `--.\ `--.| |_| |
+ `--. \`--. \  _  |
+/\__/ /\__/ / | | |
+\____/\____/\_| |_/
 """
 
 SKILL_PACK = SkillPack(
@@ -40,7 +40,17 @@ SKILL_PACK = SkillPack(
         "hardening_core":    "grandmaster",
         "multiplexer_gateway": "session_keeper",
         "scp_vault":         "data_mover",
+        "port_forwarding":   "relay_operator",
+        "key_management":    "key_rotator",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,
+    level_titles=[
+        (1, "Rookie"),
+        (6, "Operative"),
+        (11, "Shadow"),
+        (16, "Ghost"),
+        (21, "Phantom"),
+        (26, "Specter"),
+    ],
 )

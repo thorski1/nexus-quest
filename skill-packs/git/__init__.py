@@ -14,12 +14,12 @@ from .story import (
 from .zones import ZONES, ZONE_ORDER
 
 BANNER_ASCII = r"""
-  ██████  ██ ████████      ██████  ██    ██ ███████ ███████ ████████
- ██       ██    ██        ██    ██ ██    ██ ██      ██         ██
- ██   ███ ██    ██        ██    ██ ██    ██ █████   ███████    ██
- ██    ██ ██    ██        ██ ▄▄ ██ ██    ██ ██           ██    ██
-  ██████  ██    ██         ██████   ██████  ███████ ███████    ██
-                                ▀▀
+ _____ _____ _____
+|  __ \_   _|_   _|
+| |  \/ | |   | |
+| | __  | |   | |
+| |_\ \_| |_  | |
+ \____/\___/  \_/
 """
 
 SKILL_PACK = SkillPack(
@@ -49,4 +49,12 @@ SKILL_PACK = SkillPack(
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,
+    level_titles=[
+        (1, "Rookie"),
+        (6, "Operative"),
+        (11, "Shadow"),
+        (16, "Ghost"),
+        (21, "Phantom"),
+        (26, "Specter"),
+    ],
 )

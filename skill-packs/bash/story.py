@@ -252,6 +252,52 @@ substitution, delimiter-agnostic column operations.
 [italic]"The data is in there. sed and awk are the tools that let you reshape it
 into something that means something."[/italic]
 """,
+    "shell_scripting_basics": """
+[bold cyan]== THE SCRIPT FOUNDRY ==[/bold cyan]
+
+The automation layer. This is where the fraud stopped being manual.
+
+Someone sat down at a terminal — months ago, maybe longer — and wrote the
+scripts that run it all automatically. Cron jobs at 3 AM. Shell scripts that
+pull account data, calculate the skimmed amounts, write the transactions.
+Nobody has to log in anymore. The machine does it.
+
+[bold white]Ghost finds the scripts.[/bold white] They're not complicated. They don't need to be.
+A shebang line, a few variables, an if statement, a loop. Forty lines of bash
+running on a schedule, invisible to the ops team, indistinguishable from
+the legitimate batch jobs the sysadmins deployed years ago.
+
+[yellow]#!/bin/bash[/yellow] — the declaration of intent.
+[yellow]chmod +x[/yellow] — the unlocking.
+[yellow]$1[/yellow] — the argument that makes it flexible.
+[yellow]if[/yellow], [yellow]for[/yellow] — the logic that makes it dangerous.
+
+[italic]"Automation doesn't sleep. Automation doesn't make mistakes.
+Automation runs exactly what you told it to run, forever, until someone stops it."[/italic]
+""",
+    "job_control": """
+[bold cyan]== THE JOB CONTROL STATION ==[/bold cyan]
+
+Multiple NEXUS processes running in parallel. That's how they hid it.
+
+One process ingests account data. One calculates the siphon amounts.
+One writes the transactions. One cleans the logs. They run in sequence,
+or in parallel, or on a schedule — and the noise of all of them running
+simultaneously is exactly what makes the signal hard to find.
+
+To work in this environment, Ghost needs to move between processes.
+Suspend one. Push another to the background. Pull a third forward.
+Keep four things running while focusing on the fifth.
+
+[yellow]Ctrl+Z[/yellow] — the pause.
+[yellow]bg[/yellow] — send it back without killing it.
+[yellow]fg[/yellow] — bring it forward when you're ready.
+[yellow]jobs[/yellow] — the full accounting of what's running.
+[yellow]nohup[/yellow] — the command that survives session end.
+
+[italic]"The terminal is a workspace. Job control is how you manage
+more than one thing at once without losing any of them."[/italic]
+""",
     "grand_terminal": """
 [bold cyan]== THE BLACK ICE ROOM ==[/bold cyan]
 
@@ -399,6 +445,35 @@ logs say when you know how to ask.
 [bold cyan]The Stream Editor Lab is next. The data needs reshaping — and sed and awk
 are the tools that do it.[/bold cyan]
 """,
+    "shell_scripting_basics": """
+[bold green]THE SCRIPT FOUNDRY — OPERATIONAL.[/bold green]
+
+Shebang. Execute bit. Arguments. Conditionals. Loops.
+
+Ghost has read the automation layer front to back. The fraud scripts are
+no longer opaque — they're forty lines of bash, completely legible,
+running on a cron schedule that hasn't changed in eleven months.
+
+The scripts that ran automatically every night. The scripts nobody
+thought to audit because they looked like routine batch jobs.
+
+[bold cyan]The Job Control Station is next. Multiple processes, multiple threads.
+Time to learn to manage them all at once.[/bold cyan]
+""",
+    "job_control": """
+[bold green]THE JOB CONTROL STATION — CLEARED.[/bold green]
+
+Suspend. Background. Foreground. The full job lifecycle under control.
+
+Ghost moved between NEXUS processes like switching between channels —
+pausing the noise, focusing on the signal, resuming what needed to keep
+running. nohup confirmed the last piece: the fraud scripts survive
+session end. They were designed to. Nobody ever had to log back in.
+
+Every process accounted for. Every job in the listing understood.
+
+[bold cyan]The substrate layer has no more secrets. Ghost is ready.[/bold cyan]
+""",
     "stream_editor_lab": """
 [bold green]THE STREAM EDITOR LAB — COMPLETE.[/bold green]
 
@@ -447,6 +522,8 @@ BOSS_INTROS = {
     "environment_chamber": "[bold red]⚠  CREDENTIAL EXPOSURE: The Live Process Audit[/bold red]\nA service process on NEXUS Corp's application server has a credential in its environment. Read it. Know where to find it in production.",
     "text_processing_forge": "[bold red]⚠  DATA REDUCTION: The Log Pipeline Trial[/bold red]\n48,000 lines. Colon-delimited fields. One pipeline to extract unique usernames. Build it clean.",
     "stream_editor_lab": "[bold red]⚠  LOG FORENSICS: The Field Extraction Challenge[/bold red]\nPipe-delimited application log. Conditional field extraction. One awk command. The data doesn't reshape itself.",
+    "shell_scripting_basics": "[bold red]⚠  AUTOMATION AUDIT: The Loop Interrogation[/bold red]\nThe fraud script loops over every .log file in the directory. Prove you can read the loop — and know exactly what it outputs.",
+    "job_control": "[bold red]⚠  PROCESS PERSISTENCE: The Hangup Immunity Test[/bold red]\nThe audit script needs to keep running after the session ends. One command makes it immune to hangup. No margin for error — if the session drops, the process must survive.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -473,4 +550,6 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "stream_master": ("Stream Transformed", "Cleared the Stream Editor Lab. sed rewrites. awk dissects. The data takes the shape you need it to."),
     "completionist": ("Full Extraction", "Every challenge. Every zone. Every command. Complete data extraction achieved. The contract was always just the beginning."),
     "boss_slayer": ("Countermeasure Bypassed", "You beat your first boss challenge. The corps' best automated defense, and you walked through it clean."),
+    "script_foundry_cleared": ("Automation Decoded", "Cleared the Script Foundry. Shebang to loop — you can read and write the automation layer. The scripts that ran the fraud are no longer a mystery."),
+    "job_control_cleared": ("Jobs Managed", "Cleared the Job Control Station. Suspend, background, foreground, nohup. Multiple processes, no confusion, nothing lost."),
 }

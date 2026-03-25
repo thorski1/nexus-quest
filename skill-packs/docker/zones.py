@@ -1885,6 +1885,154 @@ ZONES = {
             },
         ],
     },
+    "docker_volumes": {
+        "id": "docker_volumes",
+        "name": "The Data Persistence Vault",
+        "subtitle": "Docker Volume Operations",
+        "color": "yellow",
+        "icon": "🗄️",
+        "commands": ["docker volume create", "docker run -v", "docker volume ls", "docker volume inspect"],
+        "challenges": [
+            {
+                "id": "dvol_1",
+                "type": "quiz",
+                "title": "Create the Vault",
+                "flavor": "The fraud logs weren't stored inside the containers — they were persisted to Docker volumes, surviving container restarts and deletions. Ghost traces the trail: first, a named volume. What command creates one called 'nexus-data'?",
+                "lesson": (
+                    "docker volume create — creates a named Docker volume.\n\n"
+                    "Syntax: docker volume create <name>\n\n"
+                    "Named volumes:\n"
+                    "  - Managed by Docker (stored in /var/lib/docker/volumes/ on Linux)\n"
+                    "  - Persist after container is stopped or removed\n"
+                    "  - Can be mounted into multiple containers simultaneously\n"
+                    "  - Are NOT deleted when you run docker rm\n"
+                    "  - Must be explicitly removed with: docker volume rm\n\n"
+                    "Example:\n"
+                    "  docker volume create nexus-data\n"
+                    "  → creates a named volume called nexus-data"
+                ),
+                "answer": "docker volume create nexus-data",
+                "hints": [
+                    "The subcommand is 'volume create' followed by the name.",
+                    "The answer is: docker volume create nexus-data",
+                ],
+            },
+            {
+                "id": "dvol_2",
+                "type": "fill_blank",
+                "title": "Mount the Named Volume",
+                "flavor": "The fraud container mounts the nexus-data volume at /data inside the container. Complete the run command: docker run ___ nexus-data:/data nginx",
+                "lesson": (
+                    "docker run -v name:path — mounts a named volume into a container.\n\n"
+                    "Syntax: docker run -v <volume-name>:<container-path> <image>\n\n"
+                    "The -v flag syntax:\n"
+                    "  -v nexus-data:/data       → named volume mounted at /data\n"
+                    "  -v /host/path:/app         → bind mount (host directory)\n"
+                    "  -v nexus-data:/data:ro     → read-only mount\n\n"
+                    "Named volume behavior:\n"
+                    "  - If the volume doesn't exist, Docker creates it automatically\n"
+                    "  - Data written to /data inside the container goes to the volume\n"
+                    "  - Data survives: docker stop, docker rm, docker run (new container)\n\n"
+                    "Equivalent long form:\n"
+                    "  docker run --mount source=nexus-data,target=/data nginx"
+                ),
+                "answer": "-v",
+                "hints": [
+                    "The flag that mounts volumes is short: two characters.",
+                    "The answer is: -v",
+                ],
+            },
+            {
+                "id": "dvol_3",
+                "type": "fill_blank",
+                "title": "Bind Mount the Host",
+                "flavor": "One of the fraud containers bound the current working directory directly into the container at /app. Complete the command: docker run ___ nginx",
+                "lesson": (
+                    "docker run -v $(pwd):/app — bind mounts the current directory into a container.\n\n"
+                    "$(pwd) is command substitution: it expands to the current working directory.\n\n"
+                    "Bind mount vs named volume:\n"
+                    "  Named volume: docker run -v nexus-data:/data\n"
+                    "    → Docker manages the storage location\n"
+                    "  Bind mount:   docker run -v /host/path:/container/path\n"
+                    "    → You specify the exact host filesystem path\n\n"
+                    "Bind mounts:\n"
+                    "  - Give the container direct access to host files\n"
+                    "  - Changes in the container affect the host immediately\n"
+                    "  - Changes on the host are visible in the container immediately\n\n"
+                    "Example: docker run -v $(pwd):/app nginx\n"
+                    "  → mounts the current directory as /app in the container"
+                ),
+                "answer": "-v $(pwd):/app",
+                "hints": [
+                    "Use the -v flag with $(pwd) as the host path.",
+                    "The answer is: -v $(pwd):/app",
+                ],
+            },
+            {
+                "id": "dvol_4",
+                "type": "quiz",
+                "title": "Enumerate the Volumes",
+                "flavor": "Ghost needs to see all Docker volumes on the host — named volumes, anonymous volumes, everything. The fraud logs could be in any of them. What command lists all volumes?",
+                "lesson": (
+                    "docker volume ls — lists all Docker volumes on the host.\n\n"
+                    "Syntax: docker volume ls [flags]\n\n"
+                    "Output columns:\n"
+                    "  DRIVER   → the volume driver (local by default)\n"
+                    "  VOLUME NAME → the name (or a hash for anonymous volumes)\n\n"
+                    "Key flags:\n"
+                    "  docker volume ls -q       → quiet mode, print names only\n"
+                    "  docker volume ls -f dangling=true  → show volumes not in use\n\n"
+                    "Dangling volumes: volumes that exist but are not mounted by any\n"
+                    "container. They may contain data from deleted containers.\n"
+                    "Remove dangling volumes with: docker volume prune"
+                ),
+                "answer": "docker volume ls",
+                "hints": [
+                    "The subcommand is 'volume ls'.",
+                    "The answer is: docker volume ls",
+                ],
+            },
+            {
+                "id": "dvol_boss",
+                "type": "quiz",
+                "title": "BOSS: Inspect the Evidence",
+                "flavor": "Ghost has the volume name: nexus-data. The goal is to find its actual location on the host filesystem, its driver, and its labels. One command surfaces all of it. What does docker volume inspect nexus-data show?",
+                "lesson": (
+                    "docker volume inspect — shows detailed metadata for a named volume.\n\n"
+                    "Syntax: docker volume inspect <volume-name>\n\n"
+                    "Output (JSON) includes:\n"
+                    "  Name       → the volume name\n"
+                    "  Driver     → the volume driver (usually 'local')\n"
+                    "  Mountpoint → the actual path on the HOST filesystem where\n"
+                    "               the data is stored\n"
+                    "               (e.g. /var/lib/docker/volumes/nexus-data/_data)\n"
+                    "  Labels     → key-value metadata attached to the volume\n"
+                    "  Scope      → local or global (swarm)\n"
+                    "  CreatedAt  → when the volume was created\n\n"
+                    "Forensic use:\n"
+                    "  Mountpoint reveals where on the host filesystem the data actually lives.\n"
+                    "  With root access, you can read that directory directly —\n"
+                    "  bypassing the container entirely."
+                ),
+                "question": "What does 'docker volume inspect nexus-data' show?",
+                "answers": [
+                    "volume name, driver, mount path on host, labels",
+                    "name, driver, mountpoint, labels",
+                    "the volume's name driver mountpoint and labels",
+                    "mount path driver and labels",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It shows where the data actually lives on the host.",
+                    "Think: name, driver, mountpoint, labels.",
+                    "The answer is: volume name, driver, mount path on host, labels",
+                ],
+            },
+        ],
+    },
+
 }
 
 ZONE_ORDER = [
@@ -1900,4 +2048,5 @@ ZONE_ORDER = [
     "health_protocol",
     "compose_advanced",
     "docker_networks",
+    "docker_volumes",
 ]

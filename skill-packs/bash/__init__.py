@@ -44,6 +44,8 @@ SKILL_PACK = SkillPack(
         "environment_chamber": "env_operative",
         "text_processing_forge": "data_shaper",
         "stream_editor_lab": "stream_master",
+        "shell_scripting_basics": "script_foundry_cleared",
+        "job_control": "job_control_cleared",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=r"""

@@ -46,6 +46,7 @@ SKILL_PACK = SkillPack(
         "forensics_chamber":  "grandmaster",
         "stash_chamber":      "stash_operative",
         "tag_archive":        "tag_archivist",
+        "rebase_ops":         "rebase_forge_cleared",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=BANNER_ASCII,

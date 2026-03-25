@@ -254,6 +254,30 @@ three years from now when the appeal happens.
 
 [italic]"A commit is evidence. A tag is how you find it again."[/italic]
 """,
+    "rebase_ops": """
+[bold cyan]== THE REBASE FORGE ==[/bold cyan]
+
+This is where evidence goes to be reshaped.
+
+[yellow]git rebase -i[/yellow]. Interactive mode. The fraudsters sat here and made choices:
+squash this, drop that, reword this one, fixup the next. Four months of incremental
+commits — each one a breadcrumb, each one a timestamp, each one a record of what
+was done and when — collapsed into five clean lines in the git log.
+
+It looks like routine maintenance. It looks like a developer who cares about
+commit hygiene. It looks like nothing at all to someone who doesn't know
+what they're reading.
+
+Ghost knows what they're reading.
+
+[yellow]git rebase main[/yellow] — the base operation.
+[yellow]git rebase --continue[/yellow] — when conflicts arise and are resolved.
+[yellow]git rebase --abort[/yellow] — when the forge needs to go cold.
+[yellow]git rebase -i HEAD~5[/yellow] — the interactive editor. Where history gets rewritten.
+
+[italic]"Squash is not a cleanup tool. It is an erasure tool.
+The question is whether the reflog still has what was erased."[/italic]
+""",
     "forensics_chamber": """
 [bold cyan]== THE FORENSICS CHAMBER ==[/bold cyan]
 
@@ -387,6 +411,22 @@ evidence record.
 
 [bold cyan]The Tag Archive is next. Time to mark the moments that matter.[/bold cyan]
 """,
+    "rebase_ops": """
+[bold green]THE REBASE FORGE — DECODED.[/bold green]
+
+The mechanics are fully understood. Rebase onto a branch. Continue through
+conflicts. Abort when the results are wrong. Interactive mode — where
+[cyan]pick[/cyan], [cyan]squash[/cyan], [cyan]fixup[/cyan], and [cyan]drop[/cyan] give complete control
+over which commits survive and in what form.
+
+The fraudsters used [cyan]git rebase -i HEAD~5[/cyan] and marked four commits as
+squash. One commit remained. It looks clean. It looks like it was always
+one commit. The timestamps agree.
+
+The reflog disagrees. The reflog always disagrees.
+
+[bold cyan]The full audit trail is nearly complete. One zone remains.[/bold cyan]
+""",
     "tag_archive": """
 [bold green]THE TAG ARCHIVE — DOCUMENTED.[/bold green]
 
@@ -435,6 +475,7 @@ BOSS_INTROS = {
     "forensics_chamber": "[bold red]★  FINAL ANALYSIS: The Blame Audit[/bold red]\nEvery line of the contested algorithm. Every commit in its history. One command surfaces who actually wrote it, and when.",
     "stash_chamber": "[bold red]⚠  CONTEXT SWITCH: The Stash Drill[/bold red]\nAn urgent task just opened on a different branch. Your working tree is dirty. Prove you can park work cleanly and drop what's no longer needed.",
     "tag_archive": "[bold red]⚠  RELEASE AUDIT: The Tag Evidence Trail[/bold red]\nThe annotated tag is the key evidence. git show will expose the tagger metadata. Prove you understand what it contains.",
+    "rebase_ops": "[bold red]⚠  REBASE ANALYSIS: The Squash Interrogation[/bold red]\nFive commits became one. Interactive rebase, squash action, four months of history collapsed. Prove you understand exactly what squash does — and what it doesn't destroy.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -460,4 +501,5 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "tag_archivist": ("Tags Documented", "Cleared the Tag Archive. Annotated tags carry metadata. git show reveals the timestamp that changes the case."),
     "completionist": ("Full Audit Complete", "Every zone. Every challenge. Total repository forensics achieved."),
     "boss_slayer": ("Defense Overruled", "Beat your first boss challenge. The defense attorney's argument didn't survive contact with git log."),
+    "rebase_forge_cleared": ("Rebase Decoded", "Cleared the Rebase Forge. You know what squash does, what -i opens, and why the reflog is the only honest witness."),
 }

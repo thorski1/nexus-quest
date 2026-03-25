@@ -1746,6 +1746,180 @@ ZONES = {
             },
         ],
     },
+    "rebase_ops": {
+        "id": "rebase_ops",
+        "name": "The Rebase Forge",
+        "subtitle": "Rebase Operations",
+        "color": "red",
+        "icon": "⚒️",
+        "commands": ["git rebase", "git rebase --continue", "git rebase --abort", "git rebase -i"],
+        "challenges": [
+            {
+                "id": "rebase_1",
+                "type": "quiz",
+                "title": "Forge the Base",
+                "flavor": "The fraudsters moved their commits onto a clean branch to hide the timestamps. The command: git rebase. Ghost needs to understand exactly what was done — and replicate it.",
+                "lesson": (
+                    "git rebase <branch> — replays the current branch's commits on top of another branch.\n\n"
+                    "Syntax: git rebase <base-branch>\n\n"
+                    "What it does:\n"
+                    "  1. Finds the common ancestor of your branch and base-branch\n"
+                    "  2. Takes your commits since that ancestor\n"
+                    "  3. Replays them one-by-one on top of base-branch's latest commit\n"
+                    "  4. Each replayed commit gets a NEW hash (the parent changed)\n\n"
+                    "Effect: your branch's commits appear as if they were written after\n"
+                    "everything in base-branch. The history looks linear and clean.\n\n"
+                    "Example:\n"
+                    "  git rebase main\n"
+                    "  → replays the current branch's commits on top of main"
+                ),
+                "question": "What command rebases the current branch onto 'main'?",
+                "answers": ["git rebase main", "rebase main"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The command is git rebase followed by the target branch.",
+                    "The answer is: git rebase main",
+                ],
+            },
+            {
+                "id": "rebase_2",
+                "type": "quiz",
+                "title": "Resume the Forge",
+                "flavor": "A conflict. A file the fraudsters modified and Ghost is also examining. Rebase paused. Ghost resolves the conflict manually — now the forge needs to continue.",
+                "lesson": (
+                    "git rebase --continue — continues a rebase after resolving conflicts.\n\n"
+                    "During a rebase, if a commit cannot be applied cleanly:\n"
+                    "  1. Rebase pauses and reports the conflict\n"
+                    "  2. You resolve the conflict in the affected files\n"
+                    "  3. You stage the resolved files: git add <file>\n"
+                    "  4. You resume with: git rebase --continue\n\n"
+                    "Git then applies the next commit in the sequence.\n\n"
+                    "Do NOT use git commit — git rebase --continue handles committing\n"
+                    "the resolved state as part of the rebase operation.\n\n"
+                    "Example:\n"
+                    "  # After resolving conflicts:\n"
+                    "  git add resolved_file.py\n"
+                    "  git rebase --continue"
+                ),
+                "question": "After resolving a conflict during a rebase, what command continues the rebase?",
+                "answers": ["git rebase --continue", "rebase --continue"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "The flag is --continue.",
+                    "The answer is: git rebase --continue",
+                ],
+            },
+            {
+                "id": "rebase_3",
+                "type": "quiz",
+                "title": "Abort the Forge",
+                "flavor": "Something went wrong. The rebase is producing commits that don't match the expected fraud trail. Ghost needs to bail out cleanly — restore the original state as if the rebase never started.",
+                "lesson": (
+                    "git rebase --abort — cancels the current rebase and restores the original state.\n\n"
+                    "What it does:\n"
+                    "  - Stops the rebase wherever it is (mid-conflict or mid-replay)\n"
+                    "  - Returns the branch to exactly where it was before git rebase started\n"
+                    "  - Cleans up the temporary rebase state from .git/rebase-merge/\n\n"
+                    "When to use it:\n"
+                    "  - Conflicts are too complex to resolve right now\n"
+                    "  - You rebased onto the wrong branch\n"
+                    "  - The result is not what you expected\n\n"
+                    "Example:\n"
+                    "  git rebase --abort\n"
+                    "  → branch is restored to its state before the rebase started"
+                ),
+                "question": "What command cancels an in-progress rebase and restores the original branch state?",
+                "answers": ["git rebase --abort", "rebase --abort"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "The flag is --abort.",
+                    "The answer is: git rebase --abort",
+                ],
+            },
+            {
+                "id": "rebase_4",
+                "type": "quiz",
+                "title": "Interactive Mode",
+                "flavor": "The fraudsters didn't just rebase — they rewrote individual commits. Squashed. Reordered. Changed messages. This is interactive rebase. Ghost needs to understand the -i flag.",
+                "lesson": (
+                    "git rebase -i — interactive rebase: opens an editor to rewrite commit history.\n\n"
+                    "Syntax: git rebase -i <commit-ref>\n\n"
+                    "Example: git rebase -i HEAD~3\n"
+                    "  → opens editor showing the last 3 commits with actions:\n\n"
+                    "  pick a1b2c3 First commit\n"
+                    "  pick d4e5f6 Second commit\n"
+                    "  pick 7g8h9i Third commit\n\n"
+                    "Available actions (replace 'pick'):\n"
+                    "  pick    → keep commit as-is\n"
+                    "  reword  → keep commit, edit the message\n"
+                    "  squash  → combine with the previous commit\n"
+                    "  fixup   → like squash, but discard this commit's message\n"
+                    "  drop    → remove the commit entirely\n"
+                    "  edit    → pause here to amend the commit\n\n"
+                    "What does -i do? It opens the editor so you can choose what to do\n"
+                    "with each commit before the rebase executes."
+                ),
+                "question": "What does the -i flag do in 'git rebase -i HEAD~3'?",
+                "answers": [
+                    "opens editor to squash/reorder/edit commits",
+                    "opens an editor to squash reorder or edit commits",
+                    "opens an interactive editor to rewrite commits",
+                    "opens an editor to rewrite the last 3 commits",
+                    "lets you interactively edit squash or reorder commits",
+                ],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "-i stands for interactive.",
+                    "It opens an editor where you choose what to do with each commit.",
+                    "The answer is: opens editor to squash/reorder/edit commits",
+                ],
+            },
+            {
+                "id": "rebase_boss",
+                "type": "quiz",
+                "title": "BOSS: The Squash",
+                "flavor": "The fraudsters used interactive rebase to squash five commits into one — making four months of incremental fraud look like a single routine change. Ghost needs to understand what 'squash' does in the interactive rebase editor.",
+                "lesson": (
+                    "squash — combines a commit with the one immediately above it in the interactive rebase list.\n\n"
+                    "In the interactive rebase editor:\n"
+                    "  pick  a1b2c3 Initial fraud setup\n"
+                    "  squash d4e5f6 Add account skimmer\n"
+                    "  squash 7g8h9i Adjust amounts\n"
+                    "  squash 8j9k0l Cover logging\n"
+                    "  squash 1m2n3o Final cleanup\n\n"
+                    "Result: all five commits are combined into ONE commit.\n"
+                    "Git opens the editor again to write the combined commit message.\n\n"
+                    "Forensic significance:\n"
+                    "  Four months of incremental commits → one 'cleanup' commit.\n"
+                    "  The individual commit timestamps are gone from the visible history.\n"
+                    "  The original commits still exist in the reflog — for 90 days.\n\n"
+                    "fixup vs squash:\n"
+                    "  squash → combine commits, edit the merged message\n"
+                    "  fixup  → combine commits, discard this commit's message silently"
+                ),
+                "question": "In an interactive rebase, what does 'squash' do to a commit?",
+                "answers": [
+                    "combines the commit with the one above it",
+                    "combines it with the commit above it",
+                    "merges the commit into the one above it",
+                    "squashes the commit into the previous one",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Look at the commit above the one marked 'squash'.",
+                    "The two commits are merged together into one.",
+                    "The answer is: combines the commit with the one above it",
+                ],
+            },
+        ],
+    },
+
 }
 
 ZONE_ORDER = [
@@ -1760,4 +1934,5 @@ ZONE_ORDER = [
     "forensics_chamber",
     "stash_chamber",
     "tag_archive",
+    "rebase_ops",
 ]

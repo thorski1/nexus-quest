@@ -2220,6 +2220,391 @@ ZONES = {
             },
         ],
     },
+    "shell_scripting_basics": {
+        "id": "shell_scripting_basics",
+        "name": "The Script Foundry",
+        "subtitle": "Shell Scripting Basics",
+        "color": "magenta",
+        "icon": "📜",
+        "commands": ["#!/bin/bash", "chmod +x", "./script.sh", "$1", "if", "for"],
+        "challenges": [
+            {
+                "id": "script_1",
+                "type": "quiz",
+                "title": "The First Line",
+                "flavor": "Ghost finds the automation layer — shell scripts running the fraud on a timer, every night at 3 AM. But first: what makes a file a script? The answer is line one.",
+                "lesson": (
+                    "#!/bin/bash — the shebang line. The first line of every shell script.\n\n"
+                    "Syntax: #!/path/to/interpreter\n\n"
+                    "The shebang tells the operating system which interpreter should be used\n"
+                    "to execute the file. Without it, the shell may guess wrong — or refuse\n"
+                    "to run the file at all.\n\n"
+                    "Common shebangs:\n"
+                    "  #!/bin/bash      → run with bash\n"
+                    "  #!/usr/bin/env python3  → run with whatever python3 is in PATH\n"
+                    "  #!/bin/sh        → run with the system's POSIX shell\n\n"
+                    "Example: The first line of a script that should run as bash:\n"
+                    "  #!/bin/bash"
+                ),
+                "question": "What does the shebang line (#!/bin/bash) tell the operating system?",
+                "answers": [
+                    "what interpreter to use",
+                    "which interpreter to use",
+                    "the interpreter",
+                    "tells the OS what interpreter to use",
+                    "it tells the OS which interpreter to use",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's about what runs the script, not what the script does.",
+                    "Think: 'use /bin/bash to interpret this file'.",
+                    "The answer is: tells the OS what interpreter to use",
+                ],
+            },
+            {
+                "id": "script_2",
+                "type": "quiz",
+                "title": "Make It Executable",
+                "flavor": "The fraud script is sitting there. It won't run. The OS won't let it — not until someone gives it the execute bit. Ghost needs to flip that bit.",
+                "lesson": (
+                    "chmod +x — adds the execute permission to a file.\n\n"
+                    "Syntax: chmod +x filename\n\n"
+                    "A script file must have the execute bit set before it can be run directly.\n"
+                    "Without execute permission, the OS refuses to run it, even if the shebang\n"
+                    "is correct.\n\n"
+                    "Verification:\n"
+                    "  ls -l script.sh\n"
+                    "  -rwxr-xr-x  → the 'x' bits confirm it is executable\n\n"
+                    "Example: chmod +x fraud_runner.sh\n"
+                    "  → allows ./fraud_runner.sh to execute"
+                ),
+                "question": "What command makes a script file executable?",
+                "answers": ["chmod +x script.sh", "chmod +x"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "You need to change the file's mode.",
+                    "The flag adds the execute (+x) permission.",
+                    "The answer is: chmod +x script.sh",
+                ],
+            },
+            {
+                "id": "script_3",
+                "type": "quiz",
+                "title": "Run It",
+                "flavor": "Execute bit is set. The script is ready. How does Ghost run it without putting it on the PATH — directly, from the current directory?",
+                "lesson": (
+                    "./script.sh — runs a script in the current directory.\n\n"
+                    "The ./ prefix means 'in the current directory'.\n\n"
+                    "Why ./ is required:\n"
+                    "  The shell searches PATH for commands. The current directory is NOT\n"
+                    "  in PATH by default (a security measure). Without ./, the shell won't\n"
+                    "  find the script even if it's right in front of you.\n\n"
+                    "Alternatives:\n"
+                    "  bash script.sh        → run with bash explicitly (no execute bit needed)\n"
+                    "  /full/path/script.sh  → absolute path works anywhere\n\n"
+                    "Example: ./fraud_runner.sh → executes the script in the current directory"
+                ),
+                "question": "How do you run a script called 'script.sh' in the current directory?",
+                "answers": ["./script.sh"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "You need to tell the shell where to find it — the current directory.",
+                    "The current directory prefix is: ./",
+                    "The answer is: ./script.sh",
+                ],
+            },
+            {
+                "id": "script_4",
+                "type": "quiz",
+                "title": "The First Argument",
+                "flavor": "The fraud script takes a target account ID as input — passed as an argument when the cron job calls it. Ghost needs to know: where does that argument live inside the script?",
+                "lesson": (
+                    "$1 — the first positional argument passed to a script.\n\n"
+                    "Positional parameters:\n"
+                    "  $0   the script name itself\n"
+                    "  $1   the first argument\n"
+                    "  $2   the second argument\n"
+                    "  $@   all arguments as separate words\n"
+                    "  $#   the count of arguments\n\n"
+                    "Example:\n"
+                    "  # Inside script.sh:\n"
+                    "  echo \"Target: $1\"\n\n"
+                    "  # Running it:\n"
+                    "  ./script.sh account_7731\n"
+                    "  → Target: account_7731"
+                ),
+                "question": "What does $1 refer to in a shell script?",
+                "answers": [
+                    "the first positional argument passed to the script",
+                    "the first argument",
+                    "the first positional argument",
+                    "first argument passed to the script",
+                ],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "Positional parameters start at $1.",
+                    "Think: what was typed after the script name when it was run.",
+                    "The answer is: the first positional argument passed to the script",
+                ],
+            },
+            {
+                "id": "script_5",
+                "type": "quiz",
+                "title": "Conditional Gate",
+                "flavor": "The fraud script checks whether the caller is an admin before running the payload. Ghost reads the if statement — and needs to understand what the brackets do.",
+                "lesson": (
+                    "[ ] — the test command in shell scripts. Evaluates a condition.\n\n"
+                    "Syntax: [ condition ]\n\n"
+                    "[ ] is equivalent to the 'test' command. It evaluates expressions\n"
+                    "and returns an exit status: 0 (true) or non-zero (false).\n\n"
+                    "Common tests:\n"
+                    "  [ \"$1\" == \"admin\" ]   → string equality\n"
+                    "  [ -f file.txt ]      → file exists and is a regular file\n"
+                    "  [ -d dir ]           → directory exists\n"
+                    "  [ $n -gt 10 ]        → integer greater than\n\n"
+                    "Example:\n"
+                    "  if [ \"$1\" == \"admin\" ]; then\n"
+                    "    echo \"welcome\"\n"
+                    "  fi"
+                ),
+                "question": "In a bash if statement, what does [ ] do?",
+                "answers": [
+                    "test/evaluate a condition",
+                    "evaluates a condition",
+                    "tests a condition",
+                    "evaluate a condition",
+                    "it tests or evaluates a condition",
+                ],
+                "xp": 100,
+                "difficulty": "medium",
+                "hints": [
+                    "It's not just brackets — it's the 'test' command.",
+                    "It checks whether something is true or false.",
+                    "The answer is: test/evaluate a condition",
+                ],
+            },
+            {
+                "id": "script_boss",
+                "type": "quiz",
+                "title": "BOSS: Loop the Evidence",
+                "flavor": "The fraud script processed every log file in the directory — rotating through each one in a loop. Ghost reconstructs the logic: a for loop, a glob pattern, an echo. What does this loop do?",
+                "lesson": (
+                    "for loop — iterates over a list of items.\n\n"
+                    "Syntax:\n"
+                    "  for VARIABLE in LIST; do\n"
+                    "    COMMANDS\n"
+                    "  done\n\n"
+                    "Glob expansion in loops:\n"
+                    "  for f in *.log; do echo \"$f\"; done\n"
+                    "  → expands *.log to all matching filenames, then loops over each one\n\n"
+                    "The loop variable $f holds the current item in each iteration.\n\n"
+                    "Example:\n"
+                    "  for f in *.log; do echo \"$f\"; done\n"
+                    "  → prints each .log filename in the current directory, one per line"
+                ),
+                "question": "What does: for f in *.log; do echo \"$f\"; done  — print?",
+                "answers": [
+                    "the name of each .log file in the current directory",
+                    "each .log filename",
+                    "every .log file name",
+                    "the names of all .log files",
+                    "all log file names",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The glob *.log matches all files ending in .log.",
+                    "The loop variable $f holds each filename in turn.",
+                    "The answer is: the name of each .log file in the current directory",
+                ],
+            },
+        ],
+    },
+
+    "job_control": {
+        "id": "job_control",
+        "name": "The Job Control Station",
+        "subtitle": "Foreground & Background Jobs",
+        "color": "yellow",
+        "icon": "⚙️",
+        "commands": ["Ctrl+Z", "bg", "fg", "jobs", "nohup"],
+        "challenges": [
+            {
+                "id": "job_1",
+                "type": "quiz",
+                "title": "Suspend the Process",
+                "flavor": "Multiple NEXUS processes are masking the fraud trail — running loud in the foreground, covering the signal. Ghost needs to pause one without killing it. The keystroke is simple. The effect is immediate.",
+                "lesson": (
+                    "Ctrl+Z — suspends (pauses) the currently running foreground process.\n\n"
+                    "The process is not killed — it is stopped and moved to the background\n"
+                    "in a suspended state. The shell regains control of the terminal.\n\n"
+                    "What happens after Ctrl+Z:\n"
+                    "  - The process stops executing\n"
+                    "  - The shell prints: [1]+  Stopped    command_name\n"
+                    "  - The job is assigned a job number (e.g. [1])\n"
+                    "  - You can resume it with fg or bg\n\n"
+                    "Example:\n"
+                    "  $ sleep 9999\n"
+                    "  ^Z\n"
+                    "  [1]+  Stopped    sleep 9999"
+                ),
+                "question": "What does Ctrl+Z do to the currently running foreground process?",
+                "answers": [
+                    "pauses/suspends the current foreground process",
+                    "suspends the current foreground process",
+                    "pauses the foreground process",
+                    "suspends it",
+                    "pauses the process",
+                    "it suspends the current foreground process",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It doesn't kill the process — it pauses it.",
+                    "Think: suspend, not terminate.",
+                    "The answer is: pauses/suspends the current foreground process",
+                ],
+            },
+            {
+                "id": "job_2",
+                "type": "quiz",
+                "title": "Push It Back",
+                "flavor": "The NEXUS process is suspended. Ghost needs it running again — but quietly, in the background, so the terminal stays free for the real work.",
+                "lesson": (
+                    "bg — resumes a suspended job and runs it in the background.\n\n"
+                    "Syntax: bg [%job_number]\n\n"
+                    "After Ctrl+Z suspends a process:\n"
+                    "  bg        → resume the most recently suspended job in background\n"
+                    "  bg %1     → resume job number 1 in the background\n\n"
+                    "The process keeps running but no longer controls the terminal.\n"
+                    "Its output may still appear on screen unless you redirect it.\n\n"
+                    "Example:\n"
+                    "  ^Z             → suspend the foreground job\n"
+                    "  bg             → send it to the background\n"
+                    "  [1]+ sleep 9999 &   → confirmation it's running in background"
+                ),
+                "question": "After suspending a job with Ctrl+Z, what command resumes it in the background?",
+                "answers": ["bg"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: background.",
+                    "Two letters: b-g.",
+                    "The answer is: bg",
+                ],
+            },
+            {
+                "id": "job_3",
+                "type": "quiz",
+                "title": "Pull It Forward",
+                "flavor": "The process is running in the background. Ghost needs to interact with it directly — bring it forward, take control. One command moves it back to the foreground.",
+                "lesson": (
+                    "fg — brings a background or suspended job to the foreground.\n\n"
+                    "Syntax: fg [%job_number]\n\n"
+                    "  fg        → bring the most recent background job to the foreground\n"
+                    "  fg %1     → bring job 1 to the foreground\n"
+                    "  fg %2     → bring job 2 to the foreground\n\n"
+                    "Once in the foreground, the job controls the terminal again.\n"
+                    "Ctrl+C will terminate it; Ctrl+Z will suspend it again.\n\n"
+                    "Example:\n"
+                    "  $ jobs\n"
+                    "  [1]- Running    long_scan.sh &\n"
+                    "  [2]+ Stopped    tail -f server.log\n"
+                    "  $ fg %2\n"
+                    "  → tail -f server.log resumes in the foreground"
+                ),
+                "question": "What command brings a background job back to the foreground?",
+                "answers": ["fg"],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "Think: foreground.",
+                    "Two letters: f-g.",
+                    "The answer is: fg",
+                ],
+            },
+            {
+                "id": "job_4",
+                "type": "quiz",
+                "title": "Enumerate the Jobs",
+                "flavor": "Ghost has been juggling multiple background processes. Which NEXUS daemons are running? Which are suspended? One command shows the full job list for this shell session.",
+                "lesson": (
+                    "jobs — lists all background and suspended jobs in the current shell.\n\n"
+                    "Syntax: jobs [flags]\n\n"
+                    "Output format:\n"
+                    "  [1]- Running    scan.sh &\n"
+                    "  [2]+ Stopped    tail -f audit.log\n\n"
+                    "  [N]  → job number\n"
+                    "  +    → most recent job (default for fg/bg)\n"
+                    "  -    → second most recent job\n"
+                    "  Status → Running, Stopped, Done, Killed\n\n"
+                    "Common flags:\n"
+                    "  -l   include PIDs in the output\n"
+                    "  -p   print PIDs only\n\n"
+                    "Note: jobs only shows jobs for the CURRENT shell session.\n"
+                    "Processes started in other shells won't appear here."
+                ),
+                "question": "What does the 'jobs' command show?",
+                "answers": [
+                    "all suspended and background jobs in current shell",
+                    "all background and suspended jobs in the current shell",
+                    "suspended and background jobs",
+                    "background jobs",
+                    "all jobs in the current shell",
+                ],
+                "xp": 75,
+                "difficulty": "easy",
+                "hints": [
+                    "It's scoped to the current shell session.",
+                    "Think: list all current shell jobs.",
+                    "The answer is: all suspended and background jobs in current shell",
+                ],
+            },
+            {
+                "id": "job_boss",
+                "type": "quiz",
+                "title": "BOSS: The Unkillable Process",
+                "flavor": "Ghost needs the fraud audit script to keep running after logout — surviving the session end, immune to the hangup signal the system will send when the connection drops. The command is one line.",
+                "lesson": (
+                    "nohup — runs a command immune to the SIGHUP (hangup) signal.\n\n"
+                    "Syntax: nohup command [args] &\n\n"
+                    "When a terminal session ends, the OS sends SIGHUP to all processes\n"
+                    "attached to it. This normally kills them. nohup intercepts SIGHUP\n"
+                    "and ignores it, keeping the process alive after logout.\n\n"
+                    "The & at the end sends it to the background immediately.\n\n"
+                    "Output:\n"
+                    "  nohup redirects stdout/stderr to nohup.out by default\n"
+                    "  (if stdout is not already redirected)\n\n"
+                    "Example:\n"
+                    "  nohup long_command.sh &\n"
+                    "  → starts long_command.sh, immune to hangup, running in background\n"
+                    "  → output written to nohup.out"
+                ),
+                "question": "What does nohup do when you run: nohup long_command.sh &",
+                "answers": [
+                    "lets the process keep running after you log out",
+                    "keeps the process running after logout",
+                    "the process keeps running after logout",
+                    "runs it immune to hangup so it survives logout",
+                    "keeps running after you log out",
+                ],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "nohup stands for 'no hangup'.",
+                    "When the terminal closes, what signal does the OS send — and what does nohup do with it?",
+                    "The answer is: lets the process keep running after you log out",
+                ],
+            },
+        ],
+    },
+
 }
 
 ZONE_ORDER = [
@@ -2237,6 +2622,8 @@ ZONE_ORDER = [
     "stream_editor_lab",
     "process_control",
     "network_recon",
+    "shell_scripting_basics",
+    "job_control",
 ]
 
 

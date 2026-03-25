@@ -74,26 +74,44 @@ nexus-quest
 
 ### Windows
 
-Open **PowerShell** as Administrator:
+**Requirements:** [Python 3.10+](https://python.org/downloads) (check "Add Python to PATH" during install) and [git](https://git-scm.com/download/win)
+
+Open **PowerShell** and run:
 ```powershell
-irm https://raw.githubusercontent.com/thorski1/nexus-quest/main/install.ps1 | iex
+powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/thorski1/nexus-quest/main/install.ps1 | iex"
 ```
 
-Then run:
+Then **open a new terminal window** and run:
 ```
 nexus-quest
 ```
 
-### Manual Install
+> **Best experience:** Use [Windows Terminal](https://aka.ms/terminal) (free, Microsoft Store). The default `cmd.exe` may display characters incorrectly.
+
+> **If you see "running scripts is disabled":** The one-liner above bypasses this automatically. If it still fails, run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` first.
+
+> **If `nexus-quest` is not found after install:** The installer adds Python's Scripts folder to your PATH — open a new terminal window and try again. If still not found, run `python -m nexus_quest.main` as a fallback.
+
+### Manual Install (Mac / Linux / Windows)
 
 Requires Python 3.10+ and git.
 
+**Mac / Linux:**
 ```bash
 git clone https://github.com/thorski1/quest-engine ~/.local/share/quest-engine
 git clone https://github.com/thorski1/nexus-quest ~/.local/share/nexus-quest
 
-pip install -e ~/.local/share/quest-engine
-pip install -e ~/.local/share/nexus-quest
+python3 -m pip install -e ~/.local/share/quest-engine
+python3 -m pip install -e ~/.local/share/nexus-quest
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/thorski1/quest-engine "$env:LOCALAPPDATA\QuestEngine\quest-engine"
+git clone https://github.com/thorski1/nexus-quest "$env:LOCALAPPDATA\QuestEngine\nexus-quest"
+
+python -m pip install -e "$env:LOCALAPPDATA\QuestEngine\quest-engine"
+python -m pip install -e "$env:LOCALAPPDATA\QuestEngine\nexus-quest"
 ```
 
 ---

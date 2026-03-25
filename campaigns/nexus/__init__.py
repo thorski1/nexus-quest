@@ -98,5 +98,11 @@ CAMPAIGN = Campaign(
             intro_bridge=CHAPTER_INTROS["regex"],
             outro_bridge=CHAPTER_OUTROS["regex"],
         ),
+        ChapterDef(
+            pack_name="linux",
+            title="The Operating System",
+            intro_bridge=CHAPTER_INTROS["linux"],
+            outro_bridge=CHAPTER_OUTROS["linux"],
+        ),
     ],
 )

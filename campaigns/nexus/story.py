@@ -160,6 +160,27 @@ Understand how the fraud ran without triggering an audit.[/bold white]
 [italic]"A container is not a vault. It's an isolation boundary.
 The difference matters when someone is determined to find where the boundary is weak."[/italic]
 """,
+    "linux": """
+The regex passed. The evidence cleared the filter.
+
+Now it needs somewhere to land — and the drop site server is
+a hardened Linux box with no web interface, no GUI, and a very
+impatient investigator on the other end.
+
+CIPHER has a login. One user account with limited privileges.
+The rest has to come from understanding the system: who runs on it,
+what's running on it, where the disk space is, what the network
+looks like, and what the logs will say about you afterward.
+
+[bold cyan]"This is the full stack of a production Linux server.
+Own every layer — from the user table to the shell config.
+The evidence delivery depends on it."[/bold cyan]
+
+[bold white]The operating system is the final layer. Know it completely.[/bold white]
+
+[italic]"Every system is just a collection of files. The art is knowing
+which ones matter, who owns them, and what they're doing."[/italic]
+""",
     "python": """
 The evidence is assembled. The queries ran. The data is accurate.
 
@@ -306,6 +327,27 @@ every inflated disbursement — ended up in one place.
 
 [bold cyan]The database is next. The primary records. The proof.[/bold cyan]
 """,
+    "linux": """
+The regex passed. The evidence cleared the filter.
+
+Now it needs somewhere to land — and the drop site server is
+a hardened Linux box with no web interface, no GUI, and a very
+impatient investigator on the other end.
+
+CIPHER has a login. One user account with limited privileges.
+The rest has to come from understanding the system: who runs on it,
+what's running on it, where the disk space is, what the network
+looks like, and what the logs will say about you afterward.
+
+[bold cyan]"This is the full stack of a production Linux server.
+Own every layer — from the user table to the shell config.
+The evidence delivery depends on it."[/bold cyan]
+
+[bold white]The operating system is the final layer. Know it completely.[/bold white]
+
+[italic]"Every system is just a collection of files. The art is knowing
+which ones matter, who owns them, and what they're doing."[/italic]
+""",
     "python": """
 The packager ran without error.
 
@@ -325,6 +367,22 @@ logged it. If NEXUS's security team checks those logs in the next
 twelve hours, the operation is burned.
 
 [bold cyan]Understand the filter. Understand the pattern. Route the evidence through it.[/bold cyan]
+""",
+    "linux": """
+The archive transferred cleanly.
+
+The server accepted the delivery. The investigator's confirmation arrived
+thirty-seven seconds later: checksums verified, chain of custody intact,
+evidence package flagged for secure review by the federal task force.
+
+NEXUS's own infrastructure delivered the evidence that brings them down.
+
+[bold cyan]CIPHER, quietly: "That's the job. Clean in. Clean out.
+No exploits. No zero-days. Just knowledge."[/bold cyan]
+
+You close the session. The logs show nothing unusual.
+
+[bold white]Case closed.[/bold white]
 """,
     "regex": """
 The archive passed through clean.
@@ -357,6 +415,27 @@ But the evidence package needs to be delivered — automatically, reliably,
 without a human at the keyboard. The investigator's secure drop expects a script.
 
 [bold cyan]The Automation Layer is next. Python awaits.[/bold cyan]
+""",
+    "linux": """
+The regex passed. The evidence cleared the filter.
+
+Now it needs somewhere to land — and the drop site server is
+a hardened Linux box with no web interface, no GUI, and a very
+impatient investigator on the other end.
+
+CIPHER has a login. One user account with limited privileges.
+The rest has to come from understanding the system: who runs on it,
+what's running on it, where the disk space is, what the network
+looks like, and what the logs will say about you afterward.
+
+[bold cyan]"This is the full stack of a production Linux server.
+Own every layer — from the user table to the shell config.
+The evidence delivery depends on it."[/bold cyan]
+
+[bold white]The operating system is the final layer. Know it completely.[/bold white]
+
+[italic]"Every system is just a collection of files. The art is knowing
+which ones matter, who owns them, and what they're doing."[/italic]
 """,
     "python": """
 The script ran clean.

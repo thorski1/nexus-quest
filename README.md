@@ -25,13 +25,13 @@ You wake up with a contract on your screen. No client name. No callback address.
 
 ```
 NEXUS CORP MAINFRAME  //  INTERNAL FRAUD SUSPECTED
-EVIDENCE BURIED ACROSS 4 INFRASTRUCTURE LAYERS
+EVIDENCE BURIED ACROSS MULTIPLE INFRASTRUCTURE LAYERS
 EXTRACT BEFORE THE MORNING ROTATION
     — ANONYMOUS
 ```
 
 You are **Ghost** — a contract operative with one rule: no exploit kits. No zero-days.
-Just your terminal, your knowledge, and six layers of systems between you and the truth.
+Just your terminal, your knowledge, and eight layers of systems between you and the truth.
 
 **The catch:** every skill you need, you have to learn for real.
 
@@ -41,14 +41,16 @@ Just your terminal, your knowledge, and six layers of systems between you and th
 
 | Chapter | Domain | The Mission |
 |---------|--------|-------------|
-| 1 | **Bash** | Ghost infiltrates a NEXUS workstation |
+| 1 | **Bash** | Infiltrate a NEXUS workstation — filesystem, processes, pipelines |
 | 2 | **SSH** | Pivot through seven jump hosts to reach the inner network |
 | 3 | **Vim** | Edit config files on servers with no GUI, no undo history |
-| 4 | **Git** | Reconstruct eleven months of tampered commit history |
-| 5 | **Docker** | Audit the containerized infrastructure for hidden processes |
-| 6 | **Postgres** | Extract the primary financial records from the database |
+| 4 | **Git** | Reconstruct eleven years of tampered commit history |
+| 5 | **Docker** | Audit containerized infrastructure for hidden misconfigurations |
+| 6 | **Postgres** | Extract 417 fraudulent transactions from the primary database |
+| 7 | **Python** | Script the evidence packager — automate the delivery chain |
+| 8 | **Regex** | Defeat the pattern filter between you and the drop site |
 
-**280+ challenges** across 52 zones. Real commands. Real syntax. Real production skills.
+**450+ challenges** across 70+ zones. Real commands. Real syntax. Real production skills.
 
 ---
 
@@ -67,7 +69,7 @@ nexus-quest
 
 ### Windows
 
-Open **PowerShell** as Administrator and run:
+Open **PowerShell** as Administrator:
 ```powershell
 irm https://raw.githubusercontent.com/thorski1/nexus-quest/main/install.ps1 | iex
 ```
@@ -95,13 +97,15 @@ pip install -e ~/.local/share/nexus-quest
 
 | Command | Description |
 |---------|-------------|
-| `nexus-quest` | Full 6-chapter campaign |
-| `terminal-quest` | Bash chapter standalone |
-| `ssh-quest` | SSH chapter standalone |
-| `vim-quest` | Vim chapter standalone |
-| `git-quest` | Git chapter standalone |
-| `docker-quest` | Docker chapter standalone |
-| `postgres-quest` | Postgres chapter standalone |
+| `nexus-quest` | Full 8-chapter campaign — start here |
+| `terminal-quest` | Bash chapter — standalone |
+| `ssh-quest` | SSH chapter — standalone |
+| `vim-quest` | Vim chapter — standalone |
+| `git-quest` | Git chapter — standalone |
+| `docker-quest` | Docker chapter — standalone |
+| `postgres-quest` | Postgres chapter — standalone |
+| `python-quest` | Python chapter — standalone |
+| `regex-quest` | Pattern Recon — standalone |
 
 ---
 
@@ -109,15 +113,30 @@ pip install -e ~/.local/share/nexus-quest
 
 Each challenge teaches one concept through a short **lesson**, then asks you to demonstrate it:
 
-- **Knowledge Check** — type the command or answer
-- **Live Challenge** — identify the right command for a real scenario
-- **Flag Quiz** — identify the correct flag or option
+- **Knowledge Check** — type the command, flag, or answer
+- **Live Challenge** — run a real command in a sandboxed environment
+- **Flag Quiz** — identify the correct option or syntax
+- **Fill in the Blank** — complete the command or concept
+- **Matching** — pair commands to their descriptions
 
 ```
-  [h] Hint  (-10 XP)   [s] Skip   [q] Menu
+  [h] Hint  [b] Bookmark  [d] Difficulty  [?] Help  [s] Skip  [q] Menu
 ```
 
-Progress saves automatically. Resume any time. The evidence doesn't expire.
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Daily Challenge** | One challenge per day with 2x XP bonus and streak tracking |
+| **Difficulty Modes** | Easy (0.75x XP, free hints) / Normal / Hard (1.5x XP) |
+| **Speed Records** | Per-challenge personal bests — new records flash on screen |
+| **Bookmarks** | Flag any challenge for later review with `[b]` |
+| **Zone Preview** | See challenge list before entering a zone |
+| **Completion Certificate** | ASCII grade certificate (S/A/B/C/D) on campaign complete |
+| **Star Ratings** | Zones rated 1-3 stars based on hints and skips used |
+| **XP & Levels** | Rookie -> Operative -> Shadow -> Ghost -> Phantom -> Specter |
+
+Progress saves automatically. Resume any time.
 
 ---
 

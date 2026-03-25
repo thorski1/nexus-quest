@@ -44,6 +44,11 @@ CAMPAIGN = Campaign(
     final_story=CAMPAIGN_FINAL,
     quit_message="The operation is suspended. The clock is still running.",
     banner_ascii=BANNER_ASCII,
+    entry_summary_prefix="Previously in the operation...",
+    campaign_achievements={
+        "campaign_complete": ("Ghost Operative", "Complete The NEXUS Files campaign"),
+        "all_stars": ("Phantom Grade S", "Earn 3 stars on every chapter"),
+    },
     chapters=[
         ChapterDef(
             pack_name="bash",

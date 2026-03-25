@@ -957,6 +957,406 @@ ZONES = {
             },
         ],
     },
+
+    "regex_flags": {
+        "id": "regex_flags",
+        "name": "The Flag Station",
+        "subtitle": "re.IGNORECASE, re.MULTILINE, re.DOTALL & more",
+        "color": "magenta",
+        "icon": "⚑",
+        "commands": ["re.IGNORECASE", "re.MULTILINE", "re.DOTALL", "re.VERBOSE", "re.ASCII"],
+        "challenges": [
+            {
+                "id": "rf_1",
+                "type": "quiz",
+                "title": "Case Blind",
+                "flavor": "The NEXUS error logs use inconsistent casing — 'ERROR', 'error', 'Error'. You need a flag that makes your pattern match regardless of letter case.",
+                "lesson": (
+                    "re.IGNORECASE (or re.I) — makes the pattern case-insensitive.\n\n"
+                    "With this flag, [a-z] also matches uppercase letters, and vice versa.\n\n"
+                    "Examples:\n"
+                    "  re.search(r'error', log, re.IGNORECASE)\n"
+                    "  → matches 'error', 'ERROR', 'Error', 'eRrOr'\n\n"
+                    "  re.findall(r'phantom', text, re.I)\n"
+                    "  → case-insensitive search for 'phantom'\n\n"
+                    "Shorthand: re.I"
+                ),
+                "question": "Which regex flag makes a pattern match regardless of letter case?",
+                "answers": [
+                    "re.IGNORECASE",
+                    "re.I",
+                    "IGNORECASE",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It makes uppercase and lowercase equivalent in the pattern.",
+                    "Shorthand version is re.I",
+                    "The answer is: re.IGNORECASE",
+                ],
+            },
+            {
+                "id": "rf_2",
+                "type": "quiz",
+                "title": "Line by Line",
+                "flavor": "The fraud log has thousands of lines. Without a flag, ^ only anchors to the start of the entire string. You need it to anchor to the start of each line.",
+                "lesson": (
+                    "re.MULTILINE (or re.M) — changes ^ and $ to match at line boundaries.\n\n"
+                    "Without re.MULTILINE:\n"
+                    "  ^ matches only the very start of the entire string\n"
+                    "  $ matches only the very end of the entire string\n\n"
+                    "With re.MULTILINE:\n"
+                    "  ^ matches at the start of EACH line\n"
+                    "  $ matches at the end of EACH line\n\n"
+                    "Example:\n"
+                    "  re.findall(r'^\\d{4}-\\d{2}-\\d{2}', log, re.MULTILINE)\n"
+                    "  → extracts timestamps from the start of every log line\n\n"
+                    "Shorthand: re.M"
+                ),
+                "question": "Which regex flag makes ^ and $ match at the start and end of each line (not just the whole string)?",
+                "answers": [
+                    "re.MULTILINE",
+                    "re.M",
+                    "MULTILINE",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Without this flag, ^ and $ anchor to the entire string.",
+                    "With it, they anchor to every individual line.",
+                    "The answer is: re.MULTILINE",
+                ],
+            },
+            {
+                "id": "rf_3",
+                "type": "quiz",
+                "title": "Dot Through Newlines",
+                "flavor": "The phantom vendor records span multiple lines in the raw data dump. The dot metacharacter skips newlines by default — you need a flag to make it cross line boundaries.",
+                "lesson": (
+                    "re.DOTALL (or re.S) — makes . match ANY character including newlines.\n\n"
+                    "By default, . matches everything except \\n.\n"
+                    "With re.DOTALL, . matches \\n as well.\n\n"
+                    "Example:\n"
+                    "  text = 'BEGIN\\nphantom data\\nEND'\n\n"
+                    "  re.search(r'BEGIN.+END', text)              → None\n"
+                    "  re.search(r'BEGIN.+END', text, re.DOTALL)   → matches!\n\n"
+                    "Common use: matching multi-line blocks of content.\n"
+                    "Shorthand: re.S"
+                ),
+                "question": "Which regex flag makes the . (dot) metacharacter match newline characters as well?",
+                "answers": [
+                    "re.DOTALL",
+                    "re.S",
+                    "DOTALL",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "By default, dot does NOT match newlines.",
+                    "This flag removes that restriction.",
+                    "The answer is: re.DOTALL",
+                ],
+            },
+            {
+                "id": "rf_4",
+                "type": "quiz",
+                "title": "Combine Flags",
+                "flavor": "The evidence extraction script needs to search case-insensitively AND match across lines simultaneously. Multiple flags must be combined into one call.",
+                "lesson": (
+                    "Flags can be combined using the | (bitwise OR) operator.\n\n"
+                    "Examples:\n"
+                    "  re.search(r'error.+end', text, re.IGNORECASE | re.DOTALL)\n"
+                    "  → case-insensitive AND dot matches newlines\n\n"
+                    "  re.findall(r'^txn', data, re.MULTILINE | re.IGNORECASE)\n"
+                    "  → matches 'txn', 'TXN', 'Txn' at the start of any line\n\n"
+                    "Alternative: use inline flags in the pattern:\n"
+                    "  r'(?im)^txn'    # (?i) = IGNORECASE, (?m) = MULTILINE\n\n"
+                    "Inline flag letters: i=IGNORECASE, m=MULTILINE, s=DOTALL, x=VERBOSE"
+                ),
+                "question": "How do you combine multiple regex flags in a re.search() call?",
+                "answers": [
+                    "using | between flags",
+                    "re.IGNORECASE | re.MULTILINE",
+                    "bitwise OR operator",
+                    "pipe operator between flags",
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "The same operator used for bitwise OR in Python.",
+                    "re.I | re.M | re.S",
+                    "The answer is: using | between flags",
+                ],
+            },
+            {
+                "id": "rf_5",
+                "type": "quiz",
+                "title": "Verbose Mode",
+                "flavor": "The complex multi-field log pattern is impossible to read in one dense line. There's a flag that lets you add whitespace and comments inside the pattern itself.",
+                "lesson": (
+                    "re.VERBOSE (or re.X) — allows whitespace and # comments inside patterns.\n\n"
+                    "With re.VERBOSE, the regex engine ignores:\n"
+                    "  - Unescaped whitespace (spaces, tabs, newlines)\n"
+                    "  - Everything after # on a line\n\n"
+                    "Example:\n"
+                    "  pattern = re.compile(r'''\n"
+                    "      \\b                # word boundary\n"
+                    "      (\\d{1,3}\\.){3}   # first three octets\n"
+                    "      \\d{1,3}          # final octet\n"
+                    "      \\b               # word boundary\n"
+                    "  ''', re.VERBOSE)\n\n"
+                    "Use re.VERBOSE for any pattern you'd otherwise have to comment externally.\n"
+                    "Shorthand: re.X"
+                ),
+                "question": "Which regex flag allows you to add whitespace and # comments inside the pattern for readability?",
+                "answers": [
+                    "re.VERBOSE",
+                    "re.X",
+                    "VERBOSE",
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It makes long patterns readable by allowing formatting.",
+                    "Shorthand: re.X",
+                    "The answer is: re.VERBOSE",
+                ],
+            },
+            {
+                "id": "rf_boss",
+                "type": "quiz",
+                "title": "BOSS: Inline Flags",
+                "flavor": "You need to embed flags directly inside the pattern string so the flag travels with the pattern even when you can't pass a flags parameter — legacy code integration.",
+                "lesson": (
+                    "Inline flags — embed flags directly in the pattern using (?flags) syntax.\n\n"
+                    "Inline flag syntax:\n"
+                    "  (?i)   — re.IGNORECASE\n"
+                    "  (?m)   — re.MULTILINE\n"
+                    "  (?s)   — re.DOTALL\n"
+                    "  (?x)   — re.VERBOSE\n"
+                    "  (?im)  — multiple flags combined\n\n"
+                    "Examples:\n"
+                    "  r'(?i)error'       → case-insensitive 'error'\n"
+                    "  r'(?im)^phantom'   → 'phantom' at line start, case-insensitive\n\n"
+                    "Inline flags apply to the entire pattern when placed at the start.\n"
+                    "They can also be scoped to a group: (?i:error) affects only that group."
+                ),
+                "question": "What inline flag syntax makes a regex case-insensitive without using the re.IGNORECASE argument?",
+                "answers": [
+                    "(?i)",
+                    "(?i) at the start of the pattern",
+                ],
+                "xp": 150,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Inline flags use a special group syntax at the start of the pattern.",
+                    "The letter is the same as the shorthand: i for IGNORECASE.",
+                    "The answer is: (?i)",
+                ],
+            },
+        ],
+    },
+
+    "python_regex": {
+        "id": "python_regex",
+        "name": "The Python re Module",
+        "subtitle": "re.match, re.search, re.findall, re.sub, re.compile",
+        "color": "cyan",
+        "icon": "🐍",
+        "commands": ["re.match()", "re.search()", "re.findall()", "re.sub()", "re.compile()"],
+        "challenges": [
+            {
+                "id": "pr_1",
+                "type": "quiz",
+                "title": "Search the String",
+                "flavor": "A needle in a haystack — the access token is buried somewhere in a 10,000-character session blob. You need to find the first match anywhere in the string.",
+                "lesson": (
+                    "re.search(pattern, string) — scans through the string looking for the first match.\n\n"
+                    "Returns a Match object if found, or None if not found.\n\n"
+                    "Example:\n"
+                    "  import re\n"
+                    "  m = re.search(r'\\btoken_[a-z0-9]+\\b', session_data)\n"
+                    "  if m:\n"
+                    "      print(m.group())    # the matched text\n\n"
+                    "re.search() scans the entire string.\n"
+                    "re.match() only checks at the very beginning — use search for general use."
+                ),
+                "question": "What re function scans through a string and returns the FIRST match anywhere in it?",
+                "answers": [
+                    "re.search()",
+                    "re.search",
+                    "search()",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It looks through the entire string, not just the start.",
+                    "Returns a Match object or None.",
+                    "The answer is: re.search()",
+                ],
+            },
+            {
+                "id": "pr_2",
+                "type": "quiz",
+                "title": "Match from Start",
+                "flavor": "Transaction log lines must begin with a timestamp — any line that doesn't is malformed and should be flagged. You need a function that only matches at the beginning.",
+                "lesson": (
+                    "re.match(pattern, string) — checks for a match ONLY at the start of the string.\n\n"
+                    "Unlike re.search(), it does not scan through the string.\n\n"
+                    "Example:\n"
+                    "  m = re.match(r'\\d{4}-\\d{2}-\\d{2}', log_line)\n"
+                    "  if m:\n"
+                    "      print('Valid timestamp at start:', m.group())\n"
+                    "  else:\n"
+                    "      print('MALFORMED: no timestamp at line start')\n\n"
+                    "Equivalent to anchoring your pattern with ^:\n"
+                    "  re.search(r'^\\d{4}-\\d{2}-\\d{2}', log_line)"
+                ),
+                "question": "What re function attempts to match a pattern ONLY at the beginning of a string?",
+                "answers": [
+                    "re.match()",
+                    "re.match",
+                    "match()",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It only looks at the start — not anywhere in the string.",
+                    "Returns None if the pattern doesn't match at position 0.",
+                    "The answer is: re.match()",
+                ],
+            },
+            {
+                "id": "pr_3",
+                "type": "quiz",
+                "title": "Find All Matches",
+                "flavor": "The evidence package needs every transaction ID extracted from the log — not just the first one. All of them. One call, one result.",
+                "lesson": (
+                    "re.findall(pattern, string) — returns a list of ALL non-overlapping matches.\n\n"
+                    "Returns strings (or tuples if there are capture groups).\n\n"
+                    "Examples:\n"
+                    "  txn_ids = re.findall(r'TXN-\\d{6}', log_data)\n"
+                    "  → ['TXN-004017', 'TXN-004018', 'TXN-004019', ...]\n\n"
+                    "  # With a capture group — returns the group, not the full match:\n"
+                    "  amounts = re.findall(r'amount=(\\d+\\.\\d{2})', data)\n"
+                    "  → ['49999.97', '12345.00', ...]\n\n"
+                    "Returns an empty list if no matches are found."
+                ),
+                "question": "What re function returns a list of ALL matches in a string?",
+                "answers": [
+                    "re.findall()",
+                    "re.findall",
+                    "findall()",
+                ],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It returns every match — not just the first.",
+                    "The result is a list of strings (or tuples if there are groups).",
+                    "The answer is: re.findall()",
+                ],
+            },
+            {
+                "id": "pr_4",
+                "type": "quiz",
+                "title": "Substitute and Sanitize",
+                "flavor": "The subsidiary codes must be redacted before the evidence files go to the oversight committee. Every occurrence in the document — replaced with '[REDACTED]' automatically.",
+                "lesson": (
+                    "re.sub(pattern, replacement, string) — replaces all matches with a new string.\n\n"
+                    "Returns a new string with substitutions made.\n\n"
+                    "Examples:\n"
+                    "  clean = re.sub(r'NX-[A-Z]{3}-\\d{4}', '[REDACTED]', report)\n"
+                    "  → replaces all subsidiary codes\n\n"
+                    "  # Use \\1 backreferences in replacement:\n"
+                    "  redacted = re.sub(r'(\\w+)@(\\w+\\.\\w+)', r'[USER]@\\2', emails)\n"
+                    "  → keeps domain, replaces username\n\n"
+                    "Optional count argument: re.sub(pattern, repl, string, count=1)\n"
+                    "  — limits the number of substitutions"
+                ),
+                "question": "What re function replaces all matches of a pattern in a string with a replacement value?",
+                "answers": [
+                    "re.sub()",
+                    "re.sub",
+                    "sub()",
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Short for 'substitute'.",
+                    "re.sub(pattern, replacement, string)",
+                    "The answer is: re.sub()",
+                ],
+            },
+            {
+                "id": "pr_5",
+                "type": "quiz",
+                "title": "Compile for Speed",
+                "flavor": "The same IP extraction pattern runs on millions of log lines. Recompiling it on every iteration is waste. One function pre-compiles the pattern into a reusable object.",
+                "lesson": (
+                    "re.compile(pattern) — pre-compiles a pattern into a regex object for reuse.\n\n"
+                    "The compiled object has the same methods: .search(), .match(), .findall(), .sub()\n\n"
+                    "Example:\n"
+                    "  ip_re = re.compile(r'\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b')\n\n"
+                    "  for line in massive_log:\n"
+                    "      match = ip_re.search(line)    # compiled — no reparse overhead\n"
+                    "      if match:\n"
+                    "          yield match.group()\n\n"
+                    "Benefits:\n"
+                    "  - Pattern parsed once, reused many times\n"
+                    "  - Cleaner code when a pattern is used in multiple places\n"
+                    "  - Allows storing flags with the pattern: re.compile(r'...', re.I)"
+                ),
+                "question": "What re function pre-compiles a regex pattern into a reusable compiled regex object?",
+                "answers": [
+                    "re.compile()",
+                    "re.compile",
+                    "compile()",
+                ],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It converts the pattern string into a compiled regex object.",
+                    "The compiled object has .search(), .findall(), etc. as methods.",
+                    "The answer is: re.compile()",
+                ],
+            },
+            {
+                "id": "pr_boss",
+                "type": "quiz",
+                "title": "BOSS: Extract Named Groups",
+                "flavor": "The log parser must extract timestamp, level, and message fields by name — not by index. Named groups make the extraction readable and maintainable across the entire codebase.",
+                "lesson": (
+                    "Named capture groups — (?P<name>pattern) — let you access matches by name.\n\n"
+                    "Syntax: (?P<name>pattern)\n"
+                    "Access with: match.group('name') or match.groupdict()\n\n"
+                    "Example:\n"
+                    "  pattern = re.compile(\n"
+                    "      r'(?P<date>\\d{4}-\\d{2}-\\d{2}) (?P<level>\\w+) (?P<msg>.+)'\n"
+                    "  )\n"
+                    "  m = pattern.match('2024-03-15 ERROR authentication failed')\n"
+                    "  m.group('date')    → '2024-03-15'\n"
+                    "  m.group('level')   → 'ERROR'\n"
+                    "  m.group('msg')     → 'authentication failed'\n\n"
+                    "groupdict() returns all named groups as a dictionary."
+                ),
+                "question": "What syntax defines a named capture group in Python regex, accessible by name via match.group()?",
+                "answers": [
+                    "(?P<name>pattern)",
+                    "(?P<name>...)",
+                    "named group syntax: (?P<name>...)",
+                ],
+                "xp": 150,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It looks like a regular group () but with ?P<name> at the start.",
+                    "Access it with match.group('name') instead of match.group(1).",
+                    "The answer is: (?P<name>pattern)",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -966,4 +1366,6 @@ ZONE_ORDER = [
     "quantifiers_advanced",
     "lookarounds",
     "real_world_patterns",
+    "regex_flags",
+    "python_regex",
 ]

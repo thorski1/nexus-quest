@@ -1173,6 +1173,488 @@ ZONES = {
             },
         ],
     },
+
+    "file_io_deep": {
+        "id": "file_io_deep",
+        "name": "File I/O Operations",
+        "subtitle": "open(), read, write, with statement",
+        "color": "green",
+        "icon": "📁",
+        "commands": ["open()", "read()", "write()", "with", "readlines()", "writelines()"],
+        "challenges": [
+            {
+                "id": "fio_1",
+                "type": "quiz",
+                "title": "Open the Gate",
+                "question": "What built-in Python function opens a file and returns a file object?",
+                "answers": ["open()", "open"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's a built-in — no import required.",
+                    "Takes a filename and an optional mode: open('file.txt', 'r')",
+                ],
+                "lesson": (
+                    "open(filename, mode) — opens a file and returns a file object.\n\n"
+                    "Common modes:\n"
+                    "  'r'   — read (default)\n"
+                    "  'w'   — write (creates or truncates)\n"
+                    "  'a'   — append (adds to end)\n"
+                    "  'rb'  — read binary\n"
+                    "  'wb'  — write binary\n\n"
+                    "Example:\n"
+                    "  f = open('evidence.txt', 'r')\n"
+                    "  data = f.read()\n"
+                    "  f.close()"
+                ),
+            },
+            {
+                "id": "fio_2",
+                "type": "quiz",
+                "title": "The Context Manager",
+                "question": "What Python keyword creates a context manager block that automatically closes a file when the block exits?",
+                "answers": ["with"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It ensures cleanup happens even if an exception is raised.",
+                    "Syntax: ___ open('file.txt') as f:",
+                ],
+                "lesson": (
+                    "with — creates a context manager. Used with open() to guarantee the file is closed.\n\n"
+                    "Syntax:\n"
+                    "  with open('evidence.txt', 'r') as f:\n"
+                    "      data = f.read()\n"
+                    "  # file is automatically closed here\n\n"
+                    "Benefits:\n"
+                    "  - No need to call f.close() manually\n"
+                    "  - File closes even if an exception is raised inside the block\n\n"
+                    "Best practice: always use 'with' when working with files."
+                ),
+            },
+            {
+                "id": "fio_3",
+                "type": "quiz",
+                "title": "Read All",
+                "question": "What file object method reads the entire file contents as a single string?",
+                "answers": [".read()", "read()", ".read"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It returns the entire file as one string.",
+                    "For large files, consider reading line by line instead.",
+                ],
+                "lesson": (
+                    "f.read() — reads the entire file and returns it as a string.\n\n"
+                    "Example:\n"
+                    "  with open('audit_log.txt') as f:\n"
+                    "      contents = f.read()\n"
+                    "  print(contents[:100])    # first 100 chars\n\n"
+                    "Variants:\n"
+                    "  f.read(n)      — read exactly n bytes\n"
+                    "  f.readline()   — read one line\n"
+                    "  f.readlines()  — read all lines into a list\n\n"
+                    "Warning: f.read() on a gigabyte file loads it all into memory."
+                ),
+            },
+            {
+                "id": "fio_4",
+                "type": "quiz",
+                "title": "Write Mode",
+                "question": "Which open() mode overwrites an existing file with new content (or creates it if it doesn't exist)?",
+                "answers": ["'w'", "w"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It stands for 'write'.",
+                    "Warning: this mode destroys existing file contents.",
+                ],
+                "lesson": (
+                    "'w' mode — opens a file for writing. Truncates the file if it exists.\n\n"
+                    "Example:\n"
+                    "  with open('report.txt', 'w') as f:\n"
+                    "      f.write('NEXUS Fraud Analysis\\n')\n"
+                    "      f.write('Transactions: 417\\n')\n\n"
+                    "Mode comparison:\n"
+                    "  'w'  — write, truncates existing content\n"
+                    "  'a'  — append, preserves existing content\n"
+                    "  'x'  — exclusive create, fails if file exists\n\n"
+                    "f.write() returns the number of characters written."
+                ),
+            },
+            {
+                "id": "fio_5",
+                "type": "quiz",
+                "title": "Append Mode",
+                "question": "Which open() mode adds content to the END of an existing file without erasing it?",
+                "answers": ["'a'", "a"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It stands for 'append'.",
+                    "Unlike 'w', it won't destroy existing data.",
+                ],
+                "lesson": (
+                    "'a' mode — opens for appending. Writes go to the end; existing content is preserved.\n\n"
+                    "Example:\n"
+                    "  with open('audit_trail.log', 'a') as f:\n"
+                    "      f.write(f'[{timestamp}] Transaction flagged: {txn_id}\\n')\n\n"
+                    "The fraud automation used append mode to grow its log files silently\n"
+                    "over eleven years — each run adding one more line of evidence."
+                ),
+            },
+            {
+                "id": "fio_boss",
+                "type": "quiz",
+                "title": "BOSS: Read Lines",
+                "question": "What file method reads all lines of a file into a Python list, one line per element?",
+                "answers": [".readlines()", "readlines()", ".readlines"],
+                "xp": 150,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It's similar to .read() but returns a list instead of a string.",
+                    "Each element in the list includes the trailing newline character.",
+                ],
+                "lesson": (
+                    "f.readlines() — reads all lines and returns them as a list of strings.\n\n"
+                    "Example:\n"
+                    "  with open('transactions.txt') as f:\n"
+                    "      lines = f.readlines()\n"
+                    "  print(lines[0])    # first line, includes '\\n'\n\n"
+                    "Strip newlines with a list comprehension:\n"
+                    "  lines = [line.strip() for line in f.readlines()]\n\n"
+                    "For large files, iterate directly: for line in f: — more memory efficient."
+                ),
+            },
+        ],
+    },
+
+    "list_comprehensions": {
+        "id": "list_comprehensions",
+        "name": "Comprehension Engine",
+        "subtitle": "List, Dict & Generator Comprehensions",
+        "color": "magenta",
+        "icon": "⚙",
+        "commands": ["[x for x in]", "[x for x if]", "{k: v for}", "(x for x in)"],
+        "challenges": [
+            {
+                "id": "lc_1",
+                "type": "quiz",
+                "title": "The One-Liner",
+                "question": "What Python construct builds a new list by applying an expression to each item in an iterable, all in a single line?",
+                "answers": ["list comprehension"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It uses square brackets with a for loop inside.",
+                    "[expression for item in iterable]",
+                ],
+                "lesson": (
+                    "List comprehension — builds a list in a single concise expression.\n\n"
+                    "Syntax: [expression for item in iterable]\n\n"
+                    "Examples:\n"
+                    "  squares = [x**2 for x in range(10)]\n"
+                    "  → [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]\n\n"
+                    "  names = [v['name'] for v in vendors]\n"
+                    "  → extracts 'name' from every dict in vendors list\n\n"
+                    "Equivalent to:\n"
+                    "  result = []\n"
+                    "  for item in iterable:\n"
+                    "      result.append(expression)"
+                ),
+            },
+            {
+                "id": "lc_2",
+                "type": "quiz",
+                "title": "The Filter Pass",
+                "question": "In a list comprehension, what keyword adds a condition to include only items that satisfy a test?",
+                "answers": ["if"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's the same keyword as in a regular conditional.",
+                    "[x for x in items ___ condition]",
+                ],
+                "lesson": (
+                    "List comprehension with filter: [expr for item in iterable if condition]\n\n"
+                    "The if clause filters out items that don't match.\n\n"
+                    "Examples:\n"
+                    "  evens = [x for x in range(20) if x % 2 == 0]\n"
+                    "  → [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]\n\n"
+                    "  flagged = [t for t in transactions if t['amount'] > THRESHOLD]\n"
+                    "  → all transactions above the audit threshold\n\n"
+                    "The fraud script used exactly this pattern to select phantom vendors."
+                ),
+            },
+            {
+                "id": "lc_3",
+                "type": "quiz",
+                "title": "Dict Comprehension",
+                "question": "What syntax creates a dictionary using a comprehension — mapping keys to values in one expression?",
+                "answers": ["{k: v for k, v in items}", "dict comprehension", "{key: value for ...}"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Like a list comprehension, but with curly braces and a key: value format.",
+                    "{k: v for k, v in iterable}",
+                ],
+                "lesson": (
+                    "Dict comprehension — builds a dictionary in a single expression.\n\n"
+                    "Syntax: {key_expr: value_expr for item in iterable}\n\n"
+                    "Examples:\n"
+                    "  squares = {x: x**2 for x in range(5)}\n"
+                    "  → {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}\n\n"
+                    "  vendor_map = {v['id']: v['name'] for v in vendor_list}\n"
+                    "  → maps IDs to names for fast lookup\n\n"
+                    "The fraud automation built its phantom vendor dict this way."
+                ),
+            },
+            {
+                "id": "lc_4",
+                "type": "quiz",
+                "title": "Generator Expression",
+                "question": "What type of comprehension uses parentheses instead of brackets and produces values lazily, one at a time?",
+                "answers": ["generator expression", "generator"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It looks like a list comprehension but uses () instead of [].",
+                    "It doesn't build the full list in memory — it yields one item at a time.",
+                ],
+                "lesson": (
+                    "Generator expression — like a list comprehension, but lazy (memory-efficient).\n\n"
+                    "Syntax: (expression for item in iterable)\n\n"
+                    "Examples:\n"
+                    "  total = sum(t['amount'] for t in transactions)    # no list built\n"
+                    "  gen = (x**2 for x in range(1_000_000))            # no memory spike\n\n"
+                    "Key difference:\n"
+                    "  [x**2 for x in range(10)]    → builds full list in memory\n"
+                    "  (x**2 for x in range(10))    → yields one value at a time\n\n"
+                    "Use generators when processing large datasets."
+                ),
+            },
+            {
+                "id": "lc_5",
+                "type": "quiz",
+                "title": "Nested Comprehension",
+                "question": "In a list comprehension, how do you iterate over a nested structure — e.g., items within each sublist of a 2D list?",
+                "answers": ["use two for clauses", "nested for loops in the comprehension", "[x for sublist in matrix for x in sublist]"],
+                "xp": 100,
+                "difficulty": "hard",
+                "hints": [
+                    "You can chain multiple 'for' clauses in a single comprehension.",
+                    "[item for group in groups for item in group]",
+                ],
+                "lesson": (
+                    "Nested comprehension — chain multiple for clauses to flatten or cross-join.\n\n"
+                    "Syntax: [expr for outer in iterable for inner in outer]\n\n"
+                    "Examples:\n"
+                    "  # Flatten a 2D list:\n"
+                    "  flat = [x for row in matrix for x in row]\n\n"
+                    "  # All combinations:\n"
+                    "  pairs = [(a, b) for a in [1,2] for b in ['x','y']]\n"
+                    "  → [(1,'x'), (1,'y'), (2,'x'), (2,'y')]\n\n"
+                    "Read left to right: outer loop first, inner loop second."
+                ),
+            },
+            {
+                "id": "lc_boss",
+                "type": "quiz",
+                "title": "BOSS: Comprehension vs Loop",
+                "question": "What is the primary advantage of a list comprehension over an equivalent for-loop with append()?",
+                "answers": [
+                    "more concise and typically faster",
+                    "faster and more readable",
+                    "concise syntax and better performance",
+                ],
+                "xp": 150,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Think about both readability and execution speed.",
+                    "CPython optimizes list comprehensions internally.",
+                ],
+                "lesson": (
+                    "List comprehensions are both more concise AND faster than equivalent for-loops.\n\n"
+                    "CPython optimizes comprehensions internally — the append() call overhead\n"
+                    "is avoided because the interpreter can pre-allocate the list.\n\n"
+                    "Benchmark comparison:\n"
+                    "  # Comprehension — faster:\n"
+                    "  result = [x*2 for x in data]\n\n"
+                    "  # Loop — slower due to repeated append:\n"
+                    "  result = []\n"
+                    "  for x in data:\n"
+                    "      result.append(x*2)\n\n"
+                    "Rule of thumb: if a loop builds a list, a comprehension is likely better."
+                ),
+            },
+        ],
+    },
+
+    "requests_http": {
+        "id": "requests_http",
+        "name": "HTTP Recon Module",
+        "subtitle": "requests library & urllib basics",
+        "color": "yellow",
+        "icon": "🌐",
+        "commands": ["requests.get()", "requests.post()", ".json()", ".status_code", "urllib.request"],
+        "challenges": [
+            {
+                "id": "req_1",
+                "type": "quiz",
+                "title": "GET the Data",
+                "question": "What requests function sends an HTTP GET request to a URL and returns a Response object?",
+                "answers": ["requests.get()", "requests.get"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's the most common HTTP method for fetching data.",
+                    "import requests; requests.___(url)",
+                ],
+                "lesson": (
+                    "requests.get(url) — sends an HTTP GET request. Returns a Response object.\n\n"
+                    "Setup:\n"
+                    "  pip install requests\n"
+                    "  import requests\n\n"
+                    "Example:\n"
+                    "  response = requests.get('https://nexus-api.internal/vendors')\n"
+                    "  print(response.status_code)    → 200\n"
+                    "  print(response.text)           → raw response body\n\n"
+                    "The fraud scraper used GET requests to pull vendor data from internal APIs."
+                ),
+            },
+            {
+                "id": "req_2",
+                "type": "quiz",
+                "title": "Status Check",
+                "question": "What attribute of a requests Response object contains the HTTP status code (e.g., 200, 404)?",
+                "answers": [".status_code", "status_code"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It's an integer attribute on the Response object.",
+                    "200 = OK, 404 = Not Found, 500 = Server Error",
+                ],
+                "lesson": (
+                    "response.status_code — the integer HTTP status code of the response.\n\n"
+                    "Common codes:\n"
+                    "  200   OK — request succeeded\n"
+                    "  201   Created — resource was created\n"
+                    "  401   Unauthorized — authentication required\n"
+                    "  403   Forbidden — access denied\n"
+                    "  404   Not Found — resource doesn't exist\n"
+                    "  500   Server Error — something broke server-side\n\n"
+                    "Example:\n"
+                    "  if response.status_code == 200:\n"
+                    "      process(response.json())"
+                ),
+            },
+            {
+                "id": "req_3",
+                "type": "quiz",
+                "title": "Parse the JSON",
+                "question": "What Response method parses the JSON response body and returns it as a Python dict or list?",
+                "answers": [".json()", "json()", ".json"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "It converts the JSON text body into a Python data structure.",
+                    "response.___()",
+                ],
+                "lesson": (
+                    "response.json() — decodes the JSON response body into a Python object.\n\n"
+                    "Example:\n"
+                    "  response = requests.get('https://nexus-api.internal/vendors')\n"
+                    "  data = response.json()\n"
+                    "  # data is now a dict or list\n"
+                    "  for vendor in data['results']:\n"
+                    "      print(vendor['name'])\n\n"
+                    "Raises: requests.exceptions.JSONDecodeError if the response isn't valid JSON.\n\n"
+                    "Alternative: import json; json.loads(response.text)"
+                ),
+            },
+            {
+                "id": "req_4",
+                "type": "quiz",
+                "title": "POST the Payload",
+                "question": "What requests function sends an HTTP POST request, used to submit data to a server?",
+                "answers": ["requests.post()", "requests.post"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "POST is the HTTP method for sending data — forms, JSON payloads, etc.",
+                    "requests.___(url, json=payload)",
+                ],
+                "lesson": (
+                    "requests.post(url, data=None, json=None) — sends an HTTP POST request.\n\n"
+                    "Examples:\n"
+                    "  # Send JSON payload:\n"
+                    "  response = requests.post(\n"
+                    "      'https://nexus-api.internal/submit',\n"
+                    "      json={'vendor_id': 'PV-042', 'amount': 49999.97}\n"
+                    "  )\n\n"
+                    "  # Send form data:\n"
+                    "  response = requests.post(url, data={'key': 'value'})\n\n"
+                    "The fraud script used POST to inject phantom vendor records into the API."
+                ),
+            },
+            {
+                "id": "req_5",
+                "type": "quiz",
+                "title": "urllib Fallback",
+                "question": "What Python standard library module provides HTTP request functionality without installing any third-party packages?",
+                "answers": ["urllib", "urllib.request"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "It's part of the standard library — no pip install needed.",
+                    "urllib.request.urlopen(url) is the basic entry point.",
+                ],
+                "lesson": (
+                    "urllib — Python's built-in HTTP library. No installation required.\n\n"
+                    "Basic usage:\n"
+                    "  import urllib.request\n"
+                    "  import json\n\n"
+                    "  with urllib.request.urlopen(url) as response:\n"
+                    "      body = response.read().decode('utf-8')\n"
+                    "      data = json.loads(body)\n\n"
+                    "urllib vs requests:\n"
+                    "  urllib    — built-in, verbose, no dependencies\n"
+                    "  requests  — third-party, cleaner API, industry standard\n\n"
+                    "The fraud scripts used urllib to avoid flagging a requests dependency."
+                ),
+            },
+            {
+                "id": "req_boss",
+                "type": "quiz",
+                "title": "BOSS: Session Persistence",
+                "question": "What requests object persists cookies, headers, and authentication across multiple HTTP requests?",
+                "answers": ["requests.Session()", "Session", "requests.Session"],
+                "xp": 150,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It's useful when you need to stay logged in across multiple API calls.",
+                    "s = requests.___()",
+                ],
+                "lesson": (
+                    "requests.Session() — maintains state (cookies, headers, auth) across requests.\n\n"
+                    "Example:\n"
+                    "  with requests.Session() as s:\n"
+                    "      s.headers.update({'Authorization': 'Bearer ' + token})\n"
+                    "      s.post(login_url, data=creds)\n"
+                    "      data = s.get(protected_api).json()\n\n"
+                    "Benefits:\n"
+                    "  - Cookies are automatically persisted between requests\n"
+                    "  - Default headers set once, applied to all requests\n"
+                    "  - Connection pooling for better performance\n\n"
+                    "The fraud scraper used a Session to maintain API authentication across\n"
+                    "hundreds of requests per run without re-authenticating each time."
+                ),
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1184,6 +1666,9 @@ ZONE_ORDER = [
     "string_ops",
     "modules_arsenal",
     "error_handling",
+    "file_io_deep",
+    "list_comprehensions",
+    "requests_http",
 ]
 
 

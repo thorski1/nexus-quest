@@ -185,6 +185,65 @@ and where it logged the exceptions it caught.
 [italic]"Perfect error handling means every failure is silent.
 Follow the silence to find the crime."[/italic]
 """,
+
+    "file_io_deep": """
+[bold cyan]== THE FILE I/O LAB ==[/bold cyan]
+
+You've seen what the scripts wrote. Now you need to understand exactly [bold white]how[/bold white].
+
+[yellow]open()[/yellow] with a mode flag. [yellow]'r'[/yellow] for reading the raw API cache files.
+[yellow]'w'[/yellow] for writing the falsified quarterly reports. [yellow]'a'[/yellow] for appending
+to the log file that grew silently for eleven years.
+
+[yellow]with[/yellow] statements everywhere. Not for cleanliness — for reliability.
+The script couldn't afford a leaked file handle crashing on a government server.
+Context managers guaranteed the file closed even if the write failed mid-operation.
+
+The evidence is already there in the file system. You just need to
+understand the I/O layer well enough to trace exactly what was written and when.
+
+[italic]"Files don't lie. They can be deleted, but deletion leaves traces too."[/italic]
+""",
+
+    "list_comprehensions": """
+[bold cyan]== THE COMPREHENSION ENGINE ==[/bold cyan]
+
+The data transformation layer. This is where raw vendor records became
+filtered, reformatted, ready-to-inject fraud payloads.
+
+Not with loops and [yellow]append()[/yellow]. With one-liners. Clean. Fast. Hard to audit.
+
+[yellow][vendor['id'] for vendor in raw_data if vendor['subsidiary'] in SHELL_LIST][/yellow]
+
+One line. Filtered. Extracted. The congressional investigators saw it and
+thought it was normal data processing. Which it was — applied to fraud data.
+
+List comprehensions, dict comprehensions, generator expressions.
+The automation suite used all three. Learn to read them.
+
+[italic]"The most dangerous code looks boring. A list comprehension is just boring enough."[/italic]
+""",
+
+    "requests_http": """
+[bold cyan]== THE HTTP RECON MODULE ==[/bold cyan]
+
+The scraper didn't read local files. It [bold white]pulled data from internal APIs[/bold white].
+
+[yellow]requests.get()[/yellow] to fetch vendor registries. [yellow]requests.post()[/yellow] to inject
+phantom records into the accounting system. [yellow].json()[/yellow] to parse every
+response. [yellow].status_code[/yellow] to confirm each operation succeeded silently.
+
+Three internal endpoints. Authenticated. Rate-limited. Logged on the server side —
+but the server-side logs were controlled by the same team running the fraud.
+
+[yellow]requests.Session()[/yellow] maintained the authentication token across hundreds
+of API calls per nightly run. No re-authentication. No extra log entries.
+
+The network traffic looked like normal internal tooling. Because it was
+normal tooling — pointed at fraud targets.
+
+[italic]"Every HTTP request leaves a trace. Find the server logs they didn't control."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -285,6 +344,53 @@ is now the code that proves it.
 
 [bold magenta]Ghost Operative — Python certified. Evidence complete.[/bold magenta]
 """,
+
+    "file_io_deep": """
+[bold green]THE FILE I/O LAB — UNDERSTOOD.[/bold green]
+
+The I/O layer is documented. [yellow]open()[/yellow] calls mapped. Modes catalogued.
+[yellow]with[/yellow] statements confirmed to match the file creation timestamps
+in the audit trail.
+
+The [yellow]'a'[/yellow] mode log file is the clearest record — every append
+timestamped by the OS. Eleven years of nightly additions.
+One line per fraudulent transaction. Four hundred and seventeen of them.
+
+[bold cyan]The Comprehension Engine holds the transformation logic — how the raw data
+was reshaped before hitting the file system.[/bold cyan]
+""",
+
+    "list_comprehensions": """
+[bold green]THE COMPREHENSION ENGINE — DECODED.[/bold green]
+
+The transformation patterns are documented. The filter comprehension.
+The dict comprehension that mapped vendor IDs to shell company names.
+The generator that streamed transaction records without loading them all into memory.
+
+Compact syntax. Clean execution. Every line doing exactly what it was
+designed to do — which is exactly what makes it damning.
+
+[bold cyan]The HTTP Recon Module is next. How the automation reached the APIs
+that fed it all this data.[/bold cyan]
+""",
+
+    "requests_http": """
+[bold yellow]★ ★ ★  HTTP RECON MODULE — COMPLETE.  ★ ★ ★[/bold yellow]
+
+The API layer is fully mapped.
+
+Three internal endpoints. Forty-seven nightly sessions.
+Every [yellow]requests.get()[/yellow] call documented. Every [yellow].json()[/yellow] response
+correlated to an output file in the archive.
+
+The Session token is in the decompiled memory dump. The server-side
+logs from the endpoint the corp [italic]didn't[/italic] control are now evidence.
+
+The automation infrastructure is fully reconstructed. From the first
+[yellow]open()[/yellow] to the last [yellow]requests.post()[/yellow] — the entire pipeline is mapped.
+
+[bold magenta]Ghost Operative — Extended Python modules cleared. Evidence package complete.[/bold magenta]
+""",
 }
 
 BOSS_INTROS = {
@@ -296,6 +402,9 @@ BOSS_INTROS = {
     "string_ops": "[bold red]⚠  SANITIZE: The Replace Operation[/bold red]\nThe subsidiary codes contain underscores that shouldn't appear in the output reports. The script replaces them inline. Which string method handles this?",
     "modules_arsenal": "[bold red]⚠  RUNTIME INTERFACE: The Exit Vector[/bold red]\nThe automation script terminates with a specific exit code on failure so the cron monitoring reads it as success. Which module provides sys.exit()?",
     "error_handling": "[bold red]★  FINAL EXCEPTION: The Custom Error Class[/bold red]\nThe script defines its own exception type for authentication failures. To define a custom exception in Python, you subclass what built-in class?",
+    "file_io_deep": "[bold red]⚠  FILE AUDIT: The Line Reader[/bold red]\nThe transaction archive is a 200MB text file. The script reads every line into a Python list for processing. What file method loads all lines into a list?",
+    "list_comprehensions": "[bold red]⚠  COMPREHENSION GAUNTLET: The Efficiency Test[/bold red]\nThe investigator asks why the fraud author used list comprehensions instead of for-loops. Identify the primary advantage: conciseness alone, or something more?",
+    "requests_http": "[bold red]⚠  SESSION BREACH: The Persistent Connection[/bold red]\nThe scraper authenticates once and reuses the session for hundreds of API calls. What requests object maintains cookies and headers across multiple requests?",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -307,6 +416,9 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "string_cutter": ("Strings Decoded", "Cleared the String Suite. The formatting patterns, the sanitization logic — all documented."),
     "module_runner": ("Modules Inventoried", "Cleared the Modules Arsenal. Every import understood. Every tool the script relied on catalogued."),
     "exception_master": ("Exceptions Surfaced", "Breached the Exception Vault. The silent failures are silent no longer. The error logs are in the evidence package."),
+    "io_specialist": ("I/O Specialist", "Cleared the File I/O Lab. open(), with, read, write — every file operation in the fraud infrastructure is now understood."),
+    "comprehension_ace": ("Comprehension Ace", "Decoded the Comprehension Engine. List, dict, generator — the one-liner transforms that reshaped raw data into fraud payloads."),
+    "http_operative": ("HTTP Operative", "Cleared the HTTP Recon Module. Every API call mapped, every session token traced. The network layer of the fraud is documented."),
     "first_blood": ("First Script", "Executed your first Python challenge. The syntax layer acknowledged you."),
     "streak_3": ("Signal Locked", "3 correct in a row. The code patterns are becoming readable."),
     "streak_5": ("Ghost Protocol", "5 correct in a row. You think in Python now."),

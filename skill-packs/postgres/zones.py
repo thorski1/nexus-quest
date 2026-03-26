@@ -27,6 +27,7 @@ ZONES = {
                 ),
                 "question": "What SQL keyword begins every data retrieval query?",
                 "answers": ["SELECT", "select"],
+                "url": "https://www.postgresql.org/docs/current/tutorial-select.html",
                 "xp": 50,
                 "difficulty": "easy",
                 "hints": [
@@ -180,6 +181,7 @@ ZONES = {
                     "Example: SELECT * FROM employees WHERE department = 'Engineering';"
                 ),
                 "question": "What SQL clause filters rows based on a condition?",
+                "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html",
                 "answers": ["WHERE", "where"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -348,6 +350,7 @@ ZONES = {
                     "Example: SELECT COUNT(*) FROM orders WHERE status = 'pending';"
                 ),
                 "question": "Which aggregate function counts the number of rows?",
+                "url": "https://www.postgresql.org/docs/current/tutorial-agg.html",
                 "answers": ["COUNT", "count", "COUNT()", "count()", "COUNT(*)", "count(*)"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -519,6 +522,7 @@ ZONES = {
                     "         JOIN salaries s ON e.id = s.employee_id;"
                 ),
                 "question": "What SQL operation combines rows from two tables based on a related column?",
+                "url": "https://www.postgresql.org/docs/current/tutorial-join.html",
                 "answers": ["JOIN", "join"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -699,6 +703,7 @@ ZONES = {
                     "  → employees in high-budget departments"
                 ),
                 "question": "What is a SELECT statement nested inside another SQL statement called?",
+                "url": "https://www.postgresql.org/docs/current/functions-subquery.html",
                 "answers": ["subquery", "sub-query", "nested query", "inner query"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -866,6 +871,7 @@ ZONES = {
                     "  );"
                 ),
                 "question": "What SQL command creates a new table in the database?",
+                "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
                 "answers": ["CREATE TABLE", "create table"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1026,6 +1032,7 @@ ZONES = {
                     "you probably need an index."
                 ),
                 "question": "Which SQL command shows how the database will execute a query (the execution plan)?",
+                "url": "https://www.postgresql.org/docs/current/using-explain.html",
                 "answers": ["EXPLAIN", "explain", "EXPLAIN ANALYZE", "explain analyze"],
                 "xp": 75,
                 "difficulty": "easy",
@@ -1153,6 +1160,7 @@ ZONES = {
                     "Also valid: START TRANSACTION (equivalent to BEGIN)"
                 ),
                 "question": "What SQL command starts an explicit transaction block?",
+                "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
                 "answers": ["BEGIN", "begin", "START TRANSACTION", "start transaction"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1331,6 +1339,7 @@ ZONES = {
                     "SELECT id, amount, ___ OVER (ORDER BY amount DESC) AS rn\n"
                     "FROM transactions;"
                 ),
+                "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
                 "answers": ["ROW_NUMBER()", "row_number()"],
                 "xp": 100,
                 "difficulty": "medium",
@@ -1561,6 +1570,7 @@ ZONES = {
                     "SELECT id, metadata ___ 'vendor' AS vendor_json\n"
                     "FROM transactions;"
                 ),
+                "url": "https://www.postgresql.org/docs/current/datatype-json.html",
                 "answers": ["->", "->"],
                 "xp": 100,
                 "difficulty": "medium",

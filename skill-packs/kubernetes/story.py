@@ -87,6 +87,22 @@ ZONE_INTROS = {
         "[bold yellow]Crashed pods leave logs. Previous container logs. Events. "
         "Someone tried to cover their tracks. The cluster remembers anyway.[/bold yellow]"
     ),
+    "statefulsets_and_daemonsets": (
+        "[bold cyan]ZONE: THE ORDERED MACHINES[/bold cyan]\n\n"
+        "The fraud database isn't a Deployment. It's a StatefulSet. "
+        "Each pod has a stable identity. Each pod has its own storage. "
+        "[bold yellow]pod-0, pod-1, pod-2 — three replicas of the ledger, "
+        "each holding a shard of the transaction history. "
+        "Understand StatefulSets and you understand how the data was structured.[/bold yellow]"
+    ),
+    "ingress_and_jobs": (
+        "[bold cyan]ZONE: THE ENTRY POINTS[/bold cyan]\n\n"
+        "Everything reaches the cluster through the Ingress controller. "
+        "Every batch cleanup task ran as a Job. "
+        "[bold yellow]Ingress routing rules define what was publicly reachable. "
+        "Job history shows what automated tasks ran — and when. "
+        "The evidence packager ran as a CronJob for eleven years.[/bold yellow]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -147,6 +163,20 @@ ZONE_COMPLETIONS = {
         "Kubernetes held onto them. "
         "[bold yellow]The audit logs weren't erased. They were moved. "
         "And you know where they went.[/bold yellow]"
+    ),
+    "statefulsets_and_daemonsets": (
+        "[bold green]ZONE COMPLETE — THE ORDERED MACHINES[/bold green]\n\n"
+        "The StatefulSet: `fraud-db`. Three replicas. "
+        "pod-0 holds the primary shard — 847GB. The PVC is still bound. "
+        "The DaemonSet log collector on every node has been shipping to an external endpoint "
+        "for three years. [bold yellow]Not CloudWatch. Not S3. An external IP.[/bold yellow]"
+    ),
+    "ingress_and_jobs": (
+        "[bold green]ZONE COMPLETE — THE ENTRY POINTS[/bold green]\n\n"
+        "The CronJob: `evidence-packager`. Schedule: `0 3 * * *`. "
+        "Running since cluster creation. Creating an archive, encrypting it, "
+        "shipping it to an S3 bucket not in this account. "
+        "[bold yellow]It ran last night. You have less time than you thought.[/bold yellow]"
     ),
 }
 
@@ -209,5 +239,22 @@ BOSS_INTROS = {
         "The logs are gone. The events have expired. "
         "What mechanisms could have preserved that evidence? "
         "What should have been configured from the start?[/bold yellow]"
+    ),
+    "statefulsets_and_daemonsets": (
+        "[bold red]BOSS CHALLENGE — THE STATEFUL INTERROGATION[/bold red]\n\n"
+        "[bold yellow]The `fraud-db` StatefulSet must be scaled down from 3 to 1 replica safely "
+        "to preserve pod-0's data for extraction. Describe every step: "
+        "the termination order, what happens to pod-1 and pod-2's PVCs, "
+        "how to verify pod-0 is healthy before extraction begins, "
+        "and why using `kubectl delete pod` instead of scaling down would be dangerous.[/bold yellow]"
+    ),
+    "ingress_and_jobs": (
+        "[bold red]BOSS CHALLENGE — THE CRON INTERCEPT[/bold red]\n\n"
+        "[bold yellow]The `evidence-packager` CronJob runs at `0 3 * * *`. It's 02:47. "
+        "You have 13 minutes. Describe every kubectl command to: "
+        "suspend the CronJob immediately, verify no active Jobs are running, "
+        "patch the Job template to point its output to your own S3 bucket, "
+        "and re-enable the CronJob — all without deleting it "
+        "so the attacker doesn't know you've been here.[/bold yellow]"
     ),
 }

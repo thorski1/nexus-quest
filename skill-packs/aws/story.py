@@ -100,6 +100,23 @@ ZONE_INTROS = {
         "[bold yellow]The Task Roles tell you what each service was allowed to touch. "
         "One service's Task Role includes `s3:GetObject` on the compliance archive.[/bold yellow]"
     ),
+    "elb_and_autoscaling": (
+        "[bold cyan]ZONE: THE SCALING LAYER[/bold cyan]\n\n"
+        "Behind the public endpoints: Auto Scaling Groups, Launch Templates, "
+        "and Application Load Balancers managing traffic to dozens of targets. "
+        "[bold yellow]Someone modified the Launch Template 14 months ago. "
+        "The User Data script runs on every instance. On every boot. "
+        "You need to understand load balancing and auto scaling completely "
+        "to trace what those instances have been doing.[/bold yellow]"
+    ),
+    "route53_and_cdn": (
+        "[bold cyan]ZONE: THE EDGE LAYER[/bold cyan]\n\n"
+        "DNS controls what resolves to what. CDN controls what gets cached where. "
+        "Together, they control the first and last hop of every request. "
+        "[bold yellow]An unknown Route 53 health check. Unusual cache invalidations. "
+        "A domain that shouldn't exist pointing somewhere it shouldn't go. "
+        "The edge layer is where the exfiltration channel lives.[/bold yellow]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -165,6 +182,21 @@ ZONE_COMPLETIONS = {
         "The service definition names a specific IAM user as its deployer. "
         "[bold yellow]Same user as the Lambda functions. The same hand built all of it.[/bold yellow]"
     ),
+    "elb_and_autoscaling": (
+        "[bold green]ZONE COMPLETE — THE SCALING LAYER[/bold green]\n\n"
+        "Launch Template version history: 4 versions. The rogue User Data was added in version 2. "
+        "The deployer IAM ARN: `arn:aws:iam::012345678901:user/nexus-ops-automation`. "
+        "The same credential you found in the Kubernetes cluster. "
+        "[bold yellow]One compromised key. Every layer of the infrastructure.[/bold yellow]"
+    ),
+    "route53_and_cdn": (
+        "[bold green]ZONE COMPLETE — THE EDGE LAYER[/bold green]\n\n"
+        "Route 53 query logs: 14,000 queries to `drain.internal.nexus-corp.com` in 90 days. "
+        "Each query encodes 63 characters of payload in the subdomain. "
+        "CloudFront invalidations: triggered by the same Lambda function from the automation engine. "
+        "[bold yellow]The evidence dossier is complete. Every layer mapped. "
+        "Eleven years of fraud — dismantled.[/bold yellow]"
+    ),
 }
 
 BOSS_INTROS = {
@@ -229,5 +261,22 @@ BOSS_INTROS = {
         "The container image was pulled from a public ECR repository. "
         "List every way a compromised container could use those permissions to move laterally "
         "through the AWS account — and explain what should have been done differently.[/bold yellow]"
+    ),
+    "elb_and_autoscaling": (
+        "[bold red]BOSS CHALLENGE — THE SILENT LAUNCH TEMPLATE[/bold red]\n\n"
+        "[bold yellow]Every EC2 instance spun up by the Auto Scaling Group is running an undeclared "
+        "process. The Launch Template's User Data was modified 14 months ago by a deactivated IAM user. "
+        "Describe every step to: detect the current User Data content, create a clean Launch Template "
+        "version, force instance refresh, and audit the ASG health check history "
+        "to estimate how long the rogue process has been running.[/bold yellow]"
+    ),
+    "route53_and_cdn": (
+        "[bold red]BOSS CHALLENGE — THE DNS EXFIL CHANNEL[/bold red]\n\n"
+        "[bold yellow]A CloudFront distribution is serving `assets.nexus-corp.com`. "
+        "An unusual Route 53 health check is configured on a subdomain that doesn't resolve to any "
+        "known service. CloudFront cache hit rates dropped 30% last week — something is forcing "
+        "cache invalidations. Walk through: how to audit Route 53 health checks for unknown endpoints, "
+        "how to review CloudFront invalidation history, and what DNS-based exfiltration looks like "
+        "in Route 53 query logs.[/bold yellow]"
     ),
 }

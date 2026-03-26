@@ -38,6 +38,8 @@ SKILL_PACK = SkillPack(
         "resource_management": "quota_architect",
         "network_policies": "firewall_engineer",
         "cluster_troubleshooting": "cluster_forensics",
+        "statefulsets_and_daemonsets": "stateful_operator",
+        "ingress_and_jobs": "ingress_engineer",
     },
     achievements={
         "pod_wrangler": ("Pod Wrangler", "Mastered pods, deployments, and replica sets!"),
@@ -49,6 +51,8 @@ SKILL_PACK = SkillPack(
         "quota_architect": ("Quota Architect", "Understood how resources fueled the fraud engine!"),
         "firewall_engineer": ("Firewall Engineer", "Mapped every gap in the cluster network policy!"),
         "cluster_forensics": ("Cluster Forensics", "Recovered evidence from crashed containers!"),
+        "stateful_operator": ("Stateful Operator", "Mastered StatefulSets, DaemonSets and ordered pod management!"),
+        "ingress_engineer": ("Ingress Engineer", "Routed traffic through Ingress controllers and batch Jobs!"),
         "no_hints": ("Ghost Protocol", "Completed a zone without any hints!"),
         "speed_reader": ("Neural Spike", "Answered a question in under 10 seconds!"),
     },

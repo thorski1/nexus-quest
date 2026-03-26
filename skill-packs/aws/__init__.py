@@ -38,6 +38,8 @@ SKILL_PACK = SkillPack(
         "cloudwatch_and_monitoring": "signal_analyst",
         "cloudformation_and_iac": "blueprint_reader",
         "ecs_and_containers": "container_investigator",
+        "elb_and_autoscaling": "load_balancer_ace",
+        "route53_and_cdn": "edge_navigator",
     },
     achievements={
         "identity_mapper": ("Identity Mapper", "Mapped the IAM misconfiguration chain!"),
@@ -49,6 +51,8 @@ SKILL_PACK = SkillPack(
         "signal_analyst": ("Signal Analyst", "Reconstructed the fraud timeline from CloudWatch logs!"),
         "blueprint_reader": ("Blueprint Reader", "Found the evidence trail in CloudFormation drift!"),
         "container_investigator": ("Container Investigator", "Followed the ECS task roles to the source!"),
+        "load_balancer_ace": ("Load Balancer Ace", "Mastered ALB routing and Auto Scaling groups!"),
+        "edge_navigator": ("Edge Navigator", "Mapped the Route 53 DNS and CloudFront CDN layer!"),
         "no_hints": ("Ghost Protocol", "Completed a zone without any hints!"),
         "speed_reader": ("Neural Spike", "Answered a question in under 10 seconds!"),
     },

@@ -244,6 +244,33 @@ normal tooling — pointed at fraud targets.
 
 [italic]"Every HTTP request leaves a trace. Find the server logs they didn't control."[/italic]
 """,
+    "classes_and_oop": """
+[bold red]OBJECT MODEL ANALYSIS[/bold red]
+
+The fraud system's Python codebase uses classes. Heavily. The `Evidence` base class.
+The `FraudTransaction` subclass. The `Packager` class with a `from_config()` classmethod
+that reads a JSON config — and routes evidence to the attacker's endpoint.
+
+[yellow]@dataclass[/yellow] reduced their boilerplate. [yellow]inheritance[/yellow] let them build
+a hierarchy of data types that all serialize to the same format. [yellow]__str__[/yellow]
+printed clean log lines that looked like normal system output.
+
+[italic]"Good OOP design is powerful. Including in the wrong hands."[/italic]
+""",
+    "subprocess_and_os": """
+[bold red]SHELL INTERFACE[/bold red]
+
+The evidence packager's final step: Python shells out to tar, gpg, and rsync.
+No Python libraries — just subprocess calls to system commands that leave
+fewer Python-traceable fingerprints.
+
+[yellow]subprocess.run()[/yellow] with [yellow]capture_output=True[/yellow] captured output for logging.
+[yellow]os.environ.get()[/yellow] read the encryption key and destination server from
+environment variables — meaning the config could be changed without touching code.
+[yellow]pathlib.Path.glob()[/yellow] collected the evidence files to pack.
+
+[italic]"Python is a shell. The shell is Python. The boundary was always arbitrary."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -375,21 +402,42 @@ that fed it all this data.[/bold cyan]
 """,
 
     "requests_http": """
-[bold yellow]★ ★ ★  HTTP RECON MODULE — COMPLETE.  ★ ★ ★[/bold yellow]
+[bold yellow]HTTP RECON MODULE — COMPLETE.[/bold yellow]
 
-The API layer is fully mapped.
+The API layer is fully mapped. Three internal endpoints. Forty-seven nightly sessions.
+Every [yellow]requests.get()[/yellow] documented. Every [yellow].json()[/yellow] response correlated.
 
-Three internal endpoints. Forty-seven nightly sessions.
-Every [yellow]requests.get()[/yellow] call documented. Every [yellow].json()[/yellow] response
-correlated to an output file in the archive.
+The Session token is in the decompiled memory dump.
 
-The Session token is in the decompiled memory dump. The server-side
-logs from the endpoint the corp [italic]didn't[/italic] control are now evidence.
+[bold cyan]The object model is next — how the fraud system organized its data.[/bold cyan]
+""",
 
-The automation infrastructure is fully reconstructed. From the first
-[yellow]open()[/yellow] to the last [yellow]requests.post()[/yellow] — the entire pipeline is mapped.
+    "classes_and_oop": """
+[bold green]OBJECT MODEL REVERSED.[/bold green]
 
-[bold magenta]Ghost Operative — Extended Python modules cleared. Evidence package complete.[/bold magenta]
+The inheritance hierarchy reconstructed. [yellow]@dataclass[/yellow] fields mapped.
+[yellow]__str__[/yellow] output compared to log files — exact match. The `from_config()` [yellow]@classmethod[/yellow]
+confirmed: it reads the same JSON config structure found in the container environment.
+
+The fraud system's Python code was well-engineered. Whoever wrote it knew OOP.
+
+[bold cyan]The shell interface is next — how the packager talks to the OS.[/bold cyan]
+""",
+
+    "subprocess_and_os": """
+[bold yellow]★ ★ ★  AUTOMATION SUITE — FULLY MAPPED.  ★ ★ ★[/bold yellow]
+
+[bold white]The complete evidence extraction pipeline is reconstructed.[/bold white]
+
+[yellow]subprocess.run(['tar', 'czf', ...])[/yellow] — the archive creation.
+[yellow]os.environ.get('NEXUS_KEY')[/yellow] — the encryption key, loaded at runtime.
+[yellow]Path('/tmp/evidence').glob('*.sql')[/yellow] — all database dumps, collected.
+[yellow]result.returncode[/yellow] — checked after every shell call.
+
+From [yellow]open()[/yellow] to [yellow]requests.post()[/yellow] to [yellow]subprocess.run()[/yellow]:
+the entire Python automation infrastructure is documented.
+
+[bold magenta]Ghost Operative — Python modules cleared. Evidence package complete.[/bold magenta]
 """,
 }
 
@@ -405,6 +453,8 @@ BOSS_INTROS = {
     "file_io_deep": "[bold red]⚠  FILE AUDIT: The Line Reader[/bold red]\nThe transaction archive is a 200MB text file. The script reads every line into a Python list for processing. What file method loads all lines into a list?",
     "list_comprehensions": "[bold red]⚠  COMPREHENSION GAUNTLET: The Efficiency Test[/bold red]\nThe investigator asks why the fraud author used list comprehensions instead of for-loops. Identify the primary advantage: conciseness alone, or something more?",
     "requests_http": "[bold red]⚠  SESSION BREACH: The Persistent Connection[/bold red]\nThe scraper authenticates once and reuses the session for hundreds of API calls. What requests object maintains cookies and headers across multiple requests?",
+    "classes_and_oop": "[bold red]⚠  OOP FINAL: The Evidence System[/bold red]\nThe fraud data model uses a base class and subclasses. Design the cleanest Python class hierarchy for an Evidence system — base class + DatabaseRecord subclass. @dataclass, inheritance, __str__. Make it production-quality.",
+    "subprocess_and_os": "[bold red]★  FINAL MISSION: The Evidence Packager[/bold red]\nAssemble the complete packager: read NEXUS_KEY from env, glob all .sql files in /tmp/evidence/, tar them with subprocess.run(), verify returncode is 0. Four operations. One mission. Show the complete Python.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -419,6 +469,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "io_specialist": ("I/O Specialist", "Cleared the File I/O Lab. open(), with, read, write — every file operation in the fraud infrastructure is now understood."),
     "comprehension_ace": ("Comprehension Ace", "Decoded the Comprehension Engine. List, dict, generator — the one-liner transforms that reshaped raw data into fraud payloads."),
     "http_operative": ("HTTP Operative", "Cleared the HTTP Recon Module. Every API call mapped, every session token traced. The network layer of the fraud is documented."),
+    "oop_architect": ("OOP Architect", "Mastered classes, inheritance, dunder methods, and @dataclass. The fraud system's object model is fully reverse-engineered."),
+    "shell_commander": ("Shell Commander", "Cleared subprocess and os. Python talks to the OS. Every shell command, every env variable, every file — accessible from code."),
     "first_blood": ("First Script", "Executed your first Python challenge. The syntax layer acknowledged you."),
     "streak_3": ("Signal Locked", "3 correct in a row. The code patterns are becoming readable."),
     "streak_5": ("Ghost Protocol", "5 correct in a row. You think in Python now."),

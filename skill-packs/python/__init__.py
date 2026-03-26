@@ -43,6 +43,8 @@ SKILL_PACK = SkillPack(
         "file_io_deep":        "io_specialist",
         "list_comprehensions": "comprehension_ace",
         "requests_http":       "http_operative",
+        "classes_and_oop":     "oop_architect",
+        "subprocess_and_os":   "shell_commander",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=r"""

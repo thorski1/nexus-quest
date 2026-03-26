@@ -29,6 +29,7 @@ ZONES = {
                     "tagged as 'latest' at publish time."
                 ),
                 "answer": "pull",
+                "url": "https://docs.docker.com/get-started/",
                 "hints": [
                     "Think about what you do before you can run an image that isn't on the system yet.",
                     "The command is one word: docker ___",
@@ -198,6 +199,7 @@ ZONES = {
                     "  docker inspect --format '{{.Config.ExposedPorts}}' myimage"
                 ),
                 "answer": "inspect",
+                "url": "https://docs.docker.com/get-started/",
                 "hints": [
                     "The command means 'look closely at the object'.",
                     "It's one word: docker ___",
@@ -368,6 +370,7 @@ ZONES = {
                     "The attacker used exec — no new container, no new image, no new logs."
                 ),
                 "answer": "exec",
+                "url": "https://docs.docker.com/get-started/",
                 "hints": [
                     "Think: execute a command inside something that's already running.",
                     "The command is: docker ___",
@@ -539,6 +542,7 @@ ZONES = {
                     "defaulting to 0.0.0.0 — meaning it was reachable from the internet."
                 ),
                 "answer": "-p 8080:80",
+                "url": "https://docs.docker.com/get-started/",
                 "hints": [
                     "The flag is -p, followed by hostPort:containerPort.",
                     "Host port first, container port second, colon between them.",
@@ -679,6 +683,7 @@ ZONES = {
                     "  → creates 'mydata' volume automatically if it doesn't exist"
                 ),
                 "answer": "create",
+                "url": "https://docs.docker.com/engine/storage/volumes/",
                 "hints": [
                     "The subcommand follows 'docker volume'.",
                     "docker volume ___  myvolume",
@@ -823,6 +828,7 @@ ZONES = {
                     "Custom networks appear in this list alongside the defaults."
                 ),
                 "answer": "ls",
+                "url": "https://docs.docker.com/engine/network/",
                 "hints": [
                     "Standard Unix 'list' abbreviation.",
                     "docker network ___",
@@ -975,6 +981,7 @@ ZONES = {
                     "    three times in four years without the team noticing"
                 ),
                 "answer": "FROM",
+                "url": "https://docs.docker.com/reference/dockerfile/",
                 "hints": [
                     "The first word of every Dockerfile — where you're building FROM.",
                     "All caps, one word.",
@@ -1158,6 +1165,7 @@ ZONES = {
                     "  There is no flag to disable this — it's always applied if present."
                 ),
                 "answer": "up",
+                "url": "https://docs.docker.com/compose/",
                 "hints": [
                     "The opposite of 'down'.",
                     "docker compose ___",
@@ -1310,6 +1318,7 @@ ZONES = {
                     "the old manifest. The CI/CD pipeline pulled and deployed automatically."
                 ),
                 "answer": "push",
+                "url": "https://docs.docker.com/get-started/introduction/whats-next/",
                 "hints": [
                     "The opposite of pull.",
                     "docker ___",
@@ -1462,6 +1471,7 @@ ZONES = {
                     "  --timestamps, -t  → add timestamps to each line"
                 ),
                 "answer": "logs",
+                "url": "https://docs.docker.com/get-started/",
                 "hints": [
                     "Think: read the log output of a running container.",
                     "docker ___",
@@ -1606,6 +1616,7 @@ ZONES = {
                     "Both forms are widely used in production; know both."
                 ),
                 "answer": "-d",
+                "url": "https://docs.docker.com/compose/",
                 "hints": [
                     "Detached mode. Same flag as docker run.",
                     "docker-compose up ___",
@@ -1760,6 +1771,7 @@ ZONES = {
                     "containers that should be isolated may be sharing a network."
                 ),
                 "answer": "network ls",
+                "url": "https://docs.docker.com/engine/network/",
                 "hints": [
                     "Think: docker network and then the subcommand that lists things.",
                     "The answer is: network ls",
@@ -1912,6 +1924,7 @@ ZONES = {
                     "  → creates a named volume called nexus-data"
                 ),
                 "answer": "docker volume create nexus-data",
+                "url": "https://docs.docker.com/engine/storage/volumes/",
                 "hints": [
                     "The subcommand is 'volume create' followed by the name.",
                     "The answer is: docker volume create nexus-data",

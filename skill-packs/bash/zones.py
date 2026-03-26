@@ -26,6 +26,7 @@ ZONES = {
                     "Example: ls /home/user    → lists files in /home/user"
                 ),
                 "question": "What command lists the contents of the current directory?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Introduction",
                 "answers": ["ls"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -194,6 +195,7 @@ ZONES = {
                     "Example: touch scroll.txt    → creates an empty file called scroll.txt"
                 ),
                 "question": "Create an empty file called 'scroll.txt' in the sandbox.",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Basic-Shell-Features",
                 "setup": {"files": {}, "dirs": []},
                 "validation": {"type": "file_exists", "target": "scroll.txt"},
                 "xp": 50,
@@ -385,6 +387,7 @@ ZONES = {
                     "Example: grep 'error' system.log    → prints every line containing 'error'"
                 ),
                 "question": "What command searches for patterns within files?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Pattern-Matching",
                 "answers": ["grep"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -598,6 +601,7 @@ ZONES = {
                     "Example: ls | grep '.txt'    → lists files, then filters for only .txt files"
                 ),
                 "question": "What symbol is used to pipe the output of one command into another?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Pipelines",
                 "answers": ["|", "pipe"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -791,6 +795,7 @@ ZONES = {
                     "Example: ps    → shows processes running in the current terminal session"
                 ),
                 "question": "What command shows currently running processes?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Job-Control",
                 "answers": ["ps"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -961,6 +966,7 @@ ZONES = {
                     "Example: ls -l    → shows permissions, owner, size, and name of each file"
                 ),
                 "question": "What flag do you add to 'ls' to see detailed permissions for each file?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins",
                 "answers": ["-l", "-la", "-al", "-lh"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1146,6 +1152,7 @@ ZONES = {
                     "Example: HERO=HackerArchaeologist && echo $HERO    → prints: HackerArchaeologist"
                 ),
                 "question": "Create a variable called 'HERO' with value 'HackerArchaeologist' and echo it.",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Variables",
                 "setup": {"files": {}, "dirs": []},
                 "validation": {
                     "type": "output_contains",
@@ -1343,6 +1350,7 @@ ZONES = {
                     "Example: ping -c 3 google.com    → sends 3 packets to google.com and reports round-trip time"
                 ),
                 "question": "What command sends ICMP packets to test if a host is reachable?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Basic-Shell-Features",
                 "answers": ["ping"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1511,6 +1519,7 @@ ZONES = {
                     "Example: alias ll='ls -la'    → typing 'll' now runs 'ls -la'"
                 ),
                 "question": "What command creates a shortcut (custom name) for another command?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Aliases",
                 "answers": ["alias"],
                 "xp": 75,
                 "difficulty": "easy",
@@ -1700,6 +1709,7 @@ ZONES = {
                     "Example: echo $HOME    → prints the path to your home directory"
                 ),
                 "question": "What syntax do you use to read the value of an environment variable named HOME?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Environment",
                 "answers": ["$HOME", "echo $HOME"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1876,6 +1886,7 @@ ZONES = {
                     "  cat access.log | wc -l  → 48302  (common in pipelines)"
                 ),
                 "question": "What flag do you pass to wc to count only lines?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Pipelines",
                 "answers": ["-l", "wc -l"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -2061,6 +2072,7 @@ ZONES = {
                     "Example: sed 's/ERROR/WARN/g' app.log    → replaces every ERROR with WARN"
                 ),
                 "question": "What sed command replaces all occurrences of 'ERROR' with 'CRITICAL' in every line?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Pipelines",
                 "answers": ["sed 's/ERROR/CRITICAL/g'", "s/ERROR/CRITICAL/g"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -2247,6 +2259,7 @@ ZONES = {
                     "  #!/bin/bash"
                 ),
                 "question": "What does the shebang line (#!/bin/bash) tell the operating system?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
                 "answers": [
                     "what interpreter to use",
                     "which interpreter to use",
@@ -2454,6 +2467,7 @@ ZONES = {
                     "  [1]+  Stopped    sleep 9999"
                 ),
                 "question": "What does Ctrl+Z do to the currently running foreground process?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Job-Control",
                 "answers": [
                     "pauses/suspends the current foreground process",
                     "suspends the current foreground process",

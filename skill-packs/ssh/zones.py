@@ -33,6 +33,7 @@ ZONES = {
                     "  on first connection — not just type 'yes' automatically."
                 ),
                 "answer": "admin@jump.nexus.internal",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["Format is user@hostname.", "The answer is: admin@jump.nexus.internal"],
             },
             {
@@ -183,6 +184,7 @@ ZONES = {
                     "  ~/.ssh/id_ed25519.pub  → public key (this goes on the server)"
                 ),
                 "answer": "ssh-keygen",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["The command that generates SSH keys.", "The answer is: ssh-keygen"],
             },
             {
@@ -339,6 +341,7 @@ ZONES = {
                     "  ServerAliveInterval or AddKeysToAgent."
                 ),
                 "answer": "~/.ssh/config",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["It's in the .ssh directory in your home folder.", "The answer is: ~/.ssh/config"],
             },
             {
@@ -490,6 +493,7 @@ ZONES = {
                     "Note: scp uses the same ~/.ssh/config entries as ssh."
                 ),
                 "answer": "admin@nexus-jump:/tmp/",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["Remote destination: user@host:/path/", "The answer is: admin@nexus-jump:/tmp/"],
             },
             {
@@ -616,6 +620,7 @@ ZONES = {
                     "It does not see: the database connection running inside the tunnel."
                 ),
                 "answer": "-L",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["'L' for Local port forwarding.", "The answer is: -L"],
             },
             {
@@ -745,6 +750,7 @@ ZONES = {
                     "  → ssh db   (equivalent to ssh -J bastion admin@db.internal)"
                 ),
                 "answer": "-J",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["'J' for Jump host.", "The answer is: -J"],
             },
             {
@@ -852,6 +858,7 @@ ZONES = {
                     "use this socket path to communicate with the agent."
                 ),
                 "answer": "ssh-agent",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["The name of the agent process.", "The answer is: ssh-agent"],
             },
             {
@@ -956,6 +963,7 @@ ZONES = {
                     "This is why the credential approach worked as a fallback."
                 ),
                 "answer": "PasswordAuthentication",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["The directive that controls password authentication in sshd_config.", "The answer is: PasswordAuthentication"],
             },
             {
@@ -1069,6 +1077,7 @@ ZONES = {
                     "should always run inside tmux or screen to survive disconnections."
                 ),
                 "answer": "tmux new -s ghost",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["tmux new followed by the session name flag.", "The answer is: tmux new -s ghost"],
             },
             {
@@ -1203,6 +1212,7 @@ ZONES = {
                     "It respects ~/.ssh/config entries and key files."
                 ),
                 "answer": "scp file.txt user@10.0.0.5:/opt/nexus/",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": ["scp source destination — remote path uses user@host:/path format.", "The answer is: scp file.txt user@10.0.0.5:/opt/nexus/"],
             },
             {
@@ -1338,6 +1348,7 @@ ZONES = {
                     "databases behind firewalls, internal web UIs."
                 ),
                 "answer": "forwards a local port through the SSH connection",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": [
                     "L stands for Local — it makes a local port accessible through the tunnel.",
                     "The answer is: forwards a local port through the SSH connection",
@@ -1491,6 +1502,7 @@ ZONES = {
                     "  ~/.ssh/id_ed25519.pub  → public key (this goes on the server)"
                 ),
                 "answer": "ssh-keygen -t ed25519 -C \"ghost@nexus\"",
+                "url": "https://www.openssh.com/manual.html",
                 "hints": [
                     "Use ssh-keygen with the type flag and a comment flag.",
                     "The answer is: ssh-keygen -t ed25519 -C \"ghost@nexus\"",

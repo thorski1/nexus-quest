@@ -29,6 +29,7 @@ ZONES = {
                     "Example: git init    → creates .git/ in the current directory"
                 ),
                 "question": "What command creates a new git repository in the current directory?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
                 "answers": ["git init", "init"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -205,6 +206,7 @@ ZONES = {
                     "Example: git add report.txt    → stages report.txt for the next commit"
                 ),
                 "question": "What command stages changes to be included in the next commit?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
                 "answers": ["git add", "add"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -394,6 +396,7 @@ ZONES = {
                     "Example: git commit -m 'Add forensic analysis report'"
                 ),
                 "question": "What command creates a new commit from staged changes?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
                 "answers": ["git commit", "commit"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -571,6 +574,7 @@ ZONES = {
                     "Example: git branch -a    → lists all branches including remote ones"
                 ),
                 "question": "What command lists all local git branches?",
+                "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
                 "answers": ["git branch", "branch"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -720,6 +724,7 @@ ZONES = {
                     "Example: git merge feature/auth    → merges feature/auth into current branch"
                 ),
                 "question": "What command integrates commits from another branch into the current branch?",
+                "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
                 "answers": ["git merge", "merge"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -867,6 +872,7 @@ ZONES = {
                     "Golden rule: NEVER rebase commits that have been pushed to a shared remote."
                 ),
                 "question": "What does git rebase do to commits? What happens to the original commits?",
+                "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
                 "answers": [
                     "creates new commits",
                     "new commits with new hashes",
@@ -1017,6 +1023,7 @@ ZONES = {
                     "Example: git remote -v    → shows origin's fetch and push URLs"
                 ),
                 "question": "What command lists the configured remote repositories and their URLs?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes",
                 "answers": ["git remote -v", "git remote", "remote -v", "remote"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1167,6 +1174,7 @@ ZONES = {
                     "Example: git stash    → saves current changes, restores clean working directory"
                 ),
                 "question": "What command temporarily shelves uncommitted changes so you can switch context?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
                 "answers": ["git stash", "stash"],
                 "xp": 75,
                 "difficulty": "easy",
@@ -1322,6 +1330,7 @@ ZONES = {
                     "Example: git blame algorithm.py    → full annotation of algorithm.py"
                 ),
                 "question": "What command annotates every line of a file with the commit and author that last changed it?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History",
                 "answers": ["git blame", "blame"],
                 "xp": 100,
                 "difficulty": "medium",
@@ -1472,6 +1481,7 @@ ZONES = {
                     "safely switch branches."
                 ),
                 "question": "What command saves uncommitted changes to a temporary stash and cleans the working tree?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository",
                 "answers": ["git stash", "git stash push"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1620,6 +1630,7 @@ ZONES = {
                     "  git tag -l    → same"
                 ),
                 "question": "What command creates a lightweight tag named 'v1.0' on the current commit?",
+                "url": "https://git-scm.com/book/en/v2/Git-Basics-Tagging",
                 "answers": ["git tag v1.0"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1774,6 +1785,7 @@ ZONES = {
                     "  → replays the current branch's commits on top of main"
                 ),
                 "question": "What command rebases the current branch onto 'main'?",
+                "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
                 "answers": ["git rebase main", "rebase main"],
                 "xp": 50,
                 "difficulty": "easy",

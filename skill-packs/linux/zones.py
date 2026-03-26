@@ -24,6 +24,7 @@ ZONES = {
                     "Useful when pivoting between accounts to confirm your current identity."
                 ),
                 "question": "What command prints the username of the current user?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": ["whoami"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -193,6 +194,7 @@ ZONES = {
                     "Use: ls -l to see permissions"
                 ),
                 "question": "In the permission string '-rwxr-xr--', what can the GROUP do?",
+                "url": "https://linuxcommand.org/lc3_lts0090.php",
                 "answers": ["read and execute", "r-x", "read, execute", "execute and read"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -368,6 +370,7 @@ ZONES = {
                     "Example: ps aux | grep nginx    → find the nginx process"
                 ),
                 "question": "What command shows all running processes from all users in detailed format?",
+                "url": "https://man7.org/linux/man-pages/man1/ps.1.html",
                 "answers": ["ps aux", "ps -aux", "ps aux"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -549,6 +552,7 @@ ZONES = {
                     "Example: df -h    → shows all filesystems with human-readable sizes"
                 ),
                 "question": "What command shows disk space usage for all filesystems in human-readable format?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": ["df -h", "df"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -732,6 +736,7 @@ ZONES = {
                     "Example: ip addr show    → list all network interfaces with IPs"
                 ),
                 "question": "What modern command shows all network interfaces and their IP addresses?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": ["ip addr", "ip addr show", "ip address"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -914,6 +919,7 @@ ZONES = {
                     "Example: tail -f /var/log/syslog    → watch system log in real time"
                 ),
                 "question": "What command follows a log file in real time, printing new lines as they appear?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": ["tail -f", "tail -F"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1102,6 +1108,7 @@ ZONES = {
                     "Location: both are in the user's home directory (~)"
                 ),
                 "question": "Which file runs for interactive non-login shells, used for aliases and prompt settings?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": [".bashrc", "~/.bashrc"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1286,6 +1293,7 @@ ZONES = {
                     "Example: apt install nmap    → installs the nmap network scanner"
                 ),
                 "question": "What command installs a package using apt?",
+                "url": "https://linuxcommand.org/lc3_lts0020.php",
                 "answers": ["apt install", "apt-get install"],
                 "xp": 50,
                 "difficulty": "easy",
@@ -1448,6 +1456,7 @@ ZONES = {
                     "Example: systemctl status nginx    → check if nginx is running"
                 ),
                 "question": "What command checks the current status of a systemd service named 'nginx'?",
+                "url": "https://man7.org/linux/man-pages/man1/systemctl.1.html",
                 "answers": ["systemctl status nginx"],
                 "xp": 50,
                 "difficulty": "easy",

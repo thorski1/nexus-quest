@@ -27,6 +27,7 @@ ZONES = {
                     "After a few hours of practice, hjkl becomes faster than arrow keys."
                 ),
                 "answer": "h",
+                "url": "https://vimhelp.org/",
                 "hints": ["It's the leftmost of the four movement keys.", "Home row: h j k l — h is far left.", "The answer is: h"],
             },
             {
@@ -162,6 +163,7 @@ ZONES = {
                     "The status bar shows -- INSERT -- when you're in insert mode."
                 ),
                 "answer": "i",
+                "url": "https://vimhelp.org/",
                 "hints": ["Think: insert. Single lowercase letter.", "The 'i' key.", "The answer is: i"],
             },
             {
@@ -300,6 +302,7 @@ ZONES = {
                     "Press Enter to execute, or ESC to cancel."
                 ),
                 "answer": "w",
+                "url": "https://vimhelp.org/",
                 "hints": ["Single letter — 'write'.", "The answer is: w"],
             },
             {
@@ -445,6 +448,7 @@ ZONES = {
                     "  < → indent left"
                 ),
                 "answer": "v",
+                "url": "https://vimhelp.org/",
                 "hints": ["Single lowercase letter — 'visual'.", "The answer is: v"],
             },
             {
@@ -596,6 +600,7 @@ ZONES = {
                     "So: to search for 'max_retry': type /max_retry then Enter."
                 ),
                 "answer": "/max_retry",
+                "url": "https://vimhelp.org/",
                 "hints": ["The search key is '/', followed by the pattern.", "The answer is: /max_retry"],
             },
             {
@@ -740,6 +745,7 @@ ZONES = {
                     "ciw works whether your cursor is at the start, middle, or end of the word."
                 ),
                 "answer": "ciw",
+                "url": "https://vimhelp.org/",
                 "hints": ["Change (c) + inner (i) + word (w).", "Three letters.", "The answer is: ciw"],
             },
             {
@@ -891,6 +897,7 @@ ZONES = {
                     "  Ctrl+W o  → close ALL other splits (only keep current)"
                 ),
                 "answer": "h",
+                "url": "https://vimhelp.org/",
                 "hints": ["Same as cursor movement: h is left.", "The answer is: h"],
             },
             {
@@ -1045,6 +1052,7 @@ ZONES = {
                     "where it can be replayed from (e.g., move to the next line at the end)."
                 ),
                 "answer": "qa",
+                "url": "https://vimhelp.org/",
                 "hints": ["q starts recording, then the register name.", "The answer is: qa"],
             },
             {
@@ -1181,6 +1189,7 @@ ZONES = {
                     "  This is the register to use when you've deleted something after yanking."
                 ),
                 "answer": '"ayy',
+                "url": "https://vimhelp.org/",
                 "hints": ['Start with the register prefix: "a', 'Then the yank command for a full line.', 'The answer is: "ayy'],
             },
             {
@@ -1311,6 +1320,7 @@ ZONES = {
                     "  In Neovim with very magic: :%s/\\v(\\w+)_id/id_\\1/g"
                 ),
                 "answer": "gi",
+                "url": "https://vimhelp.org/",
                 "hints": ["Two flags: global and case-insensitive.", "g for global, i for case-insensitive.", "The answer is: gi"],
             },
             {
@@ -1432,6 +1442,7 @@ ZONES = {
                     "Combine with operators: dw deletes to next word, cw changes to next word."
                 ),
                 "answer": "w",
+                "url": "https://vimhelp.org/",
                 "hints": ["Think: word forward. Single lowercase letter.", "w for word.", "The answer is: w"],
             },
             {
@@ -1584,6 +1595,7 @@ ZONES = {
                     "Use :split for files that need top-bottom reference."
                 ),
                 "answer": ":vsplit",
+                "url": "https://vimhelp.org/",
                 "hints": ["The command that splits the window vertically.", "Starts with a colon. The answer is: :vsplit"],
             },
             {

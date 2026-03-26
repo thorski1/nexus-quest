@@ -26,6 +26,7 @@ ZONES = {
                     "Note: to match a literal dot, escape it: \\."
                 ),
                 "question": "In regex, what does . (a single dot) match?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "any single character except a newline",
                     "any character except newline",
@@ -181,6 +182,7 @@ ZONES = {
                     "A character class always matches exactly ONE character."
                 ),
                 "question": "What does [abc] match in a regex?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "any one of the characters a, b, or c",
                     "any of a, b, or c",
@@ -342,6 +344,7 @@ ZONES = {
                     "  ^\\d+$    → matches lines that consist entirely of digits"
                 ),
                 "question": "In regex, what does $ mean when used outside a character class?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "end of the line",
                     "end of line",
@@ -501,6 +504,7 @@ ZONES = {
                     "Useful for fixed-width fields, codes, and identifiers."
                 ),
                 "question": "What does {n} mean in regex (e.g. \\d{4})?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "exactly n times",
                     "matches exactly n times",
@@ -658,6 +662,7 @@ ZONES = {
                     "Use lookaheads when you need context after a match but don't want to capture the context."
                 ),
                 "question": "What does (?=...) mean in regex?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "positive lookahead",
                     "asserts that what follows matches the pattern",
@@ -816,6 +821,7 @@ ZONES = {
                     "This is a simplified pattern. RFC 5322 emails are more complex in practice."
                 ),
                 "question": "Which regex best matches a typical email address like user@nexus-corp.com?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}",
                     r"[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}",
@@ -982,6 +988,7 @@ ZONES = {
                     "Shorthand: re.I"
                 ),
                 "question": "Which regex flag makes a pattern match regardless of letter case?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "re.IGNORECASE",
                     "re.I",
@@ -1183,6 +1190,7 @@ ZONES = {
                     "re.match() only checks at the very beginning — use search for general use."
                 ),
                 "question": "What re function scans through a string and returns the FIRST match anywhere in it?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": [
                     "re.search()",
                     "re.search",
@@ -1383,6 +1391,7 @@ ZONES = {
                     "  grep -P '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}' access.log"
                 ),
                 "question": "Which grep flag enables Perl-Compatible Regular Expressions (PCRE) with \\d, \\w, and lookaheads?",
+                "url": "https://www.regular-expressions.info/tutorial.html",
                 "answers": ["grep -P", "-P"],
                 "xp": 50,
                 "difficulty": "easy",

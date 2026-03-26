@@ -42,6 +42,8 @@ SKILL_PACK = SkillPack(
         "window_functions":   "window_analyst",
         "json_forge":         "json_archaeologist",
         "transactions_vault": "isolation_expert",
+        "performance_tuning": "performance_engineer",
+        "replication_and_backup": "replication_architect",
     },
     achievements=ACHIEVEMENT_DESCRIPTIONS,
     banner_ascii=r"""

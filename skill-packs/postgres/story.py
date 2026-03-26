@@ -258,6 +258,43 @@ that structure is the signature.
 [italic]"Semi-structured data is not an excuse to not query it.
 JSON operators are the bridge between the document and the relation."[/italic]
 """,
+    "performance_tuning": """
+[bold red]PERFORMANCE INTELLIGENCE CENTER[/bold red]
+
+Queries have been degrading for weeks. The monitoring team blamed the network.
+The network team blamed the application. The application team blamed the database.
+
+[italic]"The database never lies. It just waits for someone to ask it the right questions."[/italic]
+
+[bold cyan]EXPLAIN ANALYZE[/bold cyan] shows execution reality, not estimates. [bold cyan]pg_stat_statements[/bold cyan]
+aggregates query patterns across sessions — revealing the true slow-query culprits.
+[bold cyan]VACUUM ANALYZE[/bold cyan] removes dead tuples and recalibrates the planner's model of
+your data.
+
+The performance bottleneck in the NEXUS fraud database: a correlated subquery inside
+a reporting view, called seven thousand times a day, doing a Seq Scan on a 40M row
+table — because no one checked.
+
+[italic]"Every production crisis has a query at the center. Find the query."[/italic]
+""",
+    "replication_and_backup": """
+[bold red]REPLICATION COMMAND[/bold red]
+
+The primary database is intact. The backup strategy: pg_basebackup nightly,
+WAL archiving continuous, two streaming standbys in separate availability zones.
+
+[italic]"A database without a tested backup is not a database. It is a liability."[/italic]
+
+[bold cyan]pg_dump[/bold cyan] for logical backups — portable, point-in-time. [bold cyan]pg_basebackup[/bold cyan] for
+physical backups — consistent, fast, supports streaming to standby. [bold cyan]WAL archiving[/bold cyan]
+enables point-in-time recovery to any moment the logs cover.
+
+The developer deleted 847,000 rows of transaction history at 14:32. You have WAL
+archives. You have a recovery target time. The data is not gone — it just thinks
+it is.
+
+[italic]"Backups are insurance. WAL archiving is a time machine."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -393,6 +430,31 @@ Every layer of the archive walked.
 
 [bold yellow]DATA ARCHAEOLOGIST STATUS: GRANDMASTER.  ARCHIVE: FULLY EXCAVATED.[/bold yellow]
 """,
+    "performance_tuning": """
+[bold green]PERFORMANCE INVESTIGATION COMPLETE.[/bold green]
+
+[cyan]EXPLAIN ANALYZE[/cyan] exposed the Seq Scan. [cyan]pg_stat_statements[/cyan] showed it had run
+2.3 million times in 30 days. [cyan]VACUUM ANALYZE[/cyan] updated stale statistics — the planner
+had been working from table counts that were 6 months old.
+
+One index on the correlated subquery's JOIN column. Seq Scan → Index Scan.
+Query time: 8,200ms → 12ms. The monitoring system stopped alerting.
+
+[bold magenta]Performance is a skill, not a measurement.[/bold magenta]
+""",
+    "replication_and_backup": """
+[bold green]THE EVIDENCE IS PRESERVED.[/bold green]
+
+[cyan]pg_basebackup[/cyan] captured the physical database state. [cyan]WAL archives[/cyan] fill the gaps
+between base backups. [cyan]recovery_target_time = '14:31:00'[/cyan] in the recovery config —
+PostgreSQL replays WAL up to that exact moment.
+
+The 847,000 deleted rows: restored. The NEXUS transaction history: intact.
+The developer who ran `DELETE FROM transactions WHERE true`: already en route
+to questioning.
+
+[bold yellow]Every byte written to a database leaves a trace. Every backup is a time machine.[/bold yellow]
+""",
 }
 
 BOSS_INTROS = {
@@ -407,6 +469,8 @@ BOSS_INTROS = {
     "window_functions": "[bold red]⚠  FORENSIC ANALYSIS: The Pattern Across Quarters[/bold red]\nFive years. Same phantom vendor. Same account ranking pattern. You need ROW_NUMBER, PARTITION, LAG, and NTILE to surface it. No GROUP BY.",
     "json_forge": "[bold red]★  JSON EXTRACTION: The Metadata Signature[/bold red]\nSeventeen transactions. Phantom vendor hidden in a JSONB column. Use @>, ->>, jsonb_array_elements. Find the pattern before the audit window closes.",
     "transactions_vault": "[bold red]★  ISOLATION TRIAL: The Phantom Read Window[/bold red]\nThe fraud exploited a gap in transaction isolation. Identify the isolation level that closes the phantom read window. SET TRANSACTION ISOLATION LEVEL — which level makes concurrent transactions appear serial?",
+    "performance_tuning": "[bold red]⚠  PRODUCTION CRISIS: The Seq Scan[/bold red]\nQueries that ran in 50ms now take 8 seconds. pg_stat_statements shows the culprit. EXPLAIN ANALYZE shows the Seq Scan. You have one shot to fix it before the morning report runs.",
+    "replication_and_backup": "[bold red]★  FINAL EXTRACTION: The Recovery Target[/bold red]\n847,000 rows deleted. The WAL archives exist. The base backup is intact. Walk through every step of PITR — from base backup restore to recovery_target_time to the moment the deleted rows appear again.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -433,4 +497,6 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "completionist": ("Full Schema Access", "Every challenge. Every zone. Total archive penetration achieved."),
     "boss_slayer": ("Audit Bypassed", "Beat your first boss challenge. The compliance system found nothing unusual."),
     "isolation_expert": ("Transaction Isolation Specialist", "Cleared the Transactions Vault. BEGIN, COMMIT, ROLLBACK, SAVEPOINT, SERIALIZABLE — the fraud timeline is yours to read."),
+    "performance_engineer": ("Performance Engineer", "Cleared the Performance Tuning zone. EXPLAIN ANALYZE, pg_stat_statements, VACUUM — you find and fix slow queries."),
+    "replication_architect": ("Replication Architect", "Mastered backup and replication. pg_dump, pg_basebackup, WAL, PITR — the evidence is preserved."),
 }

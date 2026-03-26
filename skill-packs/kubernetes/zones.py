@@ -32,6 +32,7 @@ ZONES = {
                 options=["A Container", "A Pod", "A Deployment", "A Node"],
                 answer="b",
                 explanation="A Pod is the smallest deployable unit in Kubernetes. It can contain one or more containers that share network and storage.",
+                url="https://kubernetes.io/docs/concepts/workloads/pods/",
                 xp=10,
             ),
             Challenge(
@@ -114,6 +115,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Pods get new IP addresses every time they restart. A Service provides a stable virtual IP and DNS name that routes to healthy Pods via label selectors.",
+                url="https://kubernetes.io/docs/concepts/services-networking/service/",
                 xp=10,
             ),
             Challenge(
@@ -190,6 +192,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="ConfigMaps store non-sensitive configuration data (env vars, config files, command-line args) separately from images, making apps portable across environments.",
+                url="https://kubernetes.io/docs/concepts/configuration/configmap/",
                 xp=10,
             ),
             Challenge(
@@ -277,6 +280,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Namespaces partition the cluster's name space — two Deployments named `api` can exist in different namespaces. They don't provide network isolation by default (that's NetworkPolicy).",
+                url="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
                 xp=10,
             ),
             Challenge(
@@ -359,6 +363,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Helm is Kubernetes' package manager. It bundles related manifests into Charts, supports templating with values, and tracks release history for upgrades and rollbacks.",
+                url="https://helm.sh/docs/intro/using_helm/",
                 xp=10,
             ),
             Challenge(
@@ -435,6 +440,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Container filesystems are ephemeral — tied to the container lifecycle. When a Pod dies, all data written inside the container is gone. Persistent Volumes exist independently of Pods and survive restarts, rescheduling, and even Pod deletion.",
+                url="https://kubernetes.io/docs/concepts/storage/persistent-volumes/",
                 xp=10,
             ),
             Challenge(
@@ -523,6 +529,7 @@ ZONES = {
                 ],
                 answer="a",
                 explanation="Requests tell the scheduler how much CPU/memory to reserve — the container is guaranteed at least this much. Limits are the ceiling — the container is killed if it exceeds the memory limit, or throttled if it exceeds CPU limit. Set both for predictable scheduling.",
+                url="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
                 xp=10,
             ),
             Challenge(
@@ -605,6 +612,7 @@ ZONES = {
                 ],
                 answer="c",
                 explanation="Kubernetes is open by default — all Pods can reach all other Pods across all namespaces. This is convenient but dangerous: a compromised Pod can reach every database, every internal API. NetworkPolicies add the firewall rules that should exist from the start.",
+                url="https://kubernetes.io/docs/concepts/services-networking/network-policies/",
                 xp=10,
             ),
             Challenge(
@@ -692,6 +700,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Pending means the scheduler can't place the Pod on a Node. Check `kubectl describe pod <name>` for events — common causes: insufficient CPU/memory, node selectors, taints.",
+                url="https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/",
                 xp=10,
             ),
             Challenge(

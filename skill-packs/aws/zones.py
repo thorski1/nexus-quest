@@ -37,6 +37,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Least privilege minimizes blast radius. A compromised key with S3 read-only cannot launch EC2 instances; one with AdministratorAccess can destroy your entire AWS account.",
+                url="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
                 xp=10,
             ),
             Challenge(
@@ -124,6 +125,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="An AMI is a pre-configured snapshot: OS + software + config. You launch instances from AMIs. They enable repeatability — every instance from the same AMI starts in the same known state.",
+                url="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
                 xp=10,
             ),
             Challenge(
@@ -211,6 +213,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Bucket URLs follow the pattern `bucket-name.s3.amazonaws.com`. Since URLs must be unique globally, so must bucket names. This is why `my-bucket` is likely taken — use unique prefixes.",
+                url="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
                 xp=10,
             ),
             Challenge(
@@ -293,6 +296,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="A VPC is your own isolated section of the AWS cloud. You control the IP range (CIDR block), subnets, route tables, and internet/NAT gateways. Resources inside a VPC are isolated from other AWS customers.",
+                url="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
                 xp=10,
             ),
             Challenge(
@@ -380,6 +384,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="RDS handles the undifferentiated heavy lifting: OS patching, backups, replication, failover. You focus on the database schema and queries; AWS handles the infrastructure operations.",
+                url="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html",
                 xp=10,
             ),
             Challenge(
@@ -467,6 +472,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="Lambda is event-driven serverless compute. You write functions; AWS provisions infrastructure, scales automatically, and charges per 100ms of execution. No servers to patch, no capacity to plan.",
+                url="https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
                 xp=10,
             ),
             Challenge(
@@ -549,6 +555,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="CloudWatch Metrics are time-series numerical data. AWS services publish them automatically (EC2 CPU, RDS connections, Lambda duration). You can publish custom metrics from your application. Metrics are the foundation for alarms and dashboards.",
+                url="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html",
                 xp=10,
             ),
             Challenge(
@@ -636,6 +643,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="CloudFormation is AWS's native Infrastructure as Code service. Define resources in a template; CloudFormation provisions and manages them as a Stack. The same template deploys identical environments in dev, staging, and prod — no manual click-ops.",
+                url="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
                 xp=10,
             ),
             Challenge(
@@ -723,6 +731,7 @@ ZONES = {
                 ],
                 answer="b",
                 explanation="ECS (Elastic Container Service) is AWS's own container orchestration platform — simpler, tightly integrated with AWS services. EKS (Elastic Kubernetes Service) is managed Kubernetes — more complex, portable, with the full Kubernetes ecosystem. Choose ECS for AWS-native simplicity; EKS for Kubernetes portability.",
+                url="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html",
                 xp=10,
             ),
             Challenge(

@@ -30,7 +30,7 @@ classifiers = [
 ]
 dependencies = [
     "rich>=13.0.0",
-    "quest-engine>=1.0.0",
+    "quest-engine>=1.1.0",
 ]
 
 [project.urls]

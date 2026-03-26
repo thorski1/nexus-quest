@@ -76,6 +76,30 @@ ZONE_INTROS = {
         "`transfer-{subsidiary_id}`. These ran on a schedule. "
         "CloudWatch logs will tell you what they did.[/bold yellow]"
     ),
+    "cloudwatch_and_monitoring": (
+        "[bold cyan]ZONE: THE OBSERVATION LAYER[/bold cyan]\n\n"
+        "CloudWatch is the audit trail they forgot to audit. "
+        "Every Lambda invocation, every RDS connection spike, every IAM credential use — "
+        "[bold yellow]all logged, all queryable. "
+        "The monitoring they set up to watch their systems "
+        "also recorded everything they tried to hide.[/bold yellow]"
+    ),
+    "cloudformation_and_iac": (
+        "[bold cyan]ZONE: THE BLUEPRINT ARCHIVE[/bold cyan]\n\n"
+        "The entire NEXUS AWS infrastructure was provisioned with CloudFormation. "
+        "Every Stack has a history. Every template is versioned. "
+        "[bold yellow]The original infrastructure template — before the phantom subsidiaries "
+        "were added — is still in the S3 template bucket. "
+        "CloudFormation drift detection will show exactly what changed.[/bold yellow]"
+    ),
+    "ecs_and_containers": (
+        "[bold cyan]ZONE: THE CONTAINER FLEET[/bold cyan]\n\n"
+        "Not everything runs in the Kubernetes cluster. "
+        "The payment-processing microservices run on ECS Fargate — "
+        "separate from the main cluster, separate audit trail, separate IAM scope. "
+        "[bold yellow]The Task Roles tell you what each service was allowed to touch. "
+        "One service's Task Role includes `s3:GetObject` on the compliance archive.[/bold yellow]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -120,6 +144,27 @@ ZONE_COMPLETIONS = {
         "on a schedule that correlated with federal contract payment cycles. "
         "[bold yellow]Fully automated. Fully documented in the logs they forgot to disable.[/bold yellow]"
     ),
+    "cloudwatch_and_monitoring": (
+        "[bold green]ZONE COMPLETE — THE OBSERVATION LAYER[/bold green]\n\n"
+        "CloudWatch Logs Insights query: `filter @message like /transfer-/ | stats count(*) by bin(30d)`. "
+        "9,847 transfer events. Every one timestamped. "
+        "The metric filter they set up for alerting — never connected to an alarm. "
+        "[bold yellow]They built the monitoring. They just never turned on the notifications.[/bold yellow]"
+    ),
+    "cloudformation_and_iac": (
+        "[bold green]ZONE COMPLETE — THE BLUEPRINT ARCHIVE[/bold green]\n\n"
+        "CloudFormation drift detected: 14 resources modified outside the template. "
+        "The S3 template bucket: original template from 3 years ago, before the phantom subsidiaries. "
+        "Change set comparison shows exactly which IAM roles were added, which Lambda functions appeared. "
+        "[bold yellow]Infrastructure as code is also infrastructure as evidence.[/bold yellow]"
+    ),
+    "ecs_and_containers": (
+        "[bold green]ZONE COMPLETE — THE CONTAINER FLEET[/bold green]\n\n"
+        "The compliance-reader ECS service: Task Role includes `s3:GetObject` on the compliance archive. "
+        "CloudWatch Container Insights shows it made 847 calls to that bucket in the last 90 days. "
+        "The service definition names a specific IAM user as its deployer. "
+        "[bold yellow]Same user as the Lambda functions. The same hand built all of it.[/bold yellow]"
+    ),
 }
 
 BOSS_INTROS = {
@@ -161,5 +206,28 @@ BOSS_INTROS = {
         "The function executed 47,000 times. "
         "What evidence might still exist in the AWS environment? "
         "Think through every service that might have captured output or invocation data.[/bold yellow]"
+    ),
+    "cloudwatch_and_monitoring": (
+        "[bold red]BOSS CHALLENGE — THE INVISIBLE ALARM[/bold red]\n\n"
+        "[bold yellow]A metric filter exists that counts ERROR events in the Lambda log group. "
+        "The metric has been publishing data for 3 years. "
+        "There are no alarms on the metric. No dashboards. No notifications. "
+        "Write a CloudWatch Logs Insights query to reconstruct what those errors were "
+        "and when they peaked — using only the log data.[/bold yellow]"
+    ),
+    "cloudformation_and_iac": (
+        "[bold red]BOSS CHALLENGE — THE TAMPERED STACK[/bold red]\n\n"
+        "[bold yellow]A CloudFormation Stack shows UPDATE_COMPLETE but drift detection shows "
+        "7 resources have been modified outside CloudFormation. "
+        "Two of those resources are IAM roles. "
+        "Walk through exactly how you would reconstruct the full change history: "
+        "what changed, when, and by which IAM identity — using only AWS-native tools.[/bold yellow]"
+    ),
+    "ecs_and_containers": (
+        "[bold red]BOSS CHALLENGE — THE CONTAINER ESCAPE[/bold red]\n\n"
+        "[bold yellow]An ECS Fargate task has a Task Role with AdministratorAccess attached. "
+        "The container image was pulled from a public ECR repository. "
+        "List every way a compromised container could use those permissions to move laterally "
+        "through the AWS account — and explain what should have been done differently.[/bold yellow]"
     ),
 }

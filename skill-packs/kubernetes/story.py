@@ -61,6 +61,26 @@ ZONE_INTROS = {
         "[bold yellow]The version timestamps might match the fraud window. "
         "Learn to read them.[/bold yellow]"
     ),
+    "persistent_volumes": (
+        "[bold cyan]ZONE: THE STORAGE LAYER[/bold cyan]\n\n"
+        "The fraud engine isn't stateless. It has to persist its ledger somewhere inside the cluster. "
+        "[bold yellow]Find the PersistentVolumeClaims. Find what's bound to them. "
+        "The evidence is on a volume — and volumes outlive pods.[/bold yellow]"
+    ),
+    "resource_management": (
+        "[bold cyan]ZONE: RESOURCE ALLOCATION[/bold cyan]\n\n"
+        "The fraud-processing namespace has no ResourceQuotas, no LimitRanges. "
+        "It's been consuming 40% of cluster CPU for two years without anyone noticing. "
+        "[bold yellow]Understand how resource requests and limits work. "
+        "Understand how the HPA kept it scaled up — always.[/bold yellow]"
+    ),
+    "network_policies": (
+        "[bold cyan]ZONE: THE FIREWALL GAPS[/bold cyan]\n\n"
+        "There are no NetworkPolicies in the NEXUS cluster. None. "
+        "Every pod can reach every other pod, every database, every API endpoint. "
+        "[bold yellow]Learn how NetworkPolicies work — because understanding the absence "
+        "of them explains how the fraud data moved so freely.[/bold yellow]"
+    ),
     "cluster_troubleshooting": (
         "[bold cyan]ZONE: FORENSIC MODE[/bold cyan]\n\n"
         "Some pods are crashing. That's suspicious — or useful. "
@@ -99,6 +119,27 @@ ZONE_COMPLETIONS = {
         "`helm history fraud-engine` — 47 releases. "
         "The first release was 3 days after the CFO joined. "
         "[bold yellow]The timestamps tell the whole story.[/bold yellow]"
+    ),
+    "persistent_volumes": (
+        "[bold green]ZONE COMPLETE — THE STORAGE LAYER[/bold green]\n\n"
+        "Found it: a PVC named `ledger-data` bound to a 500Gi EBS volume. "
+        "The PVC has `reclaimPolicy: Retain` — whoever set this up knew the data needed to survive. "
+        "[bold yellow]The volume contains eleven years of raw transaction logs. "
+        "Uncompressed. Unencrypted. Waiting.[/bold yellow]"
+    ),
+    "resource_management": (
+        "[bold green]ZONE COMPLETE — RESOURCE ALLOCATION[/bold green]\n\n"
+        "The HPA target: 80% CPU. The fraud pods never dropped below 78%. "
+        "Someone tuned this to keep the scaling active at all times — "
+        "always 12 replicas, always processing. "
+        "[bold yellow]The resource configuration is evidence of intent.[/bold yellow]"
+    ),
+    "network_policies": (
+        "[bold green]ZONE COMPLETE — THE FIREWALL GAPS[/bold green]\n\n"
+        "Zero NetworkPolicies. The `finance` namespace: fully reachable from `monitoring`, "
+        "`logging`, `ingress`, and every other namespace. "
+        "The fraud pod had unrestricted egress to the Lambda function endpoints. "
+        "[bold yellow]The absence of controls was the control.[/bold yellow]"
     ),
     "cluster_troubleshooting": (
         "[bold green]ZONE COMPLETE — FORENSIC MODE[/bold green]\n\n"
@@ -139,6 +180,28 @@ BOSS_INTROS = {
         "[bold yellow]The running cluster state doesn't match the Helm release. "
         "Resources were modified outside Helm. "
         "Which command reveals the drift? What happened to the release history?[/bold yellow]"
+    ),
+    "persistent_volumes": (
+        "[bold red]BOSS CHALLENGE — THE ORPHANED VOLUME[/bold red]\n\n"
+        "[bold yellow]A PVC was deleted but the PV has `reclaimPolicy: Retain`. "
+        "The PV is now in Released state — the data still exists. "
+        "Walk through every step needed to re-bind that PV to a new PVC "
+        "and mount it in a new Pod to recover the data.[/bold yellow]"
+    ),
+    "resource_management": (
+        "[bold red]BOSS CHALLENGE — THE RUNAWAY WORKLOAD[/bold red]\n\n"
+        "[bold yellow]A namespace has no ResourceQuota. A single Deployment scaled to 200 replicas "
+        "and consumed all cluster memory. Other workloads are being evicted. "
+        "Walk through every step — in order — to stabilize the cluster "
+        "without losing in-flight data.[/bold yellow]"
+    ),
+    "network_policies": (
+        "[bold red]BOSS CHALLENGE — THE POLICY AUDIT[/bold red]\n\n"
+        "[bold yellow]The `finance` namespace needs to: accept traffic only from `api-gateway`, "
+        "connect out only to `postgres` and a specific external IP, "
+        "and block all other ingress and egress. "
+        "Write the complete NetworkPolicy spec — including the default deny rules — "
+        "that achieves this.[/bold yellow]"
     ),
     "cluster_troubleshooting": (
         "[bold red]BOSS CHALLENGE — THE FORENSIC FINAL[/bold red]\n\n"

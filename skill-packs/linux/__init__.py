@@ -32,6 +32,8 @@ SKILL_PACK = SkillPack(
         "network_diagnostics": "wire_reader",
         "log_analysis":        "log_analyst",
         "shell_configuration": "shell_hardener",
+        "package_management":  "arsenal_keeper",
+        "systemd_services":    "daemon_slayer",
     },
     achievements={
         "user_auditor":        ("User Auditor", "Mapped every user, group, and privilege on the system."),
@@ -41,6 +43,8 @@ SKILL_PACK = SkillPack(
         "wire_reader":         ("Wire Reader", "Diagnosed the network stack from interfaces to open ports."),
         "log_analyst":         ("Log Analyst", "Read and searched system logs to reconstruct an incident."),
         "shell_hardener":      ("Shell Hardener", "Audited shell configuration and removed persistence backdoors."),
+        "arsenal_keeper":      ("Arsenal Keeper", "Mastered apt, dpkg, package holds, purges, and orphan cleanup."),
+        "daemon_slayer":       ("Daemon Slayer", "Controlled, masked, and eradicated persistent systemd services."),
         "no_hints":            ("Dark Mode", "Completed a zone without any hints."),
         "speed_reader":        ("Signal Flash", "Answered a challenge in under 10 seconds."),
     },

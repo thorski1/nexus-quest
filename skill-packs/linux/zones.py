@@ -1260,6 +1260,333 @@ ZONES = {
             },
         ],
     },
+    "package_management": {
+        "id": "package_management",
+        "name": "The Arsenal Depot",
+        "subtitle": "Package Management",
+        "color": "yellow",
+        "icon": "📦",
+        "commands": ["apt", "apt-get", "dpkg", "apt-mark"],
+        "challenges": [
+            {
+                "id": "pkg_1",
+                "type": "quiz",
+                "title": "The Package Manager",
+                "flavor": "The NEXUS team uses rogue packages as infection vectors. To counter them, you need to understand how package managers work — what gets installed, where, and by whom.",
+                "lesson": (
+                    "apt (Advanced Package Tool) — Debian/Ubuntu package manager.\n\n"
+                    "Core commands:\n"
+                    "  apt update              → refresh package index from repositories\n"
+                    "  apt upgrade             → install available upgrades\n"
+                    "  apt install <pkg>       → install a package\n"
+                    "  apt remove <pkg>        → remove a package (keep config)\n"
+                    "  apt purge <pkg>         → remove package AND config files\n"
+                    "  apt autoremove          → remove unneeded dependencies\n"
+                    "  apt search <keyword>    → search available packages\n\n"
+                    "Example: apt install nmap    → installs the nmap network scanner"
+                ),
+                "question": "What command installs a package using apt?",
+                "answers": ["apt install", "apt-get install"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Two words: the tool name, then the action.",
+                    "apt install",
+                    "The answer is: apt install",
+                ],
+            },
+            {
+                "id": "pkg_2",
+                "type": "fill_blank",
+                "title": "Refresh the Index",
+                "flavor": "Before installing anything, the operative needs to sync the package index. Running installs on a stale index risks missing security patches — or installing a compromised version.",
+                "lesson": (
+                    "apt update — fetches the latest package lists from configured repositories.\n\n"
+                    "This does NOT install anything — it only refreshes the local index.\n"
+                    "Always run this before apt upgrade or apt install.\n\n"
+                    "Repository sources: /etc/apt/sources.list\n\n"
+                    "Example:\n"
+                    "  sudo apt update && sudo apt upgrade    → full system update"
+                ),
+                "question": "Complete the command to refresh the package index:\n\nsudo apt ___",
+                "answers": ["update"],
+                "xp": 60,
+                "difficulty": "easy",
+                "hints": [
+                    "Fetches fresh package lists. Not 'upgrade' — that installs.",
+                    "update",
+                    "The answer is: update",
+                ],
+            },
+            {
+                "id": "pkg_3",
+                "type": "quiz",
+                "title": "Purge vs Remove",
+                "flavor": "The NEXUS software left behind config files even after uninstall. The malware reads from those files on restart. You need a harder removal — one that gets the config too.",
+                "lesson": (
+                    "apt remove vs apt purge:\n\n"
+                    "  apt remove <pkg>    → removes the binary but KEEPS config files\n"
+                    "  apt purge <pkg>     → removes the package AND all config files\n\n"
+                    "When to use purge:\n"
+                    "  - Removing sensitive config (passwords, API keys)\n"
+                    "  - Completely resetting a service to a clean slate\n"
+                    "  - Forensic cleanup where no artifacts should remain\n\n"
+                    "Check what's installed: dpkg -L <pkg>    → list all files owned by package"
+                ),
+                "question": "Which command removes a package AND its configuration files?",
+                "answers": ["apt purge", "apt-get purge"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "remove keeps config. The stronger command does not.",
+                    "apt purge",
+                    "The answer is: apt purge",
+                ],
+            },
+            {
+                "id": "pkg_4",
+                "type": "fill_blank",
+                "title": "Audit Installed Packages",
+                "flavor": "You need to audit what's on the compromised node. Something with 'nexus' in the name. dpkg can list all installed packages — grep can find the one you're hunting.",
+                "lesson": (
+                    "dpkg — low-level Debian package manager. apt is built on top of dpkg.\n\n"
+                    "Useful dpkg commands:\n"
+                    "  dpkg -l                  → list all installed packages\n"
+                    "  dpkg -l | grep <name>    → filter for packages matching name\n"
+                    "  dpkg -L <pkg>            → list all files a package installed\n"
+                    "  dpkg -S <file>           → which package owns this file?\n\n"
+                    "Example:\n"
+                    "  dpkg -l | grep python    → find all installed python packages"
+                ),
+                "question": "Complete the command to list all installed packages and search for 'nexus':\n\ndpkg ___ | grep nexus",
+                "answers": ["-l"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "The flag that lists all installed packages.",
+                    "-l",
+                    "The answer is: -l",
+                ],
+            },
+            {
+                "id": "pkg_5",
+                "type": "quiz",
+                "title": "Holding a Version",
+                "flavor": "A critical dependency keeps getting auto-upgraded to a broken version by routine apt upgrade runs. The operative needs to freeze it at the current working version.",
+                "lesson": (
+                    "apt-mark hold — prevents a package from being upgraded automatically.\n\n"
+                    "Commands:\n"
+                    "  apt-mark hold <pkg>      → freeze package at current version\n"
+                    "  apt-mark unhold <pkg>    → release the hold, allow upgrades\n"
+                    "  apt-mark showhold        → list all held packages\n\n"
+                    "When to use:\n"
+                    "  - Pin a working kernel version after a bad update\n"
+                    "  - Freeze a database driver for compatibility\n"
+                    "  - Prevent auto-upgrade of fragile config\n\n"
+                    "Verify: dpkg -l <pkg>    → status 'hi' = held installed"
+                ),
+                "question": "What command prevents a specific package from being upgraded by apt upgrade?",
+                "answers": ["apt-mark hold"],
+                "xp": 80,
+                "difficulty": "easy",
+                "hints": [
+                    "Two words: apt-mark and the action that freezes.",
+                    "apt-mark hold",
+                    "The answer is: apt-mark hold",
+                ],
+            },
+            {
+                "id": "pkg_boss",
+                "type": "fill_blank",
+                "title": "BOSS: The Orphan Hunt",
+                "flavor": "The NEXUS payload hid inside an orphaned package — a dependency no longer needed after the main package was removed. One command hunts and removes all these automatically.",
+                "lesson": (
+                    "apt autoremove — removes packages installed as dependencies "
+                    "that are no longer needed by any installed package.\n\n"
+                    "Always run after removing a package to clean up orphaned deps.\n"
+                    "Keeps attack surface small.\n\n"
+                    "Dry run: apt autoremove --dry-run    → preview removals\n\n"
+                    "Full cleanup:\n"
+                    "  sudo apt remove <pkg> && sudo apt autoremove && sudo apt autoclean"
+                ),
+                "question": "Complete the command to remove all orphaned dependency packages:\n\nsudo apt ___",
+                "answers": ["autoremove"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "AUTO-removes packages no longer needed.",
+                    "autoremove",
+                    "The answer is: autoremove",
+                ],
+            },
+        ],
+    },
+    "systemd_services": {
+        "id": "systemd_services",
+        "name": "The Service Grid",
+        "subtitle": "systemd & Service Management",
+        "color": "magenta",
+        "icon": "⚙️",
+        "commands": ["systemctl", "journalctl"],
+        "challenges": [
+            {
+                "id": "svc_1",
+                "type": "quiz",
+                "title": "The Init System",
+                "flavor": "The NEXUS malware registered itself as a systemd service — starts on boot, restarts on crash, hides among legitimate services. To kill it permanently, you must understand systemd.",
+                "lesson": (
+                    "systemd — init system and service manager (PID 1 on modern Linux).\n\n"
+                    "systemctl — CLI to control systemd:\n"
+                    "  systemctl start <svc>     → start a service\n"
+                    "  systemctl stop <svc>      → stop a service\n"
+                    "  systemctl restart <svc>   → restart a service\n"
+                    "  systemctl status <svc>    → show current status\n"
+                    "  systemctl enable <svc>    → start on boot\n"
+                    "  systemctl disable <svc>   → don't start on boot\n"
+                    "  systemctl list-units      → list all running units\n\n"
+                    "Example: systemctl status nginx    → check if nginx is running"
+                ),
+                "question": "What command checks the current status of a systemd service named 'nginx'?",
+                "answers": ["systemctl status nginx"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "systemctl is the tool. status is the subcommand.",
+                    "systemctl status nginx",
+                    "The answer is: systemctl status nginx",
+                ],
+            },
+            {
+                "id": "svc_2",
+                "type": "fill_blank",
+                "title": "Sever the Boot Link",
+                "flavor": "The malicious service keeps coming back after reboot. Stopping it isn't enough — you need to sever the boot-time link that resurrects it every restart.",
+                "lesson": (
+                    "systemctl enable/disable:\n\n"
+                    "  systemctl enable <svc>     → creates symlink to start on boot\n"
+                    "  systemctl disable <svc>    → removes symlink, won't start on boot\n"
+                    "  systemctl is-enabled <svc> → check if enabled\n\n"
+                    "Combine stop + disable to kill now AND prevent on boot:\n"
+                    "  sudo systemctl disable --now <svc>    → stop AND disable in one command"
+                ),
+                "question": "Complete the command to prevent a service from starting on boot:\n\nsudo systemctl ___ nexus-agent",
+                "answers": ["disable"],
+                "xp": 60,
+                "difficulty": "easy",
+                "hints": [
+                    "The opposite of 'enable'. Removes the boot-time symlink.",
+                    "disable",
+                    "The answer is: disable",
+                ],
+            },
+            {
+                "id": "svc_3",
+                "type": "quiz",
+                "title": "Reading the Journal",
+                "flavor": "The service crashed 40 minutes ago. No log files on disk — NEXUS wiped them. But systemd's binary journal survived the cleanup. You need to read it.",
+                "lesson": (
+                    "journalctl — queries the systemd journal.\n\n"
+                    "Common usage:\n"
+                    "  journalctl -r                    → newest logs first\n"
+                    "  journalctl -f                    → follow live (like tail -f)\n"
+                    "  journalctl -u <svc>              → logs for one service only\n"
+                    "  journalctl --since '1 hour ago'  → logs from last hour\n"
+                    "  journalctl -p err                → only error-level messages\n\n"
+                    "Example:\n"
+                    "  journalctl -u nginx --since '10 minutes ago'"
+                ),
+                "question": "Which command shows journal logs for only the service named 'nexus-agent'?",
+                "answers": ["journalctl -u nexus-agent", "journalctl --unit nexus-agent"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "journalctl with a flag that filters by unit/service name.",
+                    "journalctl -u nexus-agent",
+                    "The answer is: journalctl -u nexus-agent",
+                ],
+            },
+            {
+                "id": "svc_4",
+                "type": "fill_blank",
+                "title": "Unit File Location",
+                "flavor": "You need to inspect the nexus-agent service definition — its ExecStart path, the user it runs as, and its restart policy. Find and read its unit file.",
+                "lesson": (
+                    "systemd unit files define service behavior.\n\n"
+                    "Locations (highest to lowest priority):\n"
+                    "  /etc/systemd/system/       → admin-defined (highest priority)\n"
+                    "  /usr/lib/systemd/system/   → package-installed\n\n"
+                    "Key unit file sections:\n"
+                    "  [Unit]     → description, dependencies\n"
+                    "  [Service]  → ExecStart, User, Restart, Environment\n"
+                    "  [Install]  → WantedBy (boot target)\n\n"
+                    "After editing:\n"
+                    "  sudo systemctl daemon-reload    → re-read all unit files"
+                ),
+                "question": "Complete the path to the highest-priority location for custom unit files:\n\n/___/systemd/system/",
+                "answers": ["etc"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "System-wide configuration lives here.",
+                    "etc",
+                    "The answer is: etc",
+                ],
+            },
+            {
+                "id": "svc_5",
+                "type": "quiz",
+                "title": "The Immortal Service",
+                "flavor": "Restart=always in the unit file makes the NEXUS service immortal — respawning within seconds of being killed. To stop it dead, you need a command more permanent than disable.",
+                "lesson": (
+                    "systemctl mask — the nuclear option for services.\n\n"
+                    "  systemctl disable <svc>  → won't start on boot, but CAN be started manually\n"
+                    "  systemctl mask <svc>     → symlinks unit to /dev/null — CANNOT be started at all\n"
+                    "  systemctl unmask <svc>   → restores ability to start\n\n"
+                    "Restart policies in unit files:\n"
+                    "  Restart=no           → never restart (default)\n"
+                    "  Restart=on-failure   → restart on non-zero exit\n"
+                    "  Restart=always       → restart regardless of how it stopped\n\n"
+                    "To counter Restart=always: stop + mask the service."
+                ),
+                "question": "Which systemctl command permanently prevents a service from EVER being started (even manually)?",
+                "answers": ["systemctl mask", "sudo systemctl mask"],
+                "xp": 80,
+                "difficulty": "easy",
+                "hints": [
+                    "More permanent than disable. Symlinks the unit to /dev/null.",
+                    "systemctl mask",
+                    "The answer is: systemctl mask",
+                ],
+            },
+            {
+                "id": "svc_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Daemon Reload",
+                "flavor": "You've edited the nexus-agent.service unit file — changed ExecStart and removed Restart=always. But systemd is still running the old definition. One command refreshes it without rebooting.",
+                "lesson": (
+                    "systemctl daemon-reload — tells systemd to re-read all unit files.\n\n"
+                    "Required after:\n"
+                    "  - Creating a new unit file\n"
+                    "  - Editing an existing unit file\n\n"
+                    "After daemon-reload, restart to apply:\n"
+                    "  sudo systemctl daemon-reload\n"
+                    "  sudo systemctl restart <svc>\n\n"
+                    "Without daemon-reload, systemctl restart still uses the cached old definition."
+                ),
+                "question": "Complete the command to reload systemd's unit file definitions after editing a service file:\n\nsudo systemctl ___",
+                "answers": ["daemon-reload"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Hyphenated. Reloads the daemon's configuration.",
+                    "daemon-reload",
+                    "The answer is: daemon-reload",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1270,4 +1597,6 @@ ZONE_ORDER = [
     "network_diagnostics",
     "log_analysis",
     "shell_configuration",
+    "package_management",
+    "systemd_services",
 ]

@@ -62,6 +62,28 @@ ZONE_INTROS = {
         "Dates. Log entries. Every data extraction task in the field requires "
         "patterns like these. Write them clean. Write them fast.'[/bold white]"
     ),
+    "regex_flags": (
+        "[bold cyan]ZONE 7 — FLAG OPERATIONS[/bold cyan]\n\n"
+        "[bold white]'Same pattern. Different flags. Completely different results. "
+        "IGNORECASE catches what case-sensitive misses. "
+        "MULTILINE changes what ^ and $ mean entirely. "
+        "DOTALL makes . match newlines. VERBOSE lets you comment a regex like code. "
+        "Flags are the configuration layer. Learn them.'[/bold white]"
+    ),
+    "python_regex": (
+        "[bold cyan]ZONE 8 — PYTHON REGEX ENGINE[/bold cyan]\n\n"
+        "[bold white]'Python wraps regex in the re module. "
+        "re.search, re.match, re.findall, re.sub — each does something different. "
+        "re.compile caches the pattern for speed. Named groups give captures semantic meaning. "
+        "This is the engine you will use in real code. Learn it cold.'[/bold white]"
+    ),
+    "sed_and_grep_regex": (
+        "[bold cyan]ZONE 9 — THE STREAM REWRITER[/bold cyan]\n\n"
+        "[bold white]'Regex in the shell is where it gets operational. "
+        "grep -oE extracts. sed -i rewrites in-place. awk splits and processes fields. "
+        "The log pipeline — grep | sort | uniq -c | sort -rn — runs in real incident response. "
+        "This is not theory. This is the field.'[/bold white]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -95,6 +117,21 @@ ZONE_COMPLETIONS = {
         "Every real-world pattern extracted cleanly. IP addresses, emails, "
         "timestamps — the noise has been decoded. Signal acquired."
     ),
+    "regex_flags": (
+        "[bold green]ZONE CLEAR — FLAG OPERATIONS[/bold green]\n\n"
+        "IGNORECASE, MULTILINE, DOTALL, VERBOSE — the flag layer is yours. "
+        "CIPHER: 'The same pattern hits ten times harder when you know which flags to arm.'"
+    ),
+    "python_regex": (
+        "[bold green]ZONE CLEAR — PYTHON REGEX ENGINE[/bold green]\n\n"
+        "re.compile, findall, sub, named groups — the Python re module fully mapped. "
+        "CIPHER: 'Now you can write regex that works in production code, not just in theory.'"
+    ),
+    "sed_and_grep_regex": (
+        "[bold green]ZONE CLEAR — STREAM REWRITER[/bold green]\n\n"
+        "grep -oE, sed -i, awk field extraction, the log pipeline — operational regex mastered. "
+        "CIPHER: 'Pattern Recon complete. You can find anything in any log file on any system.'"
+    ),
 }
 
 BOSS_INTROS = {
@@ -127,5 +164,21 @@ BOSS_INTROS = {
         "[bold red]BOSS CHALLENGE — FINAL SIGNAL EXTRACTION[/bold red]\n\n"
         "[bold white]'Extract all unique IP addresses from the log file using grep. "
         "The pattern must be tight. No false positives. This is field work.'[/bold white]"
+    ),
+    "regex_flags": (
+        "[bold red]BOSS CHALLENGE — FLAG COMBINATION[/bold red]\n\n"
+        "[bold white]'A multi-line log with mixed case and newlines inside entries. "
+        "Which combination of flags does the job? One wrong flag and you miss half the data.'[/bold white]"
+    ),
+    "python_regex": (
+        "[bold red]BOSS CHALLENGE — NAMED GROUP EXTRACTION[/bold red]\n\n"
+        "[bold white]'A structured log line. Named groups for timestamp, level, and message. "
+        "Write the pattern with (?P<name>...) syntax. Then retrieve by name.'[/bold white]"
+    ),
+    "sed_and_grep_regex": (
+        "[bold red]BOSS CHALLENGE — THE LOG PIPELINE[/bold red]\n\n"
+        "[bold white]'Build the full pipeline: extract IPs from access.log, count each, "
+        "sort highest-to-lowest, show top 10. "
+        "This runs in real incident response. Build it.'[/bold white]"
     ),
 }

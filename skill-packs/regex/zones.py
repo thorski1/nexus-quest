@@ -1357,6 +1357,179 @@ ZONES = {
             },
         ],
     },
+    "sed_and_grep_regex": {
+        "id": "sed_and_grep_regex",
+        "name": "The Stream Rewriter",
+        "subtitle": "Regex in sed, grep, and awk",
+        "color": "green",
+        "icon": "🔁",
+        "commands": ["grep", "sed", "awk", "perl"],
+        "challenges": [
+            {
+                "id": "sgr_1",
+                "type": "quiz",
+                "title": "grep -E vs grep -P",
+                "flavor": "The operative needs to search a log file for IP addresses using a full regex. Basic grep won't cut it — you need extended or Perl-compatible patterns. Which flag unlocks which?",
+                "lesson": (
+                    "grep regex modes:\n\n"
+                    "  grep 'pattern'        → basic regex (BRE) — limited\n"
+                    "  grep -E 'pattern'     → extended regex (ERE) — +, ?, |, () without escaping\n"
+                    "  grep -P 'pattern'     → Perl-Compatible Regex (PCRE) — lookaheads, \\d, \\w, etc.\n"
+                    "  grep -F 'pattern'     → fixed string, no regex (fastest)\n\n"
+                    "ERE equivalents: egrep / grep -E\n"
+                    "PCRE: grep -P (not available on all systems, e.g., macOS default grep)\n\n"
+                    "Example:\n"
+                    "  grep -E '(ERROR|WARN)' app.log\n"
+                    "  grep -P '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}' access.log"
+                ),
+                "question": "Which grep flag enables Perl-Compatible Regular Expressions (PCRE) with \\d, \\w, and lookaheads?",
+                "answers": ["grep -P", "-P"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "P for Perl-Compatible.",
+                    "-P",
+                    "The answer is: -P",
+                ],
+            },
+            {
+                "id": "sgr_2",
+                "type": "fill_blank",
+                "title": "sed Substitution",
+                "flavor": "A config file has 'localhost' hardcoded everywhere. The new deployment needs '10.0.0.5'. sed can replace every occurrence in one command — in-place, across the whole file.",
+                "lesson": (
+                    "sed s command — stream editor substitution:\n\n"
+                    "  sed 's/old/new/'          → replace FIRST occurrence per line\n"
+                    "  sed 's/old/new/g'         → replace ALL occurrences per line (global)\n"
+                    "  sed -i 's/old/new/g' file → edit file IN-PLACE\n"
+                    "  sed -i.bak 's/old/new/g'  → in-place with .bak backup\n\n"
+                    "Using regex in sed:\n"
+                    "  sed 's/[0-9]\\+/NUM/g'    → replace all numbers with NUM (BRE)\n"
+                    "  sed -E 's/[0-9]+/NUM/g'   → same with ERE (no escaping needed for +)\n\n"
+                    "Example:\n"
+                    "  sed -i 's/localhost/10.0.0.5/g' config.yml"
+                ),
+                "question": "Complete the sed command to replace ALL occurrences of 'localhost' with '10.0.0.5' in-place:\n\nsed ___ 's/localhost/10.0.0.5/g' config.yml",
+                "answers": ["-i"],
+                "xp": 60,
+                "difficulty": "easy",
+                "hints": [
+                    "The flag that edits the file in-place.",
+                    "-i",
+                    "The answer is: -i",
+                ],
+            },
+            {
+                "id": "sgr_3",
+                "type": "quiz",
+                "title": "sed Delete Lines",
+                "flavor": "The NEXUS log file has hundreds of debug lines that start with 'DEBUG:'. You only want ERROR and WARN lines. sed can delete all matching lines before you pipe the output onward.",
+                "lesson": (
+                    "sed d command — delete matching lines:\n\n"
+                    "  sed '/pattern/d'          → delete lines matching pattern\n"
+                    "  sed '/^DEBUG/d'           → delete lines starting with DEBUG\n"
+                    "  sed '/^$/d'               → delete blank lines\n"
+                    "  sed '5d'                  → delete line 5\n"
+                    "  sed '5,10d'               → delete lines 5 through 10\n\n"
+                    "Combine with -E for extended regex:\n"
+                    "  sed -E '/^(DEBUG|TRACE)/d' app.log    → remove debug and trace lines\n\n"
+                    "Invert with grep -v instead for clarity:\n"
+                    "  grep -v '^DEBUG' app.log    → same result, more readable"
+                ),
+                "question": "Which sed command deletes all lines beginning with 'DEBUG:'?",
+                "answers": ["sed '/^DEBUG:/d'", "/^DEBUG:/d"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "sed delete command: /pattern/d",
+                    "sed '/^DEBUG:/d'",
+                    "The answer is: sed '/^DEBUG:/d'",
+                ],
+            },
+            {
+                "id": "sgr_4",
+                "type": "fill_blank",
+                "title": "awk Field Extraction",
+                "flavor": "The access.log has space-separated fields: IP, timestamp, method, path, status, bytes. You need to extract just the status codes (field 5) from every line to count 500 errors.",
+                "lesson": (
+                    "awk — field processor, ideal for structured text.\n\n"
+                    "  awk '{print $1}'           → print first field (space-delimited)\n"
+                    "  awk '{print $NF}'          → print last field\n"
+                    "  awk -F: '{print $1}'       → use : as delimiter (e.g., /etc/passwd)\n"
+                    "  awk '/pattern/ {print}'    → print lines matching pattern\n"
+                    "  awk '$5 == 500'            → print lines where field 5 equals 500\n\n"
+                    "Count matches:\n"
+                    "  awk '$5 >= 500 {count++} END {print count}' access.log\n\n"
+                    "Example: Extract only HTTP status codes:\n"
+                    "  awk '{print $5}' access.log | sort | uniq -c | sort -rn"
+                ),
+                "question": "Complete the awk command to print only the 5th field from each line of access.log:\n\nawk '{print ___}' access.log",
+                "answers": ["$5"],
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "Fields in awk are $1, $2, $3... which one is 5th?",
+                    "$5",
+                    "The answer is: $5",
+                ],
+            },
+            {
+                "id": "sgr_5",
+                "type": "quiz",
+                "title": "grep -o Extract Matches",
+                "flavor": "You need to extract every IP address from a log file — not the whole line, just the IPs. grep -o prints ONLY the matched portion, not the entire line. Combined with a regex, it extracts exactly what you need.",
+                "lesson": (
+                    "grep -o — print ONLY the matching portion of each line (not the whole line).\n\n"
+                    "  grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' access.log\n"
+                    "  → prints each IP address, one per line\n\n"
+                    "Combine with sort | uniq -c to count occurrences:\n"
+                    "  grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' access.log \\\n"
+                    "    | sort | uniq -c | sort -rn | head -10\n"
+                    "  → top 10 IP addresses by request count\n\n"
+                    "Also useful:\n"
+                    "  grep -oE '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,}\\b' file\n"
+                    "  → extract all email addresses from a file"
+                ),
+                "question": "Which grep flag prints ONLY the text that matched the pattern (not the whole line)?",
+                "answers": ["grep -o", "-o"],
+                "xp": 80,
+                "difficulty": "easy",
+                "hints": [
+                    "Only the matched portion — not the surrounding line.",
+                    "-o",
+                    "The answer is: -o",
+                ],
+            },
+            {
+                "id": "sgr_boss",
+                "type": "fill_blank",
+                "title": "BOSS: The Log Pipeline",
+                "flavor": "You have access.log. You need: extract all IPs, count how many times each appears, sort highest-to-lowest, show top 10. This is a classic ops pipeline. Build it.",
+                "lesson": (
+                    "The full IP extraction + ranking pipeline:\n\n"
+                    "  grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' access.log \\\n"
+                    "    | sort | uniq -c | sort -rn | head -10\n\n"
+                    "Step by step:\n"
+                    "  grep -oE '...'   → extract all IPs, one per line\n"
+                    "  | sort           → sort alphabetically (required before uniq)\n"
+                    "  | uniq -c        → count consecutive duplicates\n"
+                    "  | sort -rn       → sort by count, highest first (-r reverse, -n numeric)\n"
+                    "  | head -10       → show top 10\n\n"
+                    "This exact pattern appears in real incident response every day."
+                ),
+                "question": "In the pipeline: grep -oE 'IP_PATTERN' | sort | uniq -c | sort ___ | head -10\nWhat flags sort the counts highest-to-lowest?",
+                "answers": ["-rn", "-nr"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Two flags: one for reverse order, one for numeric comparison.",
+                    "-rn or -nr",
+                    "The answer is: -rn",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1368,4 +1541,5 @@ ZONE_ORDER = [
     "real_world_patterns",
     "regex_flags",
     "python_regex",
+    "sed_and_grep_regex",
 ]

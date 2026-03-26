@@ -74,6 +74,21 @@ ZONE_INTROS = {
         "Where misconfigurations accumulate for years. "
         "Audit them. Understand them. Control them.'[/bold white]"
     ),
+    "package_management": (
+        "[bold cyan]ZONE 8 — PACKAGE MANAGEMENT[/bold cyan]\n\n"
+        "[bold white]'NEXUS got in through a poisoned package. An unofficial repo. "
+        "A dependency no one audited. "
+        "If you don't control what's installed on your system, "
+        "someone else will use that gap against you. "
+        "apt. dpkg. holds. purges. Know your arsenal.'[/bold white]"
+    ),
+    "systemd_services": (
+        "[bold cyan]ZONE 9 — SYSTEMD SERVICES[/bold cyan]\n\n"
+        "[bold white]'The NEXUS agent is registered as a systemd service — "
+        "Restart=always, enabled on boot, hiding as a name that looks legitimate. "
+        "Stopping it isn't enough. You need to mask it. Kill it at the source. "
+        "Learn systemd. Then own it.'[/bold white]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -112,6 +127,16 @@ ZONE_COMPLETIONS = {
         "Profile files audited. No backdoors found. PATH sanitized. "
         "The shell environment is under your control."
     ),
+    "package_management": (
+        "[bold green]ZONE CLEAR — PACKAGE MANAGEMENT[/bold green]\n\n"
+        "apt, dpkg, holds, purges, orphan cleanup — the arsenal is under control. "
+        "CIPHER: 'You just closed the vector NEXUS used to get in. Good.'"
+    ),
+    "systemd_services": (
+        "[bold green]ZONE CLEAR — SYSTEMD SERVICES[/bold green]\n\n"
+        "The NEXUS agent service: stopped, disabled, masked, its unit file rewritten. "
+        "CIPHER: 'It's not coming back. The Service Grid is ours.'"
+    ),
 }
 
 BOSS_INTROS = {
@@ -149,5 +174,17 @@ BOSS_INTROS = {
         "[bold red]BOSS CHALLENGE — PROFILE AUDIT[/bold red]\n\n"
         "[bold white]'Backdoors in shell config are common persistence mechanisms. "
         "Search all /etc profile files for outbound connection attempts.'[/bold white]"
+    ),
+    "package_management": (
+        "[bold red]BOSS CHALLENGE — THE ORPHAN HUNT[/bold red]\n\n"
+        "[bold white]'The NEXUS payload is hiding in an orphaned dependency package. "
+        "Walk me through the full removal chain: remove, autoremove, autoclean. "
+        "Leave nothing behind.'[/bold white]"
+    ),
+    "systemd_services": (
+        "[bold red]BOSS CHALLENGE — DAEMON RELOAD[/bold red]\n\n"
+        "[bold white]'You edited the unit file. You removed Restart=always. "
+        "But systemd is still running the old definition from cache. "
+        "One command. Reload the daemon. Then we restart clean.'[/bold white]"
     ),
 }

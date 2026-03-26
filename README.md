@@ -55,7 +55,7 @@ Just your terminal, your knowledge, and eight layers of systems between you and 
 | 10 | **Kubernetes** | Navigate the container orchestration cluster — pods, RBAC, Helm |
 | 11 | **AWS** | Breach the cloud layer — IAM, S3, RDS, Lambda, VPC |
 
-**720+ challenges** across 103+ zones. Real commands. Real syntax. Real production skills.
+**760+ challenges** across 109+ zones. Real commands. Real syntax. Real production skills.
 
 ---
 

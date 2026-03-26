@@ -55,7 +55,7 @@ Just your terminal, your knowledge, and eight layers of systems between you and 
 | 10 | **Kubernetes** | Navigate the container orchestration cluster — pods, RBAC, Helm |
 | 11 | **AWS** | Breach the cloud layer — IAM, S3, RDS, Lambda, VPC |
 
-**600+ challenges** across 90+ zones. Real commands. Real syntax. Real production skills.
+**700+ challenges** across 99+ zones. Real commands. Real syntax. Real production skills.
 
 ---
 
@@ -123,6 +123,9 @@ Type `y` and the game installs the update and restarts itself.
 | `postgres-quest` | Postgres chapter — standalone |
 | `python-quest` | Python chapter — standalone |
 | `regex-quest` | Pattern Recon — standalone |
+| `linux-quest` | System Infiltration — standalone |
+| `kubernetes-quest` | Container Orchestration — standalone |
+| `aws-quest` | Cloud Layer — standalone |
 
 ---
 
@@ -145,6 +148,7 @@ Each challenge teaches one concept through a short **lesson**, then asks you to 
 | Feature | Description |
 |---------|-------------|
 | **Daily Challenge** | One challenge per day with 2x XP bonus and streak tracking |
+| **Timed Drill** | 5/10/15-minute blitz — wrong answers first, then spaced repetition |
 | **Difficulty Modes** | Easy (0.75x XP, free hints) / Normal / Hard (1.5x XP) |
 | **Speed Records** | Per-challenge personal bests — new records flash on screen |
 | **Bookmarks** | Flag any challenge for later review with `[b]` |

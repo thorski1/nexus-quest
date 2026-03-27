@@ -24,68 +24,116 @@ from engine.main import run, run_campaign          # noqa: E402  (after env setu
 from engine.updater import check_and_prompt        # noqa: E402
 
 _PACKAGE = "nexus-quest"
+_PACKS_DIR = str(_HERE / "skill-packs")
+
+_WEB = "--web" in sys.argv
+
+
+def _web(pack_name: str, port: int = 8080):
+    """Launch the web interface for *pack_name*."""
+    from engine.web.server import serve
+    serve(pack_name, port=port, packs_dir=_PACKS_DIR)
 
 
 def main_nexus():
+    if _WEB:
+        _web("bash")
+        return
     check_and_prompt(_PACKAGE)
     run_campaign("nexus")
 
 
 def main_bash():
+    if _WEB:
+        _web("bash")
+        return
     check_and_prompt(_PACKAGE)
     run("bash")
 
 
 def main_git():
+    if _WEB:
+        _web("git")
+        return
     check_and_prompt(_PACKAGE)
     run("git")
 
 
 def main_docker():
+    if _WEB:
+        _web("docker")
+        return
     check_and_prompt(_PACKAGE)
     run("docker")
 
 
 def main_postgres():
+    if _WEB:
+        _web("postgres")
+        return
     check_and_prompt(_PACKAGE)
     run("postgres")
 
 
 def main_vim():
+    if _WEB:
+        _web("vim")
+        return
     check_and_prompt(_PACKAGE)
     run("vim")
 
 
 def main_ssh():
+    if _WEB:
+        _web("ssh")
+        return
     check_and_prompt(_PACKAGE)
     run("ssh")
 
 
 def main_python():
+    if _WEB:
+        _web("python")
+        return
     check_and_prompt(_PACKAGE)
     run("python")
 
 
 def main_regex():
+    if _WEB:
+        _web("regex")
+        return
     check_and_prompt(_PACKAGE)
     run("regex")
 
 
 def main_linux():
+    if _WEB:
+        _web("linux")
+        return
     check_and_prompt(_PACKAGE)
     run("linux")
 
 
 def main_kubernetes():
+    if _WEB:
+        _web("kubernetes")
+        return
     check_and_prompt(_PACKAGE)
     run("kubernetes")
 
 
 def main_aws():
+    if _WEB:
+        _web("aws")
+        return
     check_and_prompt(_PACKAGE)
     run("aws")
 
 
 def main_terraform():
+    if _WEB:
+        _web("terraform")
+        return
     check_and_prompt(_PACKAGE)
     run("terraform")

@@ -30,6 +30,11 @@ _PACKS_DIR = str(_HERE / "skill-packs")   # nexus_quest/skill-packs/
 
 _WEB = "--web" in sys.argv
 
+NEXUS_PACKS = [
+    "bash", "ssh", "vim", "git", "docker", "postgres",
+    "python", "regex", "linux", "kubernetes", "aws", "terraform",
+]
+
 
 def _web(pack_name: str, port: int = 8080):
     """Launch the web interface for *pack_name*."""
@@ -39,7 +44,8 @@ def _web(pack_name: str, port: int = 8080):
 
 def main_nexus():
     if _WEB:
-        _web("bash")
+        from engine.web.hub import serve_hub
+        serve_hub(NEXUS_PACKS, port=8080, packs_dir=_PACKS_DIR)
         return
     check_and_prompt(_PACKAGE)
     run_campaign("nexus")

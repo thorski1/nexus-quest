@@ -1698,6 +1698,593 @@ ZONES = {
             },
         ],
     },
+    "registers": {
+        "id": "registers",
+        "name": "The Registers Vault II",
+        "subtitle": "Named Registers, Clipboard & Black Hole",
+        "color": "yellow",
+        "icon": "🗄️",
+        "commands": ["\"a-z", "\"0", "\"+", "\"*", "\"_", ":reg"],
+        "challenges": [
+            {
+                "id": "reg_1",
+                "type": "quiz",
+                "title": "Yank to Named Register",
+                "flavor": "You need to yank the current line into register 'a' so it won't be overwritten by a future delete. What command does this?",
+                "lesson": (
+                    "\"ayy — yank the current line into register 'a'.\n\n"
+                    "Named register syntax: \"<register><operator>\n"
+                    "  \"ayy   → yank current line into register a\n"
+                    "  \"add   → cut (delete) current line into register a\n"
+                    "  \"ap    → paste from register a\n\n"
+                    "Why named registers matter:\n"
+                    "  The unnamed register (\"\") gets overwritten by every yank AND delete.\n"
+                    "  Named registers (\"a through \"z) only change when you explicitly write to them.\n\n"
+                    "Uppercase register appends:\n"
+                    "  \"Ayy → APPEND the current line to register a (not overwrite)\n"
+                    "  Useful for collecting multiple lines into one register."
+                ),
+                "answer": "\"ayy",
+                "hints": ["Register prefix, then register name, then yank-line.", "\"a then yy.", "The answer is: \"ayy"],
+            },
+            {
+                "id": "reg_2",
+                "type": "quiz",
+                "title": "The Yank Register",
+                "flavor": "You yanked a line, then deleted another line — and now p pastes the deleted line, not what you yanked. Which register always holds the last explicit yank (not delete)?",
+                "lesson": (
+                    "\"0 — the yank register: always holds the last yanked text.\n\n"
+                    "  \"0p  → paste from the yank register (safe even after subsequent deletes)\n\n"
+                    "How the numbered registers work:\n"
+                    "  \"0   → last yank\n"
+                    "  \"1   → last delete or change (most recent)\n"
+                    "  \"2   → the delete before that\n"
+                    "  ...through \"9 (a rolling history of the last 9 deletes)\n\n"
+                    "The unnamed register (\"\") always mirrors \"1 after a delete,\n"
+                    "which is why 'p' pastes the deleted text, not the yanked text.\n"
+                    "\"0p is the fix: it bypasses the delete history."
+                ),
+                "answer": "\"0",
+                "hints": ["The register named with the digit zero.", "\"0 — it's not a letter, it's a zero.", "The answer is: \"0"],
+            },
+            {
+                "id": "reg_3",
+                "type": "quiz",
+                "title": "System Clipboard Register",
+                "flavor": "You need to paste text from the system clipboard (copied outside vim) into your buffer. Which register holds the system clipboard?",
+                "lesson": (
+                    "\"+  — the system clipboard register.\n\n"
+                    "  \"+p   → paste from system clipboard into vim\n"
+                    "  \"+yy  → yank current line to system clipboard\n"
+                    "  \"+y{motion}  → yank motion to system clipboard\n\n"
+                    "Two clipboard registers:\n"
+                    "  \"+  → the system clipboard (Ctrl+C / Ctrl+V outside vim)\n"
+                    "  \"*  → the X11 primary selection (middle-click paste on Linux)\n"
+                    "  On macOS, both \"+  and \"* access the same clipboard.\n\n"
+                    "Requirements:\n"
+                    "  Vim must be compiled with +clipboard support.\n"
+                    "  Check: :version and look for +clipboard or -clipboard.\n"
+                    "  On macOS: use macvim or brew-installed vim with clipboard support."
+                ),
+                "answer": "\"+",
+                "hints": ["Think: the register for the + (plus/clipboard) buffer.", "Quote then plus sign.", "The answer is: \"+"],
+            },
+            {
+                "id": "reg_4",
+                "type": "quiz",
+                "title": "The Black Hole Register",
+                "flavor": "You want to delete text without it going into any register — no yank history, no overwriting the unnamed register. What register is the black hole?",
+                "lesson": (
+                    "\"_  — the black hole register: text sent here is gone forever.\n\n"
+                    "  \"_dd   → delete the line and send it nowhere\n"
+                    "  \"_d{motion}  → delete motion, no register pollution\n"
+                    "  \"_c{motion}  → change, without overwriting registers\n\n"
+                    "When to use it:\n"
+                    "  You have text in register 'a' that you need to paste multiple times.\n"
+                    "  But you need to delete something in between.\n"
+                    "  Normal 'dd' would overwrite the unnamed register.\n"
+                    "  \"_dd deletes without disturbing any register.\n\n"
+                    "  Also useful: preserving \"0 (yank register) when deleting filler text."
+                ),
+                "answer": "\"_",
+                "hints": ["It's named with an underscore character.", "Quote then underscore.", "The answer is: \"_"],
+            },
+            {
+                "id": "reg_5",
+                "type": "fill_blank",
+                "title": "Inspect All Registers",
+                "flavor": "You want to see what's stored in every register before pasting. What ex command lists all register contents?",
+                "lesson": (
+                    ":reg — display the contents of all registers.\n\n"
+                    "  :reg         → show all non-empty registers\n"
+                    "  :reg a       → show only register a\n"
+                    "  :reg a b c   → show registers a, b, and c\n\n"
+                    "What you'll see:\n"
+                    "  \"\"  — unnamed register (last yank or delete)\n"
+                    "  \"0  — last explicit yank\n"
+                    "  \"1-\"9  — delete history\n"
+                    "  \"a-\"z  — named registers\n"
+                    "  \"+  — system clipboard\n"
+                    "  \"-  — small delete register (less than one line)\n"
+                    "  \"=  — expression register\n"
+                    "  \"/ — last search pattern\n"
+                    "  \": — last command-line command\n\n"
+                    ":reg is your register audit tool — Ghost always checks it\n"
+                    "before pasting across files."
+                ),
+                "answer": ":reg",
+                "hints": ["A colon command — short for 'registers'.", "Four characters including the colon.", "The answer is: :reg"],
+            },
+            {
+                "id": "reg_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Pre-load a Register Programmatically",
+                "flavor": "You need to set register 'b' to the string 'FLAGGED' without yanking anything. What ex command accomplishes this?",
+                "lesson": (
+                    ":let @b = 'FLAGGED' — set a register programmatically.\n\n"
+                    "  :let @a = 'text'   → set register a to 'text'\n"
+                    "  :let @+ = 'text'   → set the system clipboard to 'text'\n"
+                    "  :let @/ = 'pattern'  → set the last-search pattern\n\n"
+                    "This is powerful when building macros:\n"
+                    "  Pre-load a register with a constant string.\n"
+                    "  The macro references \"ap to paste it at each position.\n"
+                    "  Result: 417 lines get the same annotation without re-yanking.\n\n"
+                    "Register names in :let use the @ prefix:\n"
+                    "  @a = register a\n"
+                    "  @+ = system clipboard\n"
+                    "  @_ = black hole (writing here has no effect)"
+                ),
+                "answer": ":let @b = 'FLAGGED'",
+                "hints": [
+                    "Use :let with the @register syntax.",
+                    ":let @b = then the string in quotes.",
+                    "The answer is: :let @b = 'FLAGGED'",
+                ],
+            },
+        ],
+    },
+    "macros": {
+        "id": "macros",
+        "name": "The Macro Forge II",
+        "subtitle": "Recording, Replaying & Editing Macros",
+        "color": "magenta",
+        "icon": "⚙️",
+        "commands": ["q{reg}", "@{reg}", "@@", "N@{reg}", ":normal @a", ":let @a="],
+        "challenges": [
+            {
+                "id": "mac_1",
+                "type": "fill_blank",
+                "title": "Start Recording a Macro",
+                "flavor": "You need to record a macro into register 'q'. What key sequence starts recording?",
+                "lesson": (
+                    "qq — start recording a macro into register 'q'.\n\n"
+                    "Macro recording:\n"
+                    "  q{register}  → start recording into that register (a–z, 0–9)\n"
+                    "  q            → stop recording (same key)\n\n"
+                    "Visual indicator:\n"
+                    "  While recording, vim shows 'recording @q' in the status line.\n\n"
+                    "What gets recorded:\n"
+                    "  Every normal-mode command, every keystroke in insert mode,\n"
+                    "  every ex command — everything until you press q to stop.\n\n"
+                    "Best practice:\n"
+                    "  Start the macro at a known position on the line (e.g. 0 to go to col 1).\n"
+                    "  End with a motion that moves to the next line (e.g. j).\n"
+                    "  This makes the macro repeatable across multiple lines."
+                ),
+                "answer": "qq",
+                "hints": ["The record key, then the register name.", "q + q (using register q).", "The answer is: qq"],
+            },
+            {
+                "id": "mac_2",
+                "type": "quiz",
+                "title": "Replay a Macro",
+                "flavor": "You recorded a macro in register 'a'. What command replays it once?",
+                "lesson": (
+                    "@a — replay the macro stored in register 'a'.\n\n"
+                    "  @{register}  → replay macro in that register\n"
+                    "  @@           → replay the last-used macro (whatever register it was in)\n"
+                    "  5@a          → replay macro in register 'a' five times\n"
+                    "  100@a        → replay 100 times\n\n"
+                    "Stopping early:\n"
+                    "  If the macro hits an error (e.g. a motion that fails), it stops.\n"
+                    "  This is useful: run 999@a on a file with 50 lines — it will stop\n"
+                    "  when it runs out of lines, without you counting.\n\n"
+                    "The count prefix:\n"
+                    "  Type the count BEFORE @a: 416@a runs the macro 416 more times\n"
+                    "  after you've already done it once manually for 417 total."
+                ),
+                "answer": "@a",
+                "hints": ["@ symbol then the register letter.", "@a to replay register a.", "The answer is: @a"],
+            },
+            {
+                "id": "mac_3",
+                "type": "quiz",
+                "title": "Replay the Last Macro",
+                "flavor": "You just ran @a. You want to repeat the last-used macro without specifying the register. What command does this?",
+                "lesson": (
+                    "@@ — replay the last-used macro.\n\n"
+                    "  @@   → replay whatever macro you ran most recently\n\n"
+                    "Why @@ is useful:\n"
+                    "  After running @a, you can press @@ repeatedly instead of @a.\n"
+                    "  Saves one keystroke — trivial in isolation, significant across hundreds of operations.\n\n"
+                    "  Also useful when dot (.) won't do:\n"
+                    "  . repeats the last *change* (single edit operation).\n"
+                    "  @@ replays the entire macro sequence — multiple operations.\n\n"
+                    "Combining with count:\n"
+                    "  After the first @a, pressing 415@@ runs 415 more iterations."
+                ),
+                "answer": "@@",
+                "hints": ["Double @ — the 'last macro' shorthand.", "Two @ characters.", "The answer is: @@"],
+            },
+            {
+                "id": "mac_4",
+                "type": "fill_blank",
+                "title": "Apply Macro to a Range",
+                "flavor": "You want to apply macro 'a' to every line in the file. What ex command does this?",
+                "lesson": (
+                    ":%normal @a — run macro 'a' on every line in the file.\n\n"
+                    "  :%normal @a       → apply macro to all lines\n"
+                    "  :10,20normal @a   → apply macro to lines 10–20\n"
+                    "  :'<,'>normal @a   → apply macro to visual selection\n\n"
+                    ":normal runs normal-mode commands from the command line.\n"
+                    "It respects the range, executing on each line in turn.\n\n"
+                    "Why use this instead of 9999@a?\n"
+                    "  More explicit about the target range.\n"
+                    "  :10,20normal @a applies ONLY to those lines, not beyond.\n"
+                    "  Works on visual selections, which count-based replay can't do.\n\n"
+                    "Other uses of :normal:\n"
+                    "  :%normal I# → prepend # to every line (comment out a file)\n"
+                    "  :%normal A; → append ; to every line"
+                ),
+                "answer": ":%normal @a",
+                "hints": ["Range + normal command + macro replay.", ":% for all lines, normal to run keystrokes, @a to invoke the macro.", "The answer is: :%normal @a"],
+            },
+            {
+                "id": "mac_5",
+                "type": "quiz",
+                "title": "Edit a Macro",
+                "flavor": "Your macro in register 'a' has a typo. You want to edit it as text. Which command lets you paste the macro contents into the buffer to edit it?",
+                "lesson": (
+                    "\"ap — paste the macro from register 'a' into the buffer for editing.\n\n"
+                    "The macro-editing workflow:\n"
+                    "  1. Open a blank line (o in normal mode)\n"
+                    "  2. \"ap → paste the macro text\n"
+                    "  3. Edit the text directly (fix the typo)\n"
+                    "  4. Yank the corrected line back: \"ayy\n"
+                    "  5. Delete the scratch line: dd\n\n"
+                    "Why this works:\n"
+                    "  Macros ARE register contents — they're just strings of keystrokes.\n"
+                    "  \"ap exposes the raw keystroke string as editable text.\n"
+                    "  \"ayy saves the edited string back as the macro.\n\n"
+                    "Alternative: :let @a = 'new_macro_text'\n"
+                    "  Useful for short macros you can construct mentally."
+                ),
+                "answer": "\"ap",
+                "hints": ["Paste from register a.", "Quote, register letter, then paste.", "The answer is: \"ap"],
+            },
+            {
+                "id": "mac_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Count-Based Macro Replay",
+                "flavor": "You've verified your macro in register 'a' works correctly on one line. There are 416 remaining lines to process. What command runs the macro 416 more times?",
+                "lesson": (
+                    "416@a — run macro 'a' 416 times.\n\n"
+                    "Count-prefix syntax:\n"
+                    "  N@{reg}  → replay macro N times\n"
+                    "  416@a    → replay register a 416 times\n\n"
+                    "How to think about count vs :normal range:\n"
+                    "  416@a  → fast, simple, stops on error (can be a feature)\n"
+                    "  :2,417normal @a  → explicit range, more controlled\n\n"
+                    "The 'stop on error' behavior:\n"
+                    "  If the macro hits a motion that fails (e.g. no more lines), it aborts.\n"
+                    "  Running 9999@a on a 417-line file: the macro stops at line 417.\n"
+                    "  Ghost's technique: use a count slightly larger than needed.\n"
+                    "  The macro self-terminates when it runs out of targets.\n\n"
+                    "After 416@a: all 417 transactions flagged. Done."
+                ),
+                "answer": "416@a",
+                "hints": ["Count prefix before the @ command.", "416 then @a.", "The answer is: 416@a"],
+            },
+        ],
+    },
+    "marks_and_jumps": {
+        "id": "marks_and_jumps",
+        "name": "The Mark & Jump Grid",
+        "subtitle": "Marks, Jump List & Change List",
+        "color": "cyan",
+        "icon": "📍",
+        "commands": ["m{a-z}", "`a/`A", "Ctrl-o/Ctrl-i", "g;/g,", ":marks", "''"],
+        "challenges": [
+            {
+                "id": "mj_1",
+                "type": "fill_blank",
+                "title": "Set a Local Mark",
+                "flavor": "You're at a key line in the processor config. You want to bookmark this position so you can jump back to it. What command sets mark 'a' at the current cursor position?",
+                "lesson": (
+                    "ma — set mark 'a' at the current position.\n\n"
+                    "Mark syntax:\n"
+                    "  m{a-z}  → set a local mark (lowercase: file-local)\n"
+                    "  m{A-Z}  → set a global mark (uppercase: works across files)\n\n"
+                    "  ma  → mark 'a' at current position in this file\n"
+                    "  mA  → mark 'A' — global, can jump to it from any file\n\n"
+                    "Marks are invisible bookmarks.\n"
+                    "They move with the text when lines are inserted or deleted above them.\n\n"
+                    "Use cases:\n"
+                    "  Mark the start of a section before navigating away.\n"
+                    "  Mark multiple points of interest and jump between them.\n"
+                    "  Use global marks to jump between files instantly."
+                ),
+                "answer": "ma",
+                "hints": ["m to set a mark, then the mark letter.", "m then a.", "The answer is: ma"],
+            },
+            {
+                "id": "mj_2",
+                "type": "fill_blank",
+                "title": "Jump to a Mark",
+                "flavor": "You set mark 'a' earlier. Now you want to jump back to the exact column position of that mark. What command jumps to the exact position (line AND column) of mark 'a'?",
+                "lesson": (
+                    "`a — jump to the exact position (line and column) of mark 'a'.\n\n"
+                    "Two jump-to-mark commands:\n"
+                    "  `a  → jump to the exact line AND column of mark a\n"
+                    "  'a  → jump to the first non-whitespace character on mark a's line\n\n"
+                    "Backtick (`) is precise; single-quote (') is line-approximate.\n\n"
+                    "Special marks:\n"
+                    "  ``  → jump back to the position before the last jump\n"
+                    "  `.  → jump to the position of the last change\n"
+                    "  `^  → jump to position where insert mode was last exited\n"
+                    "  `[  → start of last yanked or changed text\n"
+                    "  `]  → end of last yanked or changed text\n\n"
+                    "`` (double backtick) is the 'go back' key — jump somewhere, then `` to return."
+                ),
+                "answer": "`a",
+                "hints": ["Backtick (not single quote) then the mark letter.", "`a — backtick for exact position.", "The answer is: `a"],
+            },
+            {
+                "id": "mj_3",
+                "type": "quiz",
+                "title": "Jump Back in Jump List",
+                "flavor": "You searched for a pattern and jumped to a match deep in the file. You want to go back to where you were before the search. What key sequence jumps backwards through the jump list?",
+                "lesson": (
+                    "Ctrl+O — jump back (older) in the jump list.\n\n"
+                    "Jump list navigation:\n"
+                    "  Ctrl+O  → go to older position (back in history)\n"
+                    "  Ctrl+I  → go to newer position (forward in history, or Tab)\n\n"
+                    "What creates jump list entries:\n"
+                    "  /, ?, n, N  → search jumps\n"
+                    "  G, gg, NNG  → line jumps\n"
+                    "  %, (, )     → structural jumps\n"
+                    "  :N          → ex line jumps\n"
+                    "  Any mark jump (`a, 'a, etc.)\n\n"
+                    "The jump list is per-window and holds up to 100 positions.\n"
+                    ":jumps shows the full list with position numbers.\n\n"
+                    "Ctrl+O is 'go back' — the muscle memory equivalent of a browser's back button."
+                ),
+                "answer": "Ctrl+O",
+                "hints": ["Ctrl and the letter O — O for Older.", "Ctrl+O to go back.", "The answer is: Ctrl+O"],
+            },
+            {
+                "id": "mj_4",
+                "type": "quiz",
+                "title": "Jump Forward in Jump List",
+                "flavor": "You went back through the jump list with Ctrl+O. Now you want to go forward again (to where you were before going back). What key does this?",
+                "lesson": (
+                    "Ctrl+I — jump forward (newer) in the jump list.\n\n"
+                    "  Ctrl+O  → back (older)\n"
+                    "  Ctrl+I  → forward (newer)\n\n"
+                    "Note: Ctrl+I is the same as the Tab key in terminals.\n"
+                    "If your terminal intercepts Tab, Ctrl+I may not work — use :jumps\n"
+                    "and navigate manually if needed.\n\n"
+                    "The jump list pattern:\n"
+                    "  You navigate forward deep into a file.\n"
+                    "  Ctrl+O multiple times to go back to where you started.\n"
+                    "  Ctrl+I to go forward again if you went too far back.\n\n"
+                    "This is vim's 'undo for navigation' — independent of edit undo."
+                ),
+                "answer": "Ctrl+I",
+                "hints": ["Ctrl and the letter I — pairs with Ctrl+O.", "Ctrl+I to go forward.", "The answer is: Ctrl+I"],
+            },
+            {
+                "id": "mj_5",
+                "type": "quiz",
+                "title": "Jump to Previous Change",
+                "flavor": "You made a change somewhere in the file and navigated away. You want to jump back to the most recent change location. What command does this?",
+                "lesson": (
+                    "g; — jump to the previous position in the change list.\n\n"
+                    "Change list navigation:\n"
+                    "  g;  → jump to the previous (older) change\n"
+                    "  g,  → jump to the next (newer) change\n\n"
+                    "Change list vs jump list:\n"
+                    "  Jump list:   tracks cursor movements (/, G, marks, etc.)\n"
+                    "  Change list: tracks edit locations (insert mode, d, c, etc.)\n\n"
+                    "The change list is per-buffer and holds up to 100 change positions.\n"
+                    ":changes shows the full list.\n\n"
+                    "`. (backtick-dot) also jumps to the last change —\n"
+                    "it's the most recent entry in the change list.\n"
+                    "g; lets you go back through older changes step by step."
+                ),
+                "answer": "g;",
+                "hints": ["Two-character command: g followed by semicolon.", "g; for older changes.", "The answer is: g;"],
+            },
+            {
+                "id": "mj_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Global Mark Jump",
+                "flavor": "You're editing the processor config and need to jump to a position in the audit log (a different file). You previously set global mark 'A' there. What command jumps to the exact position of global mark 'A'?",
+                "lesson": (
+                    "`A — jump to the exact position of global mark 'A' (in any file).\n\n"
+                    "Global marks (uppercase A–Z):\n"
+                    "  mA   → set global mark 'A' at current position\n"
+                    "  `A   → jump to global mark 'A' (opens the file if needed)\n"
+                    "  'A   → jump to the line of global mark 'A'\n\n"
+                    "Global marks persist across vim sessions (stored in viminfo/shada).\n"
+                    "You can bookmark specific lines in specific files and return to them\n"
+                    "instantly — even after closing and reopening vim.\n\n"
+                    "Ghost's strategy:\n"
+                    "  mA  → mark the processor config's critical section\n"
+                    "  mB  → mark the routing table's header\n"
+                    "  mC  → mark the audit log's last clear timestamp\n"
+                    "  Jump between all three with `A, `B, `C — no search needed."
+                ),
+                "answer": "`A",
+                "hints": ["Backtick then the uppercase mark letter.", "`A — global marks use uppercase letters.", "The answer is: `A"],
+            },
+        ],
+    },
+    "advanced_editing": {
+        "id": "advanced_editing",
+        "name": "The Advanced Editing Suite",
+        "subtitle": "Repeat, Increment, Sort & Power Commands",
+        "color": "red",
+        "icon": "⚡",
+        "commands": [".", "Ctrl+a/Ctrl+x", "J", "gU/gu/g~", ":sort", "g commands"],
+        "challenges": [
+            {
+                "id": "ae_1",
+                "type": "quiz",
+                "title": "Repeat the Last Change",
+                "flavor": "You just ran ciw to change a word and typed a replacement. Now your cursor is on another word that needs the same replacement. What key repeats the last change?",
+                "lesson": (
+                    ". (dot) — repeat the last change.\n\n"
+                    "What . repeats:\n"
+                    "  Any normal-mode change: dd, ciw, o<text>ESC, >>...\n"
+                    "  The entire insert-mode session: everything typed between i/a/o and ESC.\n\n"
+                    "What . does NOT repeat:\n"
+                    "  Cursor movements (j, w, f,)\n"
+                    "  Ex commands (:s/…/…/)\n"
+                    "  Undo (u)\n\n"
+                    "The dot formula (from 'Practical Vim'):\n"
+                    "  1. Find the target.\n"
+                    "  2. Make the change once.\n"
+                    "  3. Navigate to the next target.\n"
+                    "  4. Press . — the change is applied again.\n\n"
+                    "Combining with n:\n"
+                    "  /word → n → . → n → . → repeat: find next, apply change."
+                ),
+                "answer": ".",
+                "hints": ["A single punctuation key — the most powerful key in vim.", "The dot key.", "The answer is: ."],
+            },
+            {
+                "id": "ae_2",
+                "type": "quiz",
+                "title": "Increment a Number",
+                "flavor": "The cursor is on the number 7 in a config value. You want to increase it to 8. What key increments the number under the cursor?",
+                "lesson": (
+                    "Ctrl+A — increment the number under (or after) the cursor.\n\n"
+                    "  Ctrl+A  → increment the nearest number by 1\n"
+                    "  Ctrl+X  → decrement the nearest number by 1\n"
+                    "  10 Ctrl+A  → increment by 10\n\n"
+                    "What counts as a number:\n"
+                    "  Decimal: 42 → 43\n"
+                    "  Hexadecimal: 0x1a → 0x1b (vim auto-detects)\n"
+                    "  Octal: 010 → 011 (if 'nrformats' includes 'octal')\n\n"
+                    "Cursor doesn't need to be ON the number:\n"
+                    "  Ctrl+A finds the next number on the line from the cursor position.\n\n"
+                    "Useful in macros:\n"
+                    "  Record: go to start of line, Ctrl+A, j (down)\n"
+                    "  Replay: increments numbers on consecutive lines\n"
+                    "  Creates auto-incrementing sequences from a macro."
+                ),
+                "answer": "Ctrl+A",
+                "hints": ["Ctrl and the letter A.", "Ctrl+A — A for Add (increment).", "The answer is: Ctrl+A"],
+            },
+            {
+                "id": "ae_3",
+                "type": "quiz",
+                "title": "Join Lines",
+                "flavor": "Two lines need to be merged into one: 'TRANSFER' on one line and 'phantom_acct_7' on the next. The cursor is on the first line. What command joins the next line onto the current line?",
+                "lesson": (
+                    "J — join the line below onto the current line.\n\n"
+                    "  J   → join next line, adding a single space between\n"
+                    "  gJ  → join next line, NO space added\n"
+                    "  3J  → join the next 3 lines onto the current line\n\n"
+                    "J (uppercase) vs j (lowercase):\n"
+                    "  j  → move cursor down (navigation)\n"
+                    "  J  → join lines (editing)\n\n"
+                    "After J:\n"
+                    "  The joined line has trailing whitespace stripped from the first line.\n"
+                    "  A single space is inserted between the two parts.\n"
+                    "  Exception: if the second line starts with ), no space is added.\n\n"
+                    "Visual mode + J:\n"
+                    "  Select multiple lines with V, then J joins them all into one."
+                ),
+                "answer": "J",
+                "hints": ["Uppercase J — not lowercase j (which moves down).", "J for Join.", "The answer is: J"],
+            },
+            {
+                "id": "ae_4",
+                "type": "fill_blank",
+                "title": "Sort Lines",
+                "flavor": "A block of IP addresses in the routing table needs to be sorted alphabetically. What ex command sorts all lines in the file?",
+                "lesson": (
+                    ":sort — sort lines in the file or range.\n\n"
+                    "  :sort          → sort all lines alphabetically\n"
+                    "  :%sort         → same (% = entire file)\n"
+                    "  :10,20sort     → sort lines 10–20\n"
+                    "  :'<,'>sort     → sort visual selection\n"
+                    "  :sort!         → reverse sort\n"
+                    "  :sort u        → sort and remove duplicates (unique)\n"
+                    "  :sort n        → numeric sort (sorts numbers correctly)\n"
+                    "  :sort r /pattern/  → sort by the pattern match within each line\n\n"
+                    "Combining with pipes:\n"
+                    "  :%!sort -u    → use the system sort (faster for huge files)\n"
+                    "  :%!sort -k2   → sort by second column (system sort flags)\n\n"
+                    "For the IP list: :%sort or :'<,'>sort on the visual selection."
+                ),
+                "answer": ":sort",
+                "hints": ["A colon command — the word 'sort'.", ":sort with a colon prefix.", "The answer is: :sort"],
+            },
+            {
+                "id": "ae_5",
+                "type": "fill_blank",
+                "title": "Uppercase a Line",
+                "flavor": "The current line needs to be fully uppercased for emphasis in the report. What command converts the entire current line to uppercase?",
+                "lesson": (
+                    "gUU — uppercase the entire current line.\n\n"
+                    "Case conversion operators:\n"
+                    "  gU{motion}  → uppercase (e.g. gUw = uppercase next word)\n"
+                    "  gu{motion}  → lowercase (e.g. guw = lowercase next word)\n"
+                    "  g~{motion}  → toggle case (e.g. g~w = toggle next word's case)\n\n"
+                    "Line shortcuts (doubled operator = current line):\n"
+                    "  gUU  → uppercase entire line\n"
+                    "  guu  → lowercase entire line\n"
+                    "  g~~  → toggle case of entire line\n\n"
+                    "  ~ (tilde alone) → toggle case of character under cursor and advance\n\n"
+                    "With visual mode:\n"
+                    "  V then U  → uppercase selected lines\n"
+                    "  V then u  → lowercase selected lines\n"
+                    "  V then ~  → toggle case of selected lines"
+                ),
+                "answer": "gUU",
+                "hints": ["gU operator doubled for the whole line.", "gU then U again.", "The answer is: gUU"],
+            },
+            {
+                "id": "ae_boss",
+                "type": "fill_blank",
+                "is_boss": True,
+                "title": "Boss: Decrement a Number",
+                "flavor": "The timeout value in the config is 90. It needs to drop to 30. The cursor is on the number 90. What single command decrements it by 60?",
+                "lesson": (
+                    "60 Ctrl+X — decrement the number under the cursor by 60.\n\n"
+                    "  Ctrl+X       → decrement by 1\n"
+                    "  60 Ctrl+X    → decrement by 60\n"
+                    "  Ctrl+A       → increment by 1\n"
+                    "  60 Ctrl+A    → increment by 60\n\n"
+                    "Count prefix with Ctrl+X:\n"
+                    "  Type the count (60) THEN press Ctrl+X.\n"
+                    "  vim applies the decrement in one operation.\n\n"
+                    "Combined with macros:\n"
+                    "  Record: 0 (go to line start), f<digit> (find number), 60 Ctrl+X, j\n"
+                    "  Replay on all lines: decrements every timeout value by 60\n\n"
+                    "90 - 60 = 30. One command. No mental arithmetic at the keyboard."
+                ),
+                "answer": "60 Ctrl+X",
+                "hints": ["Count prefix, then the decrement key.", "60 then Ctrl+X.", "The answer is: 60 Ctrl+X"],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1713,4 +2300,8 @@ ZONE_ORDER = [
     "ex_commands_deep",
     "motion_mastery",
     "split_navigation",
+    "registers",
+    "macros",
+    "marks_and_jumps",
+    "advanced_editing",
 ]

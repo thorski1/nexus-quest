@@ -290,6 +290,89 @@ no context switching, no state lost. The intelligence is in the
 
 [italic]"The screen is a workspace. Split it to match the structure of the problem."[/italic]
 """,
+    "registers": """
+[bold cyan]== THE REGISTERS VAULT II ==[/bold cyan]
+
+Twelve files. Credential strings scattered across all of them.
+One wrong delete and the string you just painstakingly extracted is gone —
+replaced in the unnamed register by whatever line you just cut.
+
+This is the failure mode Ghost has seen operatives hit during extraction:
+they yank the target string, navigate to the next file, delete a junk line,
+paste — and get the junk. The credential is lost. The whole sequence repeats.
+
+Named registers [yellow]"a[/yellow] through [yellow]"z[/yellow] don't forget.
+[yellow]"0[/yellow] always holds the last explicit yank — never corrupted by delete.
+[yellow]"+[/yellow] holds the system clipboard. [yellow]"_[/yellow] is the void — text disappears there.
+[yellow]:reg[/yellow] shows the state of every register at once.
+[yellow]:let @a = 'text'[/yellow] pre-loads a register without yanking anything.
+
+[italic]"The unnamed register is a liability. Named registers are infrastructure.
+Know where your text lives before you need it to be somewhere specific."[/italic]
+""",
+    "macros": """
+[bold cyan]== THE MACRO FORGE II ==[/bold cyan]
+
+The transaction log has been partially processed. 416 entries remain.
+Each one follows the same pattern: a TRANSFER line with a timestamp,
+a source account, and a destination. Each needs an annotation appended.
+
+Doing it manually: 416 repetitive sequences, 416 chances to mistype,
+416 opportunities for the session log to record your keystrokes.
+
+Doing it with a macro: record once, verify on line 2, run 415 more times.
+The work is done before the connection timeout fires.
+
+[yellow]q{register}[/yellow] — start recording.
+[yellow]q[/yellow] — stop.
+[yellow]@{register}[/yellow] — replay once.
+[yellow]@@[/yellow] — replay again.
+[yellow]N@{register}[/yellow] — replay N times.
+[yellow]:%normal @a[/yellow] — apply to every line in the file.
+
+[italic]"A macro is a program inside the editor.
+One correct recording. Infinite correct replays."[/italic]
+""",
+    "marks_and_jumps": """
+[bold cyan]== THE MARK & JUMP GRID ==[/bold cyan]
+
+Three critical positions. Three files. Ghost needs to triangulate between them
+faster than the connection monitor can flag an extended session.
+
+Without marks: search, navigate, lose your place, search again.
+With marks: [yellow]mA[/yellow] on the config, [yellow]mB[/yellow] on the routing header, [yellow]mC[/yellow] on the log timestamp.
+Then [yellow]`A[/yellow] [yellow]`B[/yellow] [yellow]`C[/yellow] — instant jumps across all three files, exact positions.
+
+The jump list records every navigation event — [yellow]Ctrl+O[/yellow] walks back through
+the history, [yellow]Ctrl+I[/yellow] moves forward again. No retracing steps manually.
+
+The change list tracks every edit — [yellow]g;[/yellow] and [yellow]g,[/yellow] walk through your
+modification history, returning you to exactly where you made each change.
+
+[italic]"Marks are your anchors. The jump list is your history.
+The change list is your edit trail. All three together:
+total spatial awareness inside any file."[/italic]
+""",
+    "advanced_editing": """
+[bold cyan]== THE ADVANCED EDITING SUITE ==[/bold cyan]
+
+The evidence package is almost complete. What remains is the finishing work:
+reformatting, normalizing, annotating — operations that look simple
+but become brutal without the right tools.
+
+Sort the IP list. Uppercase the section headers. Increment the case numbers
+sequentially. Join the split log entries back into single lines.
+Repeat the same annotation on 30 targets without retyping it.
+
+[yellow].[/yellow] — repeat the last change. The most-used key in vim after hjkl.
+[yellow]Ctrl+A[/yellow] / [yellow]Ctrl+X[/yellow] — increment or decrement numbers under the cursor.
+[yellow]J[/yellow] — join the next line onto the current one.
+[yellow]:sort[/yellow] — sort a range of lines.
+[yellow]gU[/yellow] / [yellow]gu[/yellow] / [yellow]g~[/yellow] — uppercase, lowercase, toggle case.
+
+[italic]"The last 10% of any edit is where amateurs spend 90% of their time.
+Ghost doesn't spend time — Ghost uses tools."[/italic]
+""",
 }
 
 ZONE_COMPLETIONS = {
@@ -420,6 +503,63 @@ The screen holds the entire investigation.
 
 [bold cyan]Motion mastered. Navigation mastered. The network is yours.[/bold cyan]
 """,
+    "registers": """
+[bold green]THE REGISTERS VAULT II — MAPPED.[/bold green]
+
+[cyan]"ayy[/cyan] to yank. [cyan]"ap[/cyan] to paste. [cyan]"0p[/cyan] when a delete got in the way.
+[cyan]"+p[/cyan] from the system clipboard. [cyan]"_dd[/cyan] to delete without disturbing anything.
+[cyan]:reg[/cyan] to verify the state before committing.
+
+The credential string is intact. The extraction is clean.
+Text goes exactly where you send it — no surprises.
+
+[bold cyan]The Macro Forge II: automation at scale.[/bold cyan]
+""",
+    "macros": """
+[bold green]THE MACRO FORGE II — COMPLETE.[/bold green]
+
+416 transactions annotated. The macro ran clean — recorded once,
+verified on line 2, replayed 415 more times without a single error.
+
+[cyan]qq[/cyan] to record. [cyan]q[/cyan] to stop. [cyan]@q[/cyan] to verify. [cyan]415@@[/cyan] to finish.
+The timing: under four seconds of replay for 416 lines.
+
+The task that would have taken an hour took thirty keystrokes.
+
+[bold cyan]The Mark & Jump Grid: spatial awareness across the session.[/bold cyan]
+""",
+    "marks_and_jumps": """
+[bold green]THE MARK & JUMP GRID — CHARTED.[/bold green]
+
+[cyan]mA[/cyan] on the config critical section. [cyan]mB[/cyan] on the routing header.
+[cyan]mC[/cyan] on the audit log timestamp. Three files. Three instant anchors.
+
+[cyan]Ctrl+O[/cyan] to walk back through the jump history.
+[cyan]g;[/cyan] to return to the last edit point.
+[cyan]`A[/cyan], [cyan]`B[/cyan], [cyan]`C[/cyan] — cross-file navigation with zero search overhead.
+
+The evidence triangle is mapped. Every position is reachable in one command.
+
+[bold cyan]The Advanced Editing Suite: power tools for the final mile.[/bold cyan]
+""",
+    "advanced_editing": """
+[bold yellow]★ ★ ★  THE ADVANCED EDITING SUITE — MASTERED.  ★ ★ ★[/bold yellow]
+
+[bold white]The evidence package is complete.[/bold white]
+
+[cyan].[/cyan] repeated the annotation across thirty targets.
+[cyan]60 Ctrl+X[/cyan] adjusted the timeout in one keystroke.
+[cyan]J[/cyan] joined the split log entries. [cyan]:sort[/cyan] ordered the IP list.
+[cyan]gUU[/cyan] uppercased the section headers. Clean. Precise. No typos.
+
+The session lasted eleven minutes. The connection monitor
+logged a single vim process. No unusual activity.
+
+[bold magenta]"The tools don't slow you down when you know them.
+They keep pace with the intention."[/bold magenta]
+
+[bold yellow]VIM STATUS: ELITE. EVIDENCE: PACKAGED. MISSION: COMPLETE.[/bold yellow]
+""",
 }
 
 BOSS_INTROS = {
@@ -435,6 +575,10 @@ BOSS_INTROS = {
     "ex_commands_deep": "[bold red]★  EX COMMANDS FINAL: The 80K Line Filter[/bold red]\nThe audit log is 80,000 lines. Reduce it to only the relevant entries, annotate the phantom accounts, and sort the output. Three :g and :v commands. No manual scrolling.",
     "motion_mastery": "[bold red]⚡  MOTION TRIAL: The Operator-Motion Combo[/bold red]\nA config value is buried in a quoted string. No manual positioning — one motion, one operator, one keystroke sequence. Change the content inside the quotes from anywhere on the line.",
     "split_navigation": "[bold red]⚠  MULTI-WINDOW BROADCAST: The Global Substitution[/bold red]\nNEXUS needs to become nexus across every open file simultaneously. :windo turns a single substitution into a window-wide operation. One command. All panes. Done.",
+    "registers": "[bold red]⚠  REGISTER TRIAL: The Programmatic Pre-load[/bold red]\nA macro needs a constant string it can paste 416 times. Don't yank — pre-load the register directly using :let. Set register 'b' to 'FLAGGED' without touching the buffer.",
+    "macros": "[bold red]★  MACRO TRIAL: The 416 Replay[/bold red]\nThe macro is verified. 416 lines remain. One count-prefixed command runs it all. Get the syntax right — count first, then @register. 416 transactions annotated in one shot.",
+    "marks_and_jumps": "[bold red]⚠  MARK TRIAL: The Cross-File Jump[/bold red]\nGlobal mark 'A' was set in a different file. Jump to its exact position — line AND column — with a single command. No search. No navigation. One keystroke to the target.",
+    "advanced_editing": "[bold red]⚡  ADVANCED TRIAL: The Count Decrement[/bold red]\nTimeout value: 90. Required value: 30. The cursor is on the number. One command — a count prefix and the decrement key — drops it by exactly 60. No manual arithmetic. No intermediate steps.",
 }
 
 ACHIEVEMENT_DESCRIPTIONS = {
@@ -462,4 +606,8 @@ ACHIEVEMENT_DESCRIPTIONS = {
     "boss_slayer": ("Boss Challenge Cleared", "Beat your first vim boss. The file yielded."),
     "motion_ghost": ("Motion Efficiency Expert", "Cleared the Motion Mastery Chamber. w, b, f, t, %, ci\" — the cursor goes exactly where you send it."),
     "split_master": ("Split Session Specialist", "Cleared the Split Navigation Hub. Multiple panes, one session, :windo broadcasting to every open file."),
+    "register_runner": ("Register Specialist II", "Cleared the Registers Vault II. Named registers, \"0, \"+, \"_ — text goes exactly where you send it, every time."),
+    "macro_maestro": ("Macro Architect II", "Cleared the Macro Forge II. Record once, replay hundreds of times. 416 lines annotated in under five seconds."),
+    "jump_master": ("Jump & Mark Expert", "Cleared the Mark & Jump Grid. Marks, jump list, change list — total spatial awareness across every open file."),
+    "edit_sensei": ("Advanced Editing Master", "Cleared the Advanced Editing Suite. Dot repeat, Ctrl+A/X, sort, case conversion — the final 10% done in seconds."),
 }

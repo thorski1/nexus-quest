@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-quest"
-version = "1.8.0"
+version = "1.9.0"
 description = "A cyberpunk terminal RPG for learning Bash, Git, Docker, Postgres, Vim, SSH, Python, Regex, Linux, Kubernetes, AWS, and Terraform."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -31,6 +31,10 @@ classifiers = [
 dependencies = [
     "rich>=13.0.0",
     "quest-engine>=1.5.0",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "jinja2>=3.0.0",
+    "python-multipart>=0.0.6",
 ]
 
 [project.urls]

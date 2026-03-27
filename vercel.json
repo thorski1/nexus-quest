@@ -9,7 +9,6 @@
   "routes": [
     { "src": "/(.*)", "dest": "/api/index" }
   ],
-  "env": {
-    "QUEST_PACK": "bash"
-  }
+  "env": {}
+
 }

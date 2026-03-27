@@ -33,15 +33,16 @@ _NEXUS_PACKS = [
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
 ]
 
-_single_pack = os.environ.get("QUEST_PACK", "")
-
-if _single_pack:
-    # Single-pack mode: serve one chapter at the root.
-    from engine.web.server import create_app  # noqa: E402
-    _skill_pack = load_skill_pack(_single_pack, packs_dir=_PACKS_DIR)
-    app = create_app(_skill_pack)
-else:
+def _make_app():
+    _single_pack = os.environ.get("QUEST_PACK", "")
+    if _single_pack:
+        # Single-pack mode: serve one chapter at the root.
+        from engine.web.server import create_app
+        return create_app(load_skill_pack(_single_pack, packs_dir=_PACKS_DIR))
     # Hub mode (default): serve all 12 chapters.
-    from engine.web.hub import create_hub_app  # noqa: E402
+    from engine.web.hub import create_hub_app
     _packs = [load_skill_pack(p, packs_dir=_PACKS_DIR) for p in _NEXUS_PACKS]
-    app = create_hub_app(_packs)
+    return create_hub_app(_packs)
+
+
+app = _make_app()

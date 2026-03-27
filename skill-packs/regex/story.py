@@ -84,6 +84,35 @@ ZONE_INTROS = {
         "The log pipeline — grep | sort | uniq -c | sort -rn — runs in real incident response. "
         "This is not theory. This is the field.'[/bold white]"
     ),
+    "named_groups_and_backreferences": (
+        "[bold cyan]◈  NAMED GROUPS AND BACKREFERENCES  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'Anonymous capture groups give you \\1, \\2 — fragile"
+        " and order-dependent. Named groups give you (?P<timestamp>...) and"
+        " (?P=timestamp) — self-documenting, resilient. The NEXUS log format"
+        " has twelve fields. Name every group. Miss none.'[/bold white]"
+    ),
+    "substitution_and_replace": (
+        "[bold cyan]◈  SUBSTITUTION AND REPLACE  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'The logs contain redacted account numbers: ACCT-XXXX-YYYY."
+        " We need to un-redact the pattern from a reference file using re.sub()."
+        " The replacement references back-captured groups. Get the backreference"
+        " syntax right and the data is ours.'[/bold white]"
+    ),
+    "regex_in_javascript": (
+        "[bold cyan]◈  REGEX IN JAVASCRIPT  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'The NEXUS frontend validates inputs client-side."
+        " JavaScript regex — /pattern/flags literals, String.match(), RegExp.test()."
+        " Their validation is supposed to block certain account numbers."
+        " Find the bypass. The JS regex has an edge case.'[/bold white]"
+    ),
+    "advanced_techniques": (
+        "[bold cyan]◈  ADVANCED TECHNIQUES  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'The NEXUS log scanner runs your patterns against"
+        " untrusted input. One ReDoS pattern in production and their server"
+        " hangs for 30 seconds on a crafted string. I need you to identify"
+        " catastrophic backtracking, understand atomic groups, and write"
+        " patterns that don't explode under adversarial input.'[/bold white]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -131,6 +160,26 @@ ZONE_COMPLETIONS = {
         "[bold green]ZONE CLEAR — STREAM REWRITER[/bold green]\n\n"
         "grep -oE, sed -i, awk field extraction, the log pipeline — operational regex mastered. "
         "CIPHER: 'Pattern Recon complete. You can find anything in any log file on any system.'"
+    ),
+    "named_groups_and_backreferences": (
+        "[bold green]ZONE CLEAR — NAMED GROUPS[/bold green]\n\n"
+        "(?P<field>...) syntax mastered. Backreferences \\1 and (?P=name) — locked. "
+        "CIPHER: 'Your patterns are self-documenting now. Senior-level regex.'"
+    ),
+    "substitution_and_replace": (
+        "[bold green]ZONE CLEAR — SUBSTITUTION ENGINE[/bold green]\n\n"
+        "re.sub(), sed substitution, backreferences in replacements — the full rewrite layer. "
+        "CIPHER: 'You can transform data at the pattern level. That's surgical precision.'"
+    ),
+    "regex_in_javascript": (
+        "[bold green]ZONE CLEAR — JS REGEX CRACKED[/bold green]\n\n"
+        "/pattern/flags literals, .match(), .replace(), .test(), exec() — all operational. "
+        "CIPHER: 'Their client-side validation is transparent to you now. The bypass is identified.'"
+    ),
+    "advanced_techniques": (
+        "[bold green]ZONE CLEAR — ADVANCED TECHNIQUES[/bold green]\n\n"
+        "ReDoS patterns identified. Atomic groups understood. Performance traps avoided. "
+        "CIPHER: 'You write production-safe regex now. No more time bombs in the codebase.'"
     ),
 }
 

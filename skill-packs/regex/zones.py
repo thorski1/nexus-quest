@@ -1539,6 +1539,817 @@ ZONES = {
             },
         ],
     },
+    "named_groups_and_backreferences": {
+        "id": "named_groups_and_backreferences",
+        "name": "Named Groups & Backreferences",
+        "subtitle": "Capture, Name, and Reuse",
+        "color": "magenta",
+        "icon": "◈",
+        "commands": ["(?P<name>...)", r"\1", "(?P=name)", "(?:...)"],
+        "challenges": [
+            {
+                "id": "ngb_1",
+                "type": "quiz",
+                "title": "Named Capture Groups",
+                "flavor": "NEXUS logs contain structured entries — timestamp, severity level, message — all crammed into one line. Named capture groups let you label each piece of the match so you can retrieve it by name, not position.",
+                "lesson": (
+                    "(?P<name>...) — named capture group in Python regex.\n\n"
+                    "Instead of accessing captures by index (group(1)), you access by name (group('timestamp')).\n\n"
+                    "Examples:\n"
+                    "  pattern = r'(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})'\n"
+                    "  m = re.search(pattern, '2024-03-15')\n"
+                    "  m.group('year')   # → '2024'\n"
+                    "  m.group('month')  # → '03'\n\n"
+                    "Named groups make complex patterns self-documenting and index-independent."
+                ),
+                "question": "What is the Python syntax for a named capture group called 'host'?",
+                "url": "https://www.regular-expressions.info/named.html",
+                "options": [
+                    "a (?<host>\\w+)",
+                    "b (?P<host>\\w+)",
+                    "c (?:host:\\w+)",
+                    "d (host:\\w+)",
+                ],
+                "answer": "b",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "Python uses a P prefix inside the angle brackets.",
+                    "The syntax is (?P<name>pattern).",
+                    "The answer is: (?P<host>\\w+)",
+                ],
+            },
+            {
+                "id": "ngb_2",
+                "type": "quiz",
+                "title": "Numeric Backreferences",
+                "flavor": "The NEXUS config files use repeated tokens — an opening tag must match its closing tag exactly. You need to match the same text twice. Backreferences let you reference a previous capture in the same pattern.",
+                "lesson": (
+                    "\\1, \\2, ... — backreferences to previously captured groups.\n\n"
+                    "\\1 refers to whatever group 1 captured. The match only succeeds if the same text appears again.\n\n"
+                    "Examples:\n"
+                    "  (\\w+)=\\1         → matches 'mode=mode', 'host=host'\n"
+                    "  <(\\w+)>.*?</\\1>  → matches XML/HTML tags: <div>...</div>\n\n"
+                    "Note: backreferences match the SAME TEXT as the group, not the same pattern."
+                ),
+                "question": "In the pattern (\\w+):\\s*\\1, what does \\1 do?",
+                "url": "https://www.regular-expressions.info/named.html",
+                "options": [
+                    "a matches any word character sequence",
+                    "b matches the literal text captured by group 1",
+                    "c matches a backslash followed by 1",
+                    "d matches the pattern \\w+ again",
+                ],
+                "answer": "b",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "A backreference re-matches the captured text — not the pattern.",
+                    "\\1 means 'the same string that group 1 captured'.",
+                    "The answer is: matches the literal text captured by group 1",
+                ],
+            },
+            {
+                "id": "ngb_3",
+                "type": "quiz",
+                "title": "Named Backreferences",
+                "flavor": "You've named your groups for clarity, but you also need to reference them later in the same pattern. Python supports named backreferences — a way to backref by name instead of number.",
+                "lesson": (
+                    "(?P=name) — named backreference in Python.\n\n"
+                    "References the text captured by the named group 'name' earlier in the pattern.\n\n"
+                    "Examples:\n"
+                    "  (?P<token>\\w+)=(?P=token)\n"
+                    "  → matches 'debug=debug', 'host=host'\n\n"
+                    "  (?P<tag>\\w+)>.*?</(?P=tag)>\n"
+                    "  → matches <div>...</div>, <span>...</span>\n\n"
+                    "(?P=name) is equivalent to \\1 but more readable in complex patterns."
+                ),
+                "question": "How do you write a named backreference to a group called 'token' in Python regex?",
+                "url": "https://www.regular-expressions.info/named.html",
+                "options": [
+                    "a \\token",
+                    "b (?=token)",
+                    "c (?P=token)",
+                    "d \\P{token}",
+                ],
+                "answer": "c",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "It uses (?P=...) — similar to how named groups use (?P<...>).",
+                    "The syntax is (?P=name) — no angle brackets.",
+                    "The answer is: (?P=token)",
+                ],
+            },
+            {
+                "id": "ngb_4",
+                "type": "quiz",
+                "title": "Non-Capturing Groups",
+                "flavor": "You need to group part of a pattern for alternation or quantification, but you don't want to capture it — it would just pollute your match results. Non-capturing groups give you grouping without the overhead.",
+                "lesson": (
+                    "(?:...) — non-capturing group.\n\n"
+                    "Groups a sub-pattern for quantifiers or alternation without creating a capture group.\n\n"
+                    "Examples:\n"
+                    "  (?:https?|ftp)://  → groups the protocol alternation — not captured\n"
+                    "  (?:\\d{1,3}\\.){3}\\d{1,3}  → matches an IP address, groups the repeating octet\n\n"
+                    "Use (?:...) when you need grouping but don't need the text later.\n"
+                    "Keeps group numbering clean and avoids clutter in m.groups()."
+                ),
+                "question": "What is the difference between (...) and (?:...) in regex?",
+                "url": "https://www.regular-expressions.info/named.html",
+                "options": [
+                    "a (?:...) is a named group, (...) is unnamed",
+                    "b (?:...) groups without capturing, (...) captures",
+                    "c (?:...) is a lookahead, (...) is a capture group",
+                    "d they are identical",
+                ],
+                "answer": "b",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "The colon after ? signals non-capturing.",
+                    "(?:...) still groups for quantifiers/alternation — it just doesn't save the match.",
+                    "The answer is: (?:...) groups without capturing, (...) captures",
+                ],
+            },
+            {
+                "id": "ngb_5",
+                "type": "fill_blank",
+                "title": "Groups in re.sub()",
+                "flavor": "The NEXUS log format needs reformatting: 'YYYY-MM-DD' must become 'DD/MM/YYYY'. Named groups make the substitution pattern readable. Fill in the replacement string.",
+                "lesson": (
+                    "Named groups can be referenced in re.sub() replacement strings using \\g<name>.\n\n"
+                    "Example — swap date format YYYY-MM-DD → DD/MM/YYYY:\n\n"
+                    "  pattern = r'(?P<y>\\d{4})-(?P<m>\\d{2})-(?P<d>\\d{2})'\n"
+                    "  result = re.sub(pattern, r'\\g<d>/\\g<m>/\\g<y>', text)\n\n"
+                    "Numeric group refs in replacements:\n"
+                    "  re.sub(r'(\\w+)@(\\w+)', r'\\2@\\1', s)  → swaps username and domain\n\n"
+                    "\\g<name> syntax avoids ambiguity when a group ref is followed by digits."
+                ),
+                "question": "To reference a named group called 'year' in a re.sub() replacement string, you write \\g<___>.",
+                "url": "https://www.regular-expressions.info/named.html",
+                "answers": ["year"],
+                "xp": 90,
+                "difficulty": "medium",
+                "hints": [
+                    "The syntax mirrors the group name directly.",
+                    "\\g<name> — the name goes inside the angle brackets.",
+                    "The answer is: year",
+                ],
+            },
+            {
+                "id": "ngb_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Named Group Log Parser",
+                "flavor": "CIPHER drops a NEXUS access log line on your screen: '2024-11-07 ERROR nexus-auth: invalid token from 10.0.0.42'. You need to extract timestamp, level, service, and message as named groups. One pattern. Name every part.",
+                "lesson": (
+                    "A named-group log parser:\n\n"
+                    "  log_pattern = re.compile(\n"
+                    "      r'(?P<ts>\\d{4}-\\d{2}-\\d{2})\\s+'\n"
+                    "      r'(?P<level>\\w+)\\s+'\n"
+                    "      r'(?P<svc>[\\w-]+):\\s+'\n"
+                    "      r'(?P<msg>.+)'\n"
+                    "  )\n"
+                    "  m = log_pattern.search(line)\n"
+                    "  m.groupdict()  # → {'ts': '2024-11-07', 'level': 'ERROR', ...}\n\n"
+                    "Named groups + groupdict() is the cleanest way to parse structured logs in Python."
+                ),
+                "question": "To retrieve all named captures as a dict from a match object m, you call m.___().",
+                "url": "https://www.regular-expressions.info/named.html",
+                "answers": ["groupdict"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It returns a dictionary mapping group names to matched strings.",
+                    "The method name combines 'group' and 'dict'.",
+                    "The answer is: groupdict",
+                ],
+            },
+        ],
+    },
+    "substitution_and_replace": {
+        "id": "substitution_and_replace",
+        "name": "Substitution & Replace",
+        "subtitle": "Rewrite the Data Stream",
+        "color": "yellow",
+        "icon": "◈",
+        "commands": ["re.sub()", r"\1", "sed s///", "/g", "count="],
+        "challenges": [
+            {
+                "id": "sr_1",
+                "type": "quiz",
+                "title": "re.sub() Basics",
+                "flavor": "The NEXUS exfil pipeline is encoding user IDs as 'USR_12345'. Ops needs them as 'USER-12345' for the next system. One re.sub() call rewrites all of them across the entire log in a single pass.",
+                "lesson": (
+                    "re.sub(pattern, repl, string, count=0, flags=0) — replaces matches with repl.\n\n"
+                    "  re.sub(r'USR_(\\d+)', r'USER-\\1', log)\n"
+                    "  → replaces all 'USR_12345' with 'USER-12345'\n\n"
+                    "Parameters:\n"
+                    "  pattern — regex to match\n"
+                    "  repl    — replacement string (can include \\1 backrefs)\n"
+                    "  string  — input string\n"
+                    "  count   — max replacements (0 = unlimited)\n\n"
+                    "Returns the modified string. The original is not changed."
+                ),
+                "question": "What does re.sub(r'\\d+', 'NUM', text) do?",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "options": [
+                    "a replaces the first number in text with 'NUM'",
+                    "b replaces all numbers in text with 'NUM'",
+                    "c counts the numbers in text",
+                    "d returns a list of numbers found in text",
+                ],
+                "answer": "b",
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "By default re.sub replaces every match, not just the first.",
+                    "The count parameter limits replacements — default is 0 meaning unlimited.",
+                    "The answer is: replaces all numbers in text with 'NUM'",
+                ],
+            },
+            {
+                "id": "sr_2",
+                "type": "quiz",
+                "title": "Backreferences in Replacements",
+                "flavor": "Reformatting the stolen credential dump: all entries are 'last_first' but the evidence system needs 'first last'. You need to swap two captured groups in the replacement.",
+                "lesson": (
+                    "In re.sub() replacement strings, use \\1, \\2 to insert captured groups.\n\n"
+                    "  re.sub(r'(\\w+)_(\\w+)', r'\\2 \\1', name)\n"
+                    "  'smith_john' → 'john smith'\n\n"
+                    "Named groups use \\g<name>:\n"
+                    "  re.sub(r'(?P<last>\\w+)_(?P<first>\\w+)', r'\\g<first> \\g<last>', name)\n"
+                    "  → same result, more readable\n\n"
+                    "\\g<1> can also be used when a numeric ref is followed by digits: \\g<1>0 not \\10"
+                ),
+                "question": "In re.sub(r'(\\w+)@(\\w+)', r'\\2@\\1', s), what does the replacement do?",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "options": [
+                    "a removes the @ symbol",
+                    "b inserts \\2 and \\1 as literal strings",
+                    "c swaps the text before and after @",
+                    "d duplicates the entire match",
+                ],
+                "answer": "c",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "\\2 and \\1 refer to the captured groups in reverse order.",
+                    "Group 1 is before @, group 2 is after @.",
+                    "The answer is: swaps the text before and after @",
+                ],
+            },
+            {
+                "id": "sr_3",
+                "type": "quiz",
+                "title": "Limiting Replacements with count",
+                "flavor": "A redaction script must replace only the FIRST occurrence of a sensitive token on each line — replacing all would corrupt the document structure. The count parameter gives you that control.",
+                "lesson": (
+                    "re.sub() accepts a count parameter to limit replacements:\n\n"
+                    "  re.sub(r'SECRET', '[REDACTED]', text, count=1)\n"
+                    "  → replaces only the FIRST match\n\n"
+                    "  re.sub(r'SECRET', '[REDACTED]', text, count=3)\n"
+                    "  → replaces at most the first 3 matches\n\n"
+                    "Default count=0 means no limit — replace all.\n\n"
+                    "Equivalent in sed: s/pattern/repl/ (first only) vs s/pattern/repl/g (global)"
+                ),
+                "question": "What does count=1 do in re.sub(pattern, repl, text, count=1)?",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "options": [
+                    "a raises an error if more than 1 match exists",
+                    "b replaces only the first match",
+                    "c replaces all matches, returning a count of 1",
+                    "d matches only strings of length 1",
+                ],
+                "answer": "b",
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "count limits how many replacements are made.",
+                    "count=1 means stop after the first replacement.",
+                    "The answer is: replaces only the first match",
+                ],
+            },
+            {
+                "id": "sr_4",
+                "type": "quiz",
+                "title": "sed Substitution with Groups",
+                "flavor": "The NEXUS shell script needs to reformat date strings in a log file in-place. sed's substitution command supports backreferences — the same concept as Python, just different syntax.",
+                "lesson": (
+                    "sed substitution with backreferences:\n\n"
+                    "  sed 's/\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)/\\2-\\1/' file\n"
+                    "  → swaps year and month using \\1, \\2\n\n"
+                    "In ERE mode (sed -E), groups don't need escaping:\n"
+                    "  sed -E 's/([0-9]{4})-([0-9]{2})/\\2-\\1/' file\n\n"
+                    "The /g flag replaces ALL occurrences on each line:\n"
+                    "  sed -E 's/foo/bar/g' file   → replaces all 'foo' with 'bar'\n\n"
+                    "Without /g, only the first match per line is replaced."
+                ),
+                "question": "In sed, what flag at the end of s/pattern/repl/ replaces ALL matches on a line (not just the first)?",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "options": [
+                    "a /a",
+                    "b /i",
+                    "c /g",
+                    "d /n",
+                ],
+                "answer": "c",
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "It's a single letter that stands for 'global'.",
+                    "Without it, only the first match per line is replaced.",
+                    "The answer is: /g",
+                ],
+            },
+            {
+                "id": "sr_5",
+                "type": "quiz",
+                "title": "Callable Replacement in re.sub()",
+                "flavor": "You need to redact all credit card numbers in the log but preserve the last 4 digits: '4111-1111-1111-1234' → 'XXXX-XXXX-XXXX-1234'. A static replacement string can't compute this — but a function can.",
+                "lesson": (
+                    "re.sub() accepts a callable as the replacement:\n\n"
+                    "  def redact_card(m):\n"
+                    "      return 'XXXX-XXXX-XXXX-' + m.group(1)\n\n"
+                    "  re.sub(r'\\d{4}-\\d{4}-\\d{4}-(\\d{4})', redact_card, text)\n\n"
+                    "The function receives the match object and returns the replacement string.\n\n"
+                    "This is powerful for:\n"
+                    "  - case transformations (m.group().upper())\n"
+                    "  - computed replacements based on match content\n"
+                    "  - lookups against a dictionary\n\n"
+                    "Lambda works too: re.sub(r'\\w+', lambda m: m.group().upper(), text)"
+                ),
+                "question": "When re.sub() is given a function as the replacement argument, what does that function receive?",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "options": [
+                    "a the matched string as a plain str",
+                    "b the match object",
+                    "c the start and end positions of the match",
+                    "d the pattern and the input string",
+                ],
+                "answer": "b",
+                "xp": 90,
+                "difficulty": "medium",
+                "hints": [
+                    "The function receives more than just the string — it gets the full match context.",
+                    "You can call .group(), .start(), .end() on what's passed in.",
+                    "The answer is: the match object",
+                ],
+            },
+            {
+                "id": "sr_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Mass Log Redaction",
+                "flavor": "CIPHER sends the order: sanitize the entire NEXUS transaction log. Every email address must be replaced with '[EMAIL]'. One re.sub() call, full file content, no survivors.",
+                "lesson": (
+                    "Full email redaction with re.sub():\n\n"
+                    "  email_pat = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}'\n"
+                    "  clean = re.sub(email_pat, '[EMAIL]', raw_log)\n\n"
+                    "re.sub returns a new string — the original is unchanged.\n\n"
+                    "To also count replacements, use re.subn():\n"
+                    "  clean, n = re.subn(email_pat, '[EMAIL]', raw_log)\n"
+                    "  print(f'{n} addresses redacted')\n\n"
+                    "re.subn() is identical to re.sub() but returns a tuple (new_string, count)."
+                ),
+                "question": "re.sub() returns the modified string. To also get the NUMBER of replacements made, use re.___(pattern, repl, string) instead.",
+                "url": "https://www.regular-expressions.info/replacebackref.html",
+                "answers": ["subn"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "The function name is a variation of re.sub with an extra letter.",
+                    "It returns a tuple: (new_string, count).",
+                    "The answer is: subn",
+                ],
+            },
+        ],
+    },
+    "regex_in_javascript": {
+        "id": "regex_in_javascript",
+        "name": "Regex in JavaScript",
+        "subtitle": "Client-Side Pattern Hacking",
+        "color": "bright_yellow",
+        "icon": "◈",
+        "commands": ["/pattern/flags", ".match()", ".replace()", "RegExp.test()", ".exec()"],
+        "challenges": [
+            {
+                "id": "rjs_1",
+                "type": "quiz",
+                "title": "JS Regex Literal Syntax",
+                "flavor": "The NEXUS web app's client-side validation is running JavaScript. You're reading the source. Regex looks different here — no re.compile(), no raw strings. JS has its own inline syntax.",
+                "lesson": (
+                    "In JavaScript, regex can be written as literals using forward slashes:\n\n"
+                    "  /pattern/flags\n\n"
+                    "Examples:\n"
+                    "  /\\d+/g          → matches one or more digits, globally\n"
+                    "  /^hello/i        → matches 'hello' at start, case-insensitive\n"
+                    "  /[a-z]{3}/gi    → matches 3-letter sequences, global + case-insensitive\n\n"
+                    "No need to escape backslashes twice (unlike Python strings):\n"
+                    "  Python: re.compile(r'\\d+')   or  re.compile('\\\\d+')\n"
+                    "  JS:     /\\d+/\n\n"
+                    "You can also use: new RegExp('\\\\d+', 'g') for dynamic patterns."
+                ),
+                "question": "How do you write a JavaScript regex literal that matches one or more digits globally?",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "options": [
+                    "a re.compile('\\\\d+', 'g')",
+                    "b /\\d+/g",
+                    "c regex('\\d+', global=True)",
+                    "d '\\d+'",
+                ],
+                "answer": "b",
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "JS regex literals use forward slashes as delimiters.",
+                    "Flags come after the closing slash.",
+                    "The answer is: /\\d+/g",
+                ],
+            },
+            {
+                "id": "rjs_2",
+                "type": "quiz",
+                "title": "String.match() vs RegExp.test()",
+                "flavor": "Two different tasks: one script needs to extract all matching tokens from a payload string, another just needs a yes/no — does this string contain a suspicious pattern? Two methods, two jobs.",
+                "lesson": (
+                    "JavaScript offers several ways to use regex:\n\n"
+                    "  str.match(regex)\n"
+                    "  → returns array of matches (or null if none)\n"
+                    "  → with /g flag: returns all matches as an array\n"
+                    "  → without /g: returns first match + groups\n\n"
+                    "  regex.test(str)\n"
+                    "  → returns true or false — does the pattern match?\n"
+                    "  → fastest option when you only need a boolean result\n\n"
+                    "Examples:\n"
+                    "  'abc123'.match(/\\d+/)     // → ['123']\n"
+                    "  'abc123'.match(/\\d+/g)    // → ['123']\n"
+                    "  /\\d+/.test('abc123')      // → true\n"
+                    "  /\\d+/.test('abcdef')      // → false"
+                ),
+                "question": "Which JavaScript method returns true or false based on whether a pattern matches a string?",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "options": [
+                    "a str.match(regex)",
+                    "b str.search(regex)",
+                    "c regex.test(str)",
+                    "d regex.exec(str)",
+                ],
+                "answer": "c",
+                "xp": 70,
+                "difficulty": "easy",
+                "hints": [
+                    "You want a boolean — true or false.",
+                    "The method is called on the regex object, not the string.",
+                    "The answer is: regex.test(str)",
+                ],
+            },
+            {
+                "id": "rjs_3",
+                "type": "quiz",
+                "title": "String.replace() with Regex",
+                "flavor": "The injected payload in the NEXUS app uses double-encoded spaces (%20%20). You need to normalize it — replace all occurrences of %20 with a real space. JS String.replace() takes a regex.",
+                "lesson": (
+                    "str.replace(regex, replacement) — replaces matches in a string.\n\n"
+                    "  'foo bar foo'.replace(/foo/g, 'baz')  // → 'baz bar baz'\n\n"
+                    "Without /g, only the first match is replaced:\n"
+                    "  'foo bar foo'.replace(/foo/, 'baz')   // → 'baz bar foo'\n\n"
+                    "Backreferences in replacement strings use $1, $2 (NOT \\1 like Python/sed):\n"
+                    "  'john_smith'.replace(/(\\w+)_(\\w+)/, '$2 $1')  // → 'smith john'\n\n"
+                    "Named groups in JS (ES2018+): $<name>\n"
+                    "  '2024-03-15'.replace(/(?<y>\\d{4})-(?<m>\\d{2})-(?<d>\\d{2})/, '$<d>/$<m>/$<y>')"
+                ),
+                "question": "In JavaScript String.replace(), how do you reference capture group 1 in the replacement string?",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "options": [
+                    "a \\1",
+                    "b %1",
+                    "c $1",
+                    "d @1",
+                ],
+                "answer": "c",
+                "xp": 80,
+                "difficulty": "medium",
+                "hints": [
+                    "JS uses a different prefix than Python or sed for backrefs in replacements.",
+                    "It's a dollar sign followed by the group number.",
+                    "The answer is: $1",
+                ],
+            },
+            {
+                "id": "rjs_4",
+                "type": "quiz",
+                "title": "RegExp.exec() and Iterating Matches",
+                "flavor": "The NEXUS exfil data has multiple session tokens on a single line. str.match(/pattern/g) gives you the strings, but you need the index positions too. exec() in a loop gives you full match objects.",
+                "lesson": (
+                    "regex.exec(str) — returns a match object for the next match.\n\n"
+                    "With the /g flag, exec() remembers position via regex.lastIndex.\n"
+                    "Calling it in a loop iterates over all matches:\n\n"
+                    "  const re = /SESSION-(\\w+)/g;\n"
+                    "  let m;\n"
+                    "  while ((m = re.exec(str)) !== null) {\n"
+                    "    console.log(m[0], 'at index', m.index);\n"
+                    "    console.log('token:', m[1]);\n"
+                    "  }\n\n"
+                    "m[0]     — full match\n"
+                    "m[1]     — capture group 1\n"
+                    "m.index  — position in string\n\n"
+                    "Modern alternative: str.matchAll(/pattern/g) returns an iterator."
+                ),
+                "question": "When using regex.exec(str) with /g in a loop, what property of the match object gives the position of the match in the string?",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "options": [
+                    "a m.position",
+                    "b m.start",
+                    "c m.index",
+                    "d m.offset",
+                ],
+                "answer": "c",
+                "xp": 90,
+                "difficulty": "medium",
+                "hints": [
+                    "It's a property on the match array object.",
+                    "Think of the array index concept.",
+                    "The answer is: m.index",
+                ],
+            },
+            {
+                "id": "rjs_5",
+                "type": "quiz",
+                "title": "Python vs JS Regex Gotchas",
+                "flavor": "You've been switching between Python and JavaScript all shift. The patterns look similar but behave differently in edge cases. CIPHER warns: 'Know your engine. A wrong assumption costs the op.'",
+                "lesson": (
+                    "Key differences between Python and JavaScript regex:\n\n"
+                    "Named groups:\n"
+                    "  Python: (?P<name>...)   backreference: (?P=name)\n"
+                    "  JS:     (?<name>...)    backreference: \\k<name>\n\n"
+                    "Substitution backreferences:\n"
+                    "  Python re.sub:  \\1 or \\g<name>\n"
+                    "  JS replace():   $1 or $<name>\n\n"
+                    "Lookahead/Lookbehind: both engines support (?=), (?!), (?<=), (?<!).\n"
+                    "  (JS lookbehind requires ES2018+)\n\n"
+                    "No re.VERBOSE in JS — use comments in code instead.\n\n"
+                    "Sticky flag: JS has /y (sticky) — matches only at lastIndex, no Python equiv."
+                ),
+                "question": "In JavaScript (ES2018+), what is the syntax for a named capture group called 'host'?",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "options": [
+                    "a (?P<host>\\w+)",
+                    "b (?:host:\\w+)",
+                    "c (?<host>\\w+)",
+                    "d [host:\\w+]",
+                ],
+                "answer": "c",
+                "xp": 90,
+                "difficulty": "medium",
+                "hints": [
+                    "JS named groups do NOT use the P prefix that Python uses.",
+                    "Angle brackets still surround the name.",
+                    "The answer is: (?<host>\\w+)",
+                ],
+            },
+            {
+                "id": "rjs_boss",
+                "type": "fill_blank",
+                "title": "BOSS: JS Token Extractor",
+                "flavor": "The NEXUS client-side script validates session tokens matching /^SID-[A-Z0-9]{16}$/. You need to extract ALL matches from a multi-token string using str.matchAll(). What flag is required on the regex for matchAll() to work?",
+                "lesson": (
+                    "str.matchAll(regex) requires the /g flag — without it, a TypeError is thrown.\n\n"
+                    "  const tokens = [...str.matchAll(/SID-[A-Z0-9]{16}/g)];\n"
+                    "  tokens.forEach(m => console.log(m[0], 'at', m.index));\n\n"
+                    "matchAll() returns an iterator of full match objects (unlike match(/g) which returns only strings).\n\n"
+                    "Each result has:\n"
+                    "  m[0]     — the full match\n"
+                    "  m[1]...  — capture groups\n"
+                    "  m.index  — position\n"
+                    "  m.input  — the original string\n\n"
+                    "Use the spread operator [...] or a for...of loop to iterate the results."
+                ),
+                "question": "str.matchAll(regex) requires the regex to have the ___ flag, otherwise it throws a TypeError.",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+                "answers": ["g"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It's the global flag.",
+                    "Without it, TypeError: String.prototype.matchAll called with a non-global RegExp argument.",
+                    "The answer is: g",
+                ],
+            },
+        ],
+    },
+    "advanced_techniques": {
+        "id": "advanced_techniques",
+        "name": "Advanced Techniques",
+        "subtitle": "Performance, Precision & Power",
+        "color": "red",
+        "icon": "◈",
+        "commands": ["(?>...)", "re.compile()", "?+", "*+", "catastrophic backtracking"],
+        "challenges": [
+            {
+                "id": "at_1",
+                "type": "quiz",
+                "title": "Catastrophic Backtracking",
+                "flavor": "A NEXUS intrusion detection rule uses the pattern (a+)+ against user input. An attacker sends a crafted 30-character string and the server hangs for 30 seconds. You've just discovered a ReDoS vulnerability.",
+                "lesson": (
+                    "Catastrophic backtracking (ReDoS) occurs when a regex backtracks exponentially.\n\n"
+                    "The classic vulnerable pattern: (a+)+\n\n"
+                    "For input 'aaaaaaaaaaaaaaaaaab', the engine tries every possible way to split\n"
+                    "the a's between the outer and inner + — exponential time complexity.\n\n"
+                    "Vulnerable patterns typically have:\n"
+                    "  - Nested quantifiers: (a+)+, (a|a)+, (a*)*\n"
+                    "  - Overlapping alternatives: (a|ab)+\n\n"
+                    "Defenses:\n"
+                    "  - Atomic groups (if engine supports it): (?>a+)\n"
+                    "  - Possessive quantifiers: a++ (Python: not built-in, use regex module)\n"
+                    "  - Rewrite the pattern to eliminate ambiguity\n"
+                    "  - Set a timeout on regex execution"
+                ),
+                "question": "Why is the pattern (a+)+ considered dangerous for regex engines?",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "options": [
+                    "a it matches too broadly and produces false positives",
+                    "b it can cause exponential backtracking on certain non-matching inputs",
+                    "c it requires the DOTALL flag to work correctly",
+                    "d it only works in Python, not JavaScript",
+                ],
+                "answer": "b",
+                "xp": 100,
+                "difficulty": "hard",
+                "hints": [
+                    "The danger is in the engine's work, not the matches it finds.",
+                    "Think about what happens when the input does NOT match — the engine must try everything.",
+                    "The answer is: it can cause exponential backtracking on certain non-matching inputs",
+                ],
+            },
+            {
+                "id": "at_2",
+                "type": "quiz",
+                "title": "Atomic Groups",
+                "flavor": "You need to fix the ReDoS vulnerability. The operation needs a pattern that matches possessively — once the group matches, it never gives back characters to the backtracking engine. Atomic groups lock in the match.",
+                "lesson": (
+                    "Atomic groups (?>...) prevent backtracking into the group once it has matched.\n\n"
+                    "  (?>a+)b  — matches one or more 'a' atomically, then 'b'\n"
+                    "  → if 'b' fails after the atomic group, the engine does NOT backtrack into (?>a+)\n\n"
+                    "Available in: PCRE, Java, .NET — NOT natively in Python's re module.\n"
+                    "Python workaround: use the third-party 'regex' module which supports (?>...).\n\n"
+                    "Atomic groups eliminate catastrophic backtracking in vulnerable patterns:\n"
+                    "  Vulnerable:  (a+)+  \n"
+                    "  Fixed:       (?>a+)+"
+                ),
+                "question": "What does an atomic group (?>...) prevent in a regex engine?",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "options": [
+                    "a matching across multiple lines",
+                    "b capturing the group's content",
+                    "c backtracking into the group after it has matched",
+                    "d using the group more than once",
+                ],
+                "answer": "c",
+                "xp": 110,
+                "difficulty": "hard",
+                "hints": [
+                    "Atomic means all-or-nothing — once matched, never given back.",
+                    "The engine cannot go back inside the group to try alternatives.",
+                    "The answer is: backtracking into the group after it has matched",
+                ],
+            },
+            {
+                "id": "at_3",
+                "type": "quiz",
+                "title": "Possessive Quantifiers",
+                "flavor": "In PCRE and Java regex, possessive quantifiers offer a more concise way to prevent backtracking. They look like regular quantifiers with a + appended. The NEXUS rule engine uses PCRE — you can apply these directly.",
+                "lesson": (
+                    "Possessive quantifiers match as much as possible and NEVER give back.\n\n"
+                    "  a++   — possessive +: one or more a, no backtracking\n"
+                    "  a*+   — possessive *: zero or more a, no backtracking\n"
+                    "  a?+   — possessive ?: zero or one a, no backtracking\n"
+                    "  a{3,5}+  — possessive {n,m}: no backtracking\n\n"
+                    "Available in: PCRE, Java, .NET regex module — NOT Python's built-in re.\n"
+                    "Python's 'regex' module supports possessive quantifiers.\n\n"
+                    "Equivalent to wrapping in an atomic group:\n"
+                    "  a++ is equivalent to (?>a+)"
+                ),
+                "question": "In PCRE, what does the pattern \\d++ match compared to \\d+?",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "options": [
+                    "a matches the same text but twice as fast",
+                    "b matches one or more digits without allowing any backtracking",
+                    "c matches two or more digits",
+                    "d matches digits followed by a literal +",
+                ],
+                "answer": "b",
+                "xp": 110,
+                "difficulty": "hard",
+                "hints": [
+                    "The extra + makes it possessive — it grabs and holds.",
+                    "The difference is in backtracking behavior, not what it matches initially.",
+                    "The answer is: matches one or more digits without allowing any backtracking",
+                ],
+            },
+            {
+                "id": "at_4",
+                "type": "quiz",
+                "title": "Regex Debugging Strategy",
+                "flavor": "Your extraction pattern returns nothing on the production log but works fine on your test string. CIPHER: 'Debug systematically. Don't guess. Strip the pattern down to its core and build back up.'",
+                "lesson": (
+                    "Systematic regex debugging approach:\n\n"
+                    "1. Simplify: strip to the minimal pattern and add pieces back\n"
+                    "2. Test anchors: remove ^ and $ first — does the core match?\n"
+                    "3. Check flags: is MULTILINE needed? DOTALL?\n"
+                    "4. Inspect the input: print repr(text) to expose \\r, \\n, invisible chars\n"
+                    "5. Use re.DEBUG flag: re.compile(pattern, re.DEBUG) prints the parse tree\n"
+                    "6. Use regex101.com or debuggex.com for visual debugging\n"
+                    "7. Check for double-escaping: raw string r'\\d+' vs '\\\\d+'\n\n"
+                    "re.DEBUG example:\n"
+                    "  import re\n"
+                    "  re.compile(r'(?P<ts>\\d{4}-\\d{2})', re.DEBUG)"
+                ),
+                "question": "Which Python flag passed to re.compile() prints a debug parse tree of the regex?",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "options": [
+                    "a re.VERBOSE",
+                    "b re.TRACE",
+                    "c re.DEBUG",
+                    "d re.INFO",
+                ],
+                "answer": "c",
+                "xp": 100,
+                "difficulty": "hard",
+                "hints": [
+                    "It's a built-in re flag that outputs the compiled pattern structure.",
+                    "The flag name literally describes its purpose.",
+                    "The answer is: re.DEBUG",
+                ],
+            },
+            {
+                "id": "at_5",
+                "type": "quiz",
+                "title": "re.compile() for Performance",
+                "flavor": "The NEXUS log processor runs the same pattern against 50,000 lines per second. Without caching, the regex engine re-parses the pattern on every call. CIPHER: 'Compile once. Match a million times.'",
+                "lesson": (
+                    "re.compile(pattern, flags) — pre-compiles a regex for reuse.\n\n"
+                    "  log_re = re.compile(r'(?P<ip>\\d{1,3}(?:\\.\\d{1,3}){3})', re.MULTILINE)\n\n"
+                    "  for line in log_file:\n"
+                    "      m = log_re.search(line)   # no re-parsing on each call\n\n"
+                    "Benefits:\n"
+                    "  - Python caches the last ~512 compiled patterns automatically\n"
+                    "  - Explicit compile is clearer and guaranteed cached\n"
+                    "  - Compiled object exposes same methods: .search(), .match(), .findall(), .sub()\n\n"
+                    "Python's internal cache handles simple cases, but for hot loops\n"
+                    "with many different patterns, explicit re.compile() is safer."
+                ),
+                "question": "What is the primary performance benefit of using re.compile() when applying the same pattern to many strings?",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "options": [
+                    "a the compiled pattern matches faster due to JIT compilation",
+                    "b the pattern is parsed once instead of on every call",
+                    "c compiled patterns skip backtracking entirely",
+                    "d re.compile() parallelizes the matching across CPU cores",
+                ],
+                "answer": "b",
+                "xp": 100,
+                "difficulty": "hard",
+                "hints": [
+                    "The gain comes from parsing, not matching speed.",
+                    "Without compile, the pattern string is parsed into a finite automaton on every use.",
+                    "The answer is: the pattern is parsed once instead of on every call",
+                ],
+            },
+            {
+                "id": "at_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Identify the ReDoS Pattern",
+                "flavor": "CIPHER puts four patterns on the screen. One of them is a catastrophic backtracking time bomb. You have 10 seconds to identify which one and justify why before the NEXUS security scanner runs it against untrusted input.",
+                "lesson": (
+                    "Identifying ReDoS-vulnerable patterns:\n\n"
+                    "Safe:\n"
+                    "  \\d{4}-\\d{2}-\\d{2}   → fixed-width, no ambiguity\n"
+                    "  [A-Z]+-\\d+          → deterministic, no overlap\n\n"
+                    "Vulnerable:\n"
+                    "  (\\w+\\s*)+           → \\w and \\s overlap at whitespace — catastrophic\n"
+                    "  (a+)+               → nested quantifiers on the same chars\n"
+                    "  ([a-z]+)*           → zero-or-more wrapping a one-or-more\n\n"
+                    "The danger sign: a quantified group whose content can match\n"
+                    "in multiple ways OR whose content overlaps with an outer quantifier.\n\n"
+                    "The term for this attack vector is: ReDoS (Regular Expression Denial of Service)."
+                ),
+                "question": "An attack that sends specially crafted input to trigger exponential regex backtracking and hang a server is called Re___.",
+                "url": "https://www.regular-expressions.info/catastrophic.html",
+                "answers": ["ReDoS", "redos", "REDOS"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "It's an acronym for a denial of service attack specific to regular expressions.",
+                    "Re + DoS.",
+                    "The answer is: ReDoS",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1551,4 +2362,8 @@ ZONE_ORDER = [
     "regex_flags",
     "python_regex",
     "sed_and_grep_regex",
+    "named_groups_and_backreferences",
+    "substitution_and_replace",
+    "regex_in_javascript",
+    "advanced_techniques",
 ]

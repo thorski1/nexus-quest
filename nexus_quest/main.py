@@ -84,3 +84,8 @@ def main_kubernetes():
 def main_aws():
     check_and_prompt(_PACKAGE)
     run("aws")
+
+
+def main_terraform():
+    check_and_prompt(_PACKAGE)
+    run("terraform")

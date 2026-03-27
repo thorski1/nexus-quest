@@ -89,6 +89,34 @@ ZONE_INTROS = {
         "Stopping it isn't enough. You need to mask it. Kill it at the source. "
         "Learn systemd. Then own it.'[/bold white]"
     ),
+    "text_processing": (
+        "[bold cyan]◈  TEXT PROCESSING  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: '40 GB of access logs. The evidence is in there — every"
+        " fraudulent transfer request, timestamped, source IP attached."
+        " But you can't read 40 GB by eye. awk, sed, cut, sort, uniq —"
+        " chain them. The shell is your scalpel.'[/bold white]"
+    ),
+    "archive_and_compression": (
+        "[bold cyan]◈  ARCHIVE AND COMPRESSION  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'The evidence package needs to leave this server."
+        " But it's 2 GB of logs, configs, and state files."
+        " Compress it. Bundle it. Transfer it securely."
+        " tar, gzip, rsync — the tools that move the truth.'[/bold white]"
+    ),
+    "cron_and_scheduling": (
+        "[bold cyan]◈  CRON AND SCHEDULING  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'The automated jobs ran on schedule. Every month,"
+        " first of the month, 2 AM — fund movement, log rotation, trace cleanup."
+        " Their automation is still running. You need to read it, understand it,"
+        " and shut it down before the next cycle fires.'[/bold white]"
+    ),
+    "bash_scripting_basics": (
+        "[bold cyan]◈  BASH SCRIPTING  ◈[/bold cyan]\n\n"
+        "[bold white]CIPHER: 'Manual commands won't cut it at this scale."
+        " You need scripts — reusable, parameterised, resilient to errors."
+        " Shebang, variables, conditionals, loops, exit codes."
+        " Automate the evidence collection. Own the shell.'[/bold white]"
+    ),
 }
 
 ZONE_COMPLETIONS = {
@@ -136,6 +164,28 @@ ZONE_COMPLETIONS = {
         "[bold green]ZONE CLEAR — SYSTEMD SERVICES[/bold green]\n\n"
         "The NEXUS agent service: stopped, disabled, masked, its unit file rewritten. "
         "CIPHER: 'It's not coming back. The Service Grid is ours.'"
+    ),
+    "text_processing": (
+        "[bold green]ZONE CLEAR — TEXT PROCESSING[/bold green]\n\n"
+        "The log pipeline is built. 40 GB distilled to 847 lines of relevant entries. "
+        "CIPHER: 'Every IP, every timestamp, every fraudulent request — extracted and sorted. "
+        "awk and sed just built your case.'"
+    ),
+    "archive_and_compression": (
+        "[bold green]ZONE CLEAR — ARCHIVE AND COMPRESSION[/bold green]\n\n"
+        "The evidence package: compressed, checksummed, transferred to the secure drop. "
+        "CIPHER: 'rsync completed. The bundle is safe. They can't delete it now.'"
+    ),
+    "cron_and_scheduling": (
+        "[bold green]ZONE CLEAR — CRON AND SCHEDULING[/bold green]\n\n"
+        "The automated jobs: catalogued, documented, disabled. "
+        "CIPHER: 'The 2 AM cycle won't fire again. Their automation is dark.'"
+    ),
+    "bash_scripting_basics": (
+        "[bold green]ZONE CLEAR — BASH SCRIPTING[/bold green]\n\n"
+        "The collection script runs clean — parameterised, error-safe, logged. "
+        "CIPHER: 'Automation built. The script runs on every new server we access. "
+        "You just multiplied your reach across the whole NEXUS estate.'"
     ),
 }
 
@@ -186,5 +236,31 @@ BOSS_INTROS = {
         "[bold white]'You edited the unit file. You removed Restart=always. "
         "But systemd is still running the old definition from cache. "
         "One command. Reload the daemon. Then we restart clean.'[/bold white]"
+    ),
+    "text_processing": (
+        "[bold red]BOSS CHALLENGE — LOG EXTRACTION[/bold red]\n\n"
+        "[bold white]CIPHER: 'The evidence is buried in 40 GB of logs. "
+        "awk, sed, cut, sort, uniq — chain them in a pipeline. "
+        "I need every unique IP that hit endpoint /transfer over the last 90 days. "
+        "Build the command. One shot.'[/bold white]"
+    ),
+    "archive_and_compression": (
+        "[bold red]BOSS CHALLENGE — EVIDENCE BUNDLE[/bold red]\n\n"
+        "[bold white]CIPHER: 'Package everything. The log extracts, the config files, "
+        "the state snapshots. tar with gzip, preserve timestamps, exclude .git dirs. "
+        "Then rsync it to the secure drop. One command for each step.'[/bold white]"
+    ),
+    "cron_and_scheduling": (
+        "[bold red]BOSS CHALLENGE — SCHEDULED EXFIL[/bold red]\n\n"
+        "[bold white]CIPHER: 'The NEXUS operator ran automated jobs on the first of "
+        "every month at 2 AM. Read their crontab entry. Tell me the exact schedule "
+        "expression, what it runs, and how to disable it without deleting it.'[/bold white]"
+    ),
+    "bash_scripting_basics": (
+        "[bold red]BOSS CHALLENGE — DEFENSIVE SCRIPT[/bold red]\n\n"
+        "[bold white]CIPHER: 'Write the variable assignment that captures the first "
+        "script argument into a variable named TARGET. "
+        "One line. No spaces around the equals sign. "
+        "Get it right — the rest of the script depends on it.'[/bold white]"
     ),
 }

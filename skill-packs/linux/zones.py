@@ -1596,6 +1596,873 @@ ZONES = {
             },
         ],
     },
+    "text_processing": {
+        "id": "text_processing",
+        "name": "The Data Blade",
+        "subtitle": "Text Processing",
+        "color": "green",
+        "icon": "⚔",
+        "commands": ["awk", "sed", "cut", "sort", "uniq", "tr", "wc"],
+        "challenges": [
+            {
+                "id": "txt_1",
+                "type": "quiz",
+                "title": "Field Extraction",
+                "flavor": "NEXUS logs are colon-delimited. You need column 3 from every line — user IDs, extracted cleanly. One tool handles fixed delimiters.",
+                "lesson": (
+                    "cut — extracts fields or character ranges from each line of input.\n\n"
+                    "Syntax: cut [options] [file]\n\n"
+                    "  -d DELIM   field delimiter (default: tab)\n"
+                    "  -f N       select field number N\n"
+                    "  -c N       select character position N\n\n"
+                    "Examples:\n"
+                    "  cut -d: -f1 /etc/passwd        → extract usernames\n"
+                    "  cut -d, -f3 data.csv           → third CSV column\n"
+                    "  cut -c1-10 file.txt            → first 10 characters per line\n\n"
+                    "Combine with sort/uniq for frequency analysis:\n"
+                    "  cut -d: -f1 /etc/passwd | sort | uniq"
+                ),
+                "question": "What command extracts the first field from a colon-delimited file like /etc/passwd?",
+                "url": "https://man7.org/linux/man-pages/man1/awk.1p.html",
+                "answers": ["cut -d: -f1", "cut -d: -f1 /etc/passwd"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The command is 'cut'. Use -d for delimiter and -f for field.",
+                    "Delimiter is colon: -d:",
+                    "The answer is: cut -d: -f1",
+                ],
+            },
+            {
+                "id": "txt_2",
+                "type": "fill_blank",
+                "title": "Unique Offenders",
+                "flavor": "The auth log has thousands of lines — many duplicates. You need each unique IP, counted. Sort first, then deduplicate with counts.",
+                "lesson": (
+                    "sort | uniq -c — the classic pipeline for frequency analysis.\n\n"
+                    "sort — sorts lines alphabetically (required before uniq)\n"
+                    "uniq — filters adjacent duplicate lines\n"
+                    "  -c   prefix each line with occurrence count\n"
+                    "  -d   only print duplicate lines\n"
+                    "  -u   only print unique lines\n\n"
+                    "Full frequency pipeline:\n"
+                    "  sort | uniq -c | sort -rn | head\n\n"
+                    "Examples:\n"
+                    "  cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -10\n"
+                    "  → top 10 IPs by hit count in an access log\n\n"
+                    "Note: uniq only removes ADJACENT duplicates — always sort first."
+                ),
+                "question": (
+                    "Complete the pipeline to count and sort unique IPs from auth.log:\n\n"
+                    "grep 'Failed' auth.log | awk '{print $11}' | sort | ___ | sort -rn"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/awk.1p.html",
+                "answers": ["uniq -c"],
+                "xp": 60,
+                "difficulty": "medium",
+                "hints": [
+                    "uniq with the count flag.",
+                    "-c gives you the count.",
+                    "The answer is: uniq -c",
+                ],
+            },
+            {
+                "id": "txt_3",
+                "type": "quiz",
+                "title": "Stream Edit",
+                "flavor": "The exfil file has Windows-style CRLF line endings. The receiving server expects Unix LF only. Strip them in-place without opening an editor.",
+                "lesson": (
+                    "sed — stream editor for filtering and transforming text.\n\n"
+                    "Syntax: sed [options] 'expression' [file]\n\n"
+                    "  -i        edit file in-place\n"
+                    "  -i.bak    edit in-place, save backup with .bak extension\n"
+                    "  -n        suppress automatic printing\n\n"
+                    "Substitution syntax: s/pattern/replacement/flags\n"
+                    "  g   replace all occurrences (global)\n"
+                    "  i   case-insensitive\n\n"
+                    "Examples:\n"
+                    "  sed 's/foo/bar/g' file.txt          → replace all 'foo' with 'bar'\n"
+                    "  sed -i 's/\\r//' file.txt            → strip carriage returns (CRLF → LF)\n"
+                    "  sed -n '10,20p' file.txt            → print lines 10-20\n"
+                    "  sed '/^#/d' config.txt              → delete comment lines\n\n"
+                    "sed is the standard tool for in-place bulk text transformation."
+                ),
+                "question": "What tool is used for in-place text substitution and stream editing via regex patterns?",
+                "url": "https://man7.org/linux/man-pages/man1/sed.1.html",
+                "answers": ["sed"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Stream EDitor. Three letters.",
+                    "s/old/new/g syntax.",
+                    "The answer is: sed",
+                ],
+            },
+            {
+                "id": "txt_4",
+                "type": "fill_blank",
+                "title": "AWK Column Filter",
+                "flavor": "The NEXUS transaction log is whitespace-delimited. Column 4 is the amount field. You need only lines where the amount exceeds 10000. awk handles both extraction and filtering.",
+                "lesson": (
+                    "awk — pattern scanning and processing language for structured text.\n\n"
+                    "Syntax: awk 'pattern { action }' file\n\n"
+                    "Built-in variables:\n"
+                    "  $0   entire line\n"
+                    "  $1, $2 ... $NF   field 1, field 2 ... last field\n"
+                    "  NF   number of fields\n"
+                    "  NR   current line number\n"
+                    "  FS   field separator (default: whitespace)\n\n"
+                    "Examples:\n"
+                    "  awk '{print $1}' file             → print first field of every line\n"
+                    "  awk '$4 > 10000' transactions.log → lines where field 4 > 10000\n"
+                    "  awk -F: '{print $1}' /etc/passwd  → use colon as separator\n"
+                    "  awk 'NR==5' file                  → print line 5 only\n\n"
+                    "awk excels at column-based log analysis and conditional filtering."
+                ),
+                "question": (
+                    "Complete the awk command to print lines where the 4th field is greater than 10000:\n\n"
+                    "awk '___ > 10000' transactions.log"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/awk.1p.html",
+                "answers": ["$4"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "awk fields are accessed with $N notation.",
+                    "Fourth field: $4",
+                    "The answer is: $4",
+                ],
+            },
+            {
+                "id": "txt_5",
+                "type": "quiz",
+                "title": "Word Count",
+                "flavor": "The report needs a line count for the evidence log. One command gives you lines, words, and bytes simultaneously.",
+                "lesson": (
+                    "wc — word count utility that counts lines, words, and bytes.\n\n"
+                    "Syntax: wc [options] [file]\n\n"
+                    "  wc        → lines, words, bytes\n"
+                    "  wc -l     → line count only\n"
+                    "  wc -w     → word count only\n"
+                    "  wc -c     → byte count\n"
+                    "  wc -m     → character count\n\n"
+                    "Examples:\n"
+                    "  wc -l /var/log/auth.log         → how many log entries\n"
+                    "  cat file | wc -l               → count lines from stdin\n"
+                    "  ls | wc -l                     → count files in a directory\n\n"
+                    "Combine with grep to count matches:\n"
+                    "  grep 'ERROR' app.log | wc -l   → number of error lines"
+                ),
+                "question": "What flag does wc use to count only lines?",
+                "url": "https://man7.org/linux/man-pages/man1/awk.1p.html",
+                "answers": ["-l", "wc -l"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Single letter flag. Think: lines.",
+                    "-l",
+                    "The answer is: -l",
+                ],
+            },
+            {
+                "id": "txt_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Full Pipeline",
+                "flavor": "CIPHER: 'The NEXUS access log has tens of thousands of entries. I need the top 5 source IPs — by hit count, descending. Build the pipeline.'",
+                "lesson": (
+                    "Log analysis pipeline — combining cut, sort, uniq, and head.\n\n"
+                    "Standard pattern for top-N frequency analysis:\n\n"
+                    "  cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -5\n\n"
+                    "Step by step:\n"
+                    "  cut -d' ' -f1   → extract the IP (first field, space-delimited)\n"
+                    "  sort            → sort IPs alphabetically (required for uniq)\n"
+                    "  uniq -c         → count consecutive duplicates\n"
+                    "  sort -rn        → sort numerically, descending (highest count first)\n"
+                    "  head -5         → take the top 5\n\n"
+                    "sort flags:\n"
+                    "  -r   reverse order (descending)\n"
+                    "  -n   numeric sort (not lexicographic)\n\n"
+                    "This pipeline works on any log format — change the cut fields to match."
+                ),
+                "question": (
+                    "Complete the pipeline to find the top 5 IPs in access.log:\n\n"
+                    "cut -d' ' -f1 access.log | sort | uniq -c | sort ___ | head -5"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/awk.1p.html",
+                "answers": ["-rn", "-nr"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "sort needs to be reversed and numeric.",
+                    "-r for reverse, -n for numeric — combine them.",
+                    "The answer is: -rn",
+                ],
+            },
+        ],
+    },
+
+    "archive_and_compression": {
+        "id": "archive_and_compression",
+        "name": "The Courier Protocol",
+        "subtitle": "Archive & Compression",
+        "color": "blue",
+        "icon": "📦",
+        "commands": ["tar", "gzip", "bzip2", "zip", "unzip", "scp", "rsync"],
+        "challenges": [
+            {
+                "id": "arc_1",
+                "type": "quiz",
+                "title": "Pack the Archive",
+                "flavor": "The evidence directory is ready. Before transfer it needs to be packed into a single file. tar. Create the archive.",
+                "lesson": (
+                    "tar — tape archive utility for bundling files and directories.\n\n"
+                    "Syntax: tar [options] archive.tar [files...]\n\n"
+                    "Core flags:\n"
+                    "  -c   create a new archive\n"
+                    "  -x   extract from archive\n"
+                    "  -t   list archive contents\n"
+                    "  -f   specify archive filename (required)\n"
+                    "  -v   verbose (show files being processed)\n"
+                    "  -z   compress/decompress with gzip (.tar.gz)\n"
+                    "  -j   compress/decompress with bzip2 (.tar.bz2)\n\n"
+                    "Examples:\n"
+                    "  tar -czf archive.tar.gz /evidence/    → create gzip-compressed archive\n"
+                    "  tar -xzf archive.tar.gz               → extract gzip archive\n"
+                    "  tar -tf archive.tar.gz                → list contents without extracting"
+                ),
+                "question": "What tar flags create a new gzip-compressed archive from a directory?",
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["-czf", "czf", "tar -czf"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Three flags: create, gzip-compress, filename.",
+                    "-c -z -f combined: -czf",
+                    "The answer is: -czf",
+                ],
+            },
+            {
+                "id": "arc_2",
+                "type": "fill_blank",
+                "title": "Inspect Before Extract",
+                "flavor": "You've received an archive from the drop. Before extracting anything, verify its contents. Never unpack blind.",
+                "lesson": (
+                    "tar -tf — lists archive contents without extracting.\n\n"
+                    "Syntax: tar -tf archive.tar.gz\n\n"
+                    "  -t   list/test — show what's inside\n"
+                    "  -f   filename\n"
+                    "  -v   verbose (show permissions, owner, size, date)\n\n"
+                    "Security: always inspect archives before extraction to avoid\n"
+                    "path traversal attacks (files containing ../../ paths).\n\n"
+                    "Examples:\n"
+                    "  tar -tf payload.tar.gz          → list all files\n"
+                    "  tar -tvf payload.tar.gz         → verbose listing with metadata\n"
+                    "  tar -tf payload.tar.gz | grep '\\.\\./'  → check for path traversal\n\n"
+                    "If any path starts with / or contains ../ — do not extract."
+                ),
+                "question": (
+                    "Complete the command to list the contents of an archive without extracting:\n\n"
+                    "tar ___ payload.tar.gz"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["-tf", "-tvf"],
+                "xp": 60,
+                "difficulty": "medium",
+                "hints": [
+                    "Two flags: test/list and filename.",
+                    "-t for list, -f for filename.",
+                    "The answer is: -tf",
+                ],
+            },
+            {
+                "id": "arc_3",
+                "type": "quiz",
+                "title": "Gzip Single File",
+                "flavor": "The log file is 800MB uncompressed. Compress it with gzip before staging for transfer. It will shrink dramatically.",
+                "lesson": (
+                    "gzip — compresses files using the LZ77 algorithm.\n\n"
+                    "Syntax: gzip [options] file\n\n"
+                    "  gzip file           → compress (replaces file with file.gz)\n"
+                    "  gzip -d file.gz     → decompress (same as gunzip)\n"
+                    "  gzip -k file        → keep original (don't delete)\n"
+                    "  gzip -9 file        → maximum compression\n"
+                    "  gzip -l file.gz     → list compression ratio\n\n"
+                    "Comparison:\n"
+                    "  gzip    — fast, good compression (.gz)\n"
+                    "  bzip2   — slower, better compression (.bz2)\n"
+                    "  xz      — slowest, best compression (.xz)\n\n"
+                    "gzip is the default compression for tar (.tar.gz or .tgz)."
+                ),
+                "question": "What command compresses a file with gzip, replacing the original with a .gz file?",
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["gzip", "gzip file"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The compression utility with a name like the format.",
+                    "gzip",
+                    "The answer is: gzip",
+                ],
+            },
+            {
+                "id": "arc_4",
+                "type": "fill_blank",
+                "title": "Secure Copy",
+                "flavor": "Archive is ready. The drop site is at 10.0.1.88. Transfer the file over SSH — encrypted, authenticated, no FTP.",
+                "lesson": (
+                    "scp — secure copy over SSH.\n\n"
+                    "Syntax: scp [options] source destination\n\n"
+                    "Remote path format: user@host:/path/to/file\n\n"
+                    "  scp file.tar.gz user@host:/tmp/      → upload to remote\n"
+                    "  scp user@host:/data/file.txt ./      → download from remote\n"
+                    "  scp -r dir/ user@host:/backup/       → copy directory recursively\n"
+                    "  scp -P 2222 file user@host:/tmp/     → use custom SSH port\n\n"
+                    "rsync is preferred for large or repeated transfers:\n"
+                    "  rsync -avz file user@host:/backup/   → sync with compression and progress\n"
+                    "  rsync --delete src/ user@host:/dst/  → mirror (delete removed files)\n\n"
+                    "Both scp and rsync use SSH for transport — encrypted by default."
+                ),
+                "question": (
+                    "Complete the scp command to upload evidence.tar.gz to the /exfil/ directory on the drop server:\n\n"
+                    "scp evidence.tar.gz operative@10.0.1.88:___"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["/exfil/", "/exfil"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "The destination path on the remote host.",
+                    "After the colon comes the remote path.",
+                    "The answer is: /exfil/",
+                ],
+            },
+            {
+                "id": "arc_5",
+                "type": "quiz",
+                "title": "Backup Strategy",
+                "flavor": "CIPHER: 'You need a reliable way to sync the evidence directory to the backup server nightly — incremental, not a full copy each time.'",
+                "lesson": (
+                    "rsync — efficient file synchronization and backup tool.\n\n"
+                    "Syntax: rsync [options] source destination\n\n"
+                    "Key flags:\n"
+                    "  -a   archive mode (preserves permissions, timestamps, symlinks)\n"
+                    "  -v   verbose\n"
+                    "  -z   compress data during transfer\n"
+                    "  -n   dry run (show what would be transferred)\n"
+                    "  --delete          remove files at destination not in source\n"
+                    "  --exclude=PATTERN skip matching files\n\n"
+                    "rsync is incremental — only transfers changed files, unlike scp.\n\n"
+                    "Examples:\n"
+                    "  rsync -avz /data/ user@backup:/data/       → sync to remote\n"
+                    "  rsync -avzn /data/ user@backup:/data/      → dry run first\n"
+                    "  rsync -avz --delete /src/ /dst/            → mirror with deletion\n\n"
+                    "Trailing slash matters: /src/ (contents) vs /src (directory itself)."
+                ),
+                "question": "Which tool performs incremental file synchronization, only transferring files that have changed?",
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["rsync"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Not scp — this one is incremental.",
+                    "rsync",
+                    "The answer is: rsync",
+                ],
+            },
+            {
+                "id": "arc_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Compressed Transfer",
+                "flavor": "CIPHER: 'You need the entire /evidence directory archived, gzip-compressed, and written to a single file called drop.tar.gz. One command. No intermediates.'",
+                "lesson": (
+                    "tar -czf — create a gzip-compressed archive in a single command.\n\n"
+                    "Syntax: tar -czf output.tar.gz source_directory/\n\n"
+                    "Flags:\n"
+                    "  -c   create new archive\n"
+                    "  -z   compress with gzip\n"
+                    "  -f   next argument is the filename\n\n"
+                    "The filename argument (-f) must immediately follow in the flag string,\n"
+                    "or be the next argument when flags are separated.\n\n"
+                    "Example:\n"
+                    "  tar -czf drop.tar.gz /evidence/\n"
+                    "  tar czf drop.tar.gz /evidence/    (same, without leading dash)\n\n"
+                    "To also exclude certain paths:\n"
+                    "  tar -czf drop.tar.gz --exclude='*.tmp' /evidence/\n\n"
+                    "Verify after creation: tar -tf drop.tar.gz"
+                ),
+                "question": (
+                    "Complete the command to create a gzip-compressed archive of /evidence/:\n\n"
+                    "tar ___ drop.tar.gz /evidence/"
+                ),
+                "url": "https://man7.org/linux/man-pages/man1/tar.1.html",
+                "answers": ["-czf", "czf"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "Three flags: create, compress (gzip), filename.",
+                    "-czf",
+                    "The answer is: -czf",
+                ],
+            },
+        ],
+    },
+
+    "cron_and_scheduling": {
+        "id": "cron_and_scheduling",
+        "name": "The Clock Daemon",
+        "subtitle": "Cron & Scheduling",
+        "color": "magenta",
+        "icon": "⏰",
+        "commands": ["crontab", "cron", "anacron", "at", "batch", "systemd timers"],
+        "challenges": [
+            {
+                "id": "cron_1",
+                "type": "quiz",
+                "title": "Edit the Schedule",
+                "flavor": "You need to plant a scheduled check — a script that runs every morning at 02:00 without leaving obvious traces. The operative's tool: crontab.",
+                "lesson": (
+                    "crontab — manages the cron schedule for the current user.\n\n"
+                    "Syntax:\n"
+                    "  crontab -e    → open user's crontab in editor (create or edit)\n"
+                    "  crontab -l    → list current user's cron jobs\n"
+                    "  crontab -r    → remove ALL cron jobs (use with caution)\n"
+                    "  crontab -u user -l  → list another user's crontab (requires root)\n\n"
+                    "Cron expression format:\n"
+                    "  minute  hour  day-of-month  month  day-of-week  command\n"
+                    "  0-59    0-23  1-31          1-12   0-7\n\n"
+                    "Example entry:\n"
+                    "  0 2 * * * /opt/scripts/check.sh    → run at 02:00 every day\n\n"
+                    "The cron daemon reads the crontab and executes jobs at scheduled times."
+                ),
+                "question": "What command opens the current user's crontab for editing?",
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["crontab -e"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "crontab with the edit flag.",
+                    "-e for edit.",
+                    "The answer is: crontab -e",
+                ],
+            },
+            {
+                "id": "cron_2",
+                "type": "fill_blank",
+                "title": "Expression Decode",
+                "flavor": "Auditing the system crontab. Entry: '30 4 * * 1'. You need to know exactly when this job fires before deciding whether to neutralize it.",
+                "lesson": (
+                    "Cron expression format:\n\n"
+                    "  ┌──── minute (0-59)\n"
+                    "  │ ┌──── hour (0-23)\n"
+                    "  │ │ ┌──── day of month (1-31)\n"
+                    "  │ │ │ ┌──── month (1-12)\n"
+                    "  │ │ │ │ ┌──── day of week (0=Sun, 1=Mon ... 6=Sat, 7=Sun)\n"
+                    "  │ │ │ │ │\n"
+                    "  * * * * *  command\n\n"
+                    "Special characters:\n"
+                    "  *   any value\n"
+                    "  ,   list: 1,3,5 — at positions 1, 3, and 5\n"
+                    "  -   range: 1-5 — every value from 1 to 5\n"
+                    "  /   step: */15 — every 15 units\n\n"
+                    "Examples:\n"
+                    "  0 * * * *      → every hour on the hour\n"
+                    "  */15 * * * *   → every 15 minutes\n"
+                    "  0 2 * * 1      → every Monday at 02:00\n"
+                    "  30 4 * * 1     → every Monday at 04:30"
+                ),
+                "question": (
+                    "The cron entry '30 4 * * 1' runs at what time and day?\n\n"
+                    "Answer: Every ___ at 04:30"
+                ),
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["Monday", "monday", "Mon"],
+                "xp": 60,
+                "difficulty": "medium",
+                "hints": [
+                    "The last field is day of week. 1 = Monday.",
+                    "Day 1 = Monday.",
+                    "The answer is: Monday",
+                ],
+            },
+            {
+                "id": "cron_3",
+                "type": "quiz",
+                "title": "One-Shot Scheduling",
+                "flavor": "The exfil script needs to run exactly once, in 10 minutes, without being added to any persistent schedule. No cron. Something lighter.",
+                "lesson": (
+                    "at — schedules a one-time job to run at a specified future time.\n\n"
+                    "Syntax:\n"
+                    "  at TIME          → open interactive prompt for commands\n"
+                    "  echo 'cmd' | at TIME  → pipe command directly\n"
+                    "  at -l            → list pending at jobs (same as atq)\n"
+                    "  at -r JOB_ID     → remove a pending job (same as atrm)\n\n"
+                    "Time formats:\n"
+                    "  at now + 10 minutes\n"
+                    "  at 14:30\n"
+                    "  at midnight tomorrow\n"
+                    "  at 9am next Monday\n\n"
+                    "Example:\n"
+                    "  echo '/opt/exfil.sh' | at now + 10 minutes\n\n"
+                    "Unlike cron, 'at' runs the job once, then removes it."
+                ),
+                "question": "What command schedules a one-time command to run at a future time (not recurring)?",
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["at"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Two letters. Single-shot scheduler.",
+                    "at",
+                    "The answer is: at",
+                ],
+            },
+            {
+                "id": "cron_4",
+                "type": "fill_blank",
+                "title": "Every 15 Minutes",
+                "flavor": "The heartbeat check needs to run every 15 minutes, every hour, every day. Write the cron expression.",
+                "lesson": (
+                    "Cron step syntax — */N means 'every N units'.\n\n"
+                    "  */15 * * * *   → every 15 minutes\n"
+                    "  */2 * * * *    → every 2 minutes\n"
+                    "  0 */6 * * *    → every 6 hours, on the hour\n"
+                    "  */5 8-18 * * 1-5  → every 5 min, business hours, weekdays\n\n"
+                    "The /N step divides the range:\n"
+                    "  */15 in minutes → runs at 0, 15, 30, 45\n"
+                    "  */6 in hours → runs at 0, 6, 12, 18\n\n"
+                    "Full example entry:\n"
+                    "  */15 * * * * /opt/heartbeat.sh\n\n"
+                    "Use crontab.guru to verify expressions interactively."
+                ),
+                "question": (
+                    "Write the cron time expression (5 fields) to run a job every 15 minutes:"
+                ),
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["*/15 * * * *"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "Step syntax: */N in the minutes field.",
+                    "Minutes field: */15, then four wildcards.",
+                    "The answer is: */15 * * * *",
+                ],
+            },
+            {
+                "id": "cron_5",
+                "type": "quiz",
+                "title": "List All Jobs",
+                "flavor": "Something is scheduled that shouldn't be. Before removing anything, you need to see every cron job registered for the current user.",
+                "lesson": (
+                    "crontab -l — lists the current user's cron jobs.\n\n"
+                    "  crontab -l              → current user's jobs\n"
+                    "  sudo crontab -u root -l → root's crontab\n"
+                    "  sudo crontab -u www-data -l  → web server's crontab\n\n"
+                    "System-wide cron locations to also check:\n"
+                    "  /etc/crontab            → system crontab (includes user field)\n"
+                    "  /etc/cron.d/            → drop-in cron files\n"
+                    "  /etc/cron.hourly/       → scripts run hourly\n"
+                    "  /etc/cron.daily/        → scripts run daily\n"
+                    "  /etc/cron.weekly/\n"
+                    "  /etc/cron.monthly/\n"
+                    "  /var/spool/cron/crontabs/  → per-user crontab files\n\n"
+                    "Full audit: check all locations above for persistence mechanisms."
+                ),
+                "question": "What command lists all cron jobs for the current user?",
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["crontab -l"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "crontab with the list flag.",
+                    "-l for list.",
+                    "The answer is: crontab -l",
+                ],
+            },
+            {
+                "id": "cron_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Systemd Timer",
+                "flavor": "CIPHER: 'Cron is old. This server uses systemd timers. One is running that shouldn't be. List every active timer — I need to see the schedule.'",
+                "lesson": (
+                    "systemd timers — the modern alternative to cron.\n\n"
+                    "List timers:\n"
+                    "  systemctl list-timers          → all active timers with next trigger\n"
+                    "  systemctl list-timers --all    → including inactive timers\n\n"
+                    "Timer unit file format (.timer):\n"
+                    "  [Timer]\n"
+                    "  OnCalendar=*-*-* 02:00:00    → run daily at 02:00\n"
+                    "  OnBootSec=5min               → run 5 minutes after boot\n"
+                    "  OnUnitActiveSec=1h           → repeat every hour\n"
+                    "  Persistent=true              → catch up if missed (like anacron)\n\n"
+                    "Each timer is paired with a .service unit of the same name.\n\n"
+                    "Example: nexus-check.timer triggers nexus-check.service\n\n"
+                    "Advantage over cron: timers are tracked in the journal,\n"
+                    "support dependencies, and survive missed runs (with Persistent=true)."
+                ),
+                "question": (
+                    "Complete the command to list all active systemd timers:\n\n"
+                    "systemctl ___"
+                ),
+                "url": "https://man7.org/linux/man-pages/man5/crontab.5.html",
+                "answers": ["list-timers", "list-timers --all"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "systemctl subcommand that lists timer units.",
+                    "list-timers",
+                    "The answer is: list-timers",
+                ],
+            },
+        ],
+    },
+
+    "bash_scripting_basics": {
+        "id": "bash_scripting_basics",
+        "name": "The Script Engine",
+        "subtitle": "Bash Scripting Basics",
+        "color": "cyan",
+        "icon": "📜",
+        "commands": ["bash", "sh", "chmod +x", "if", "for", "while", "exit"],
+        "challenges": [
+            {
+                "id": "bash_1",
+                "type": "fill_blank",
+                "title": "The Shebang",
+                "flavor": "The script needs to run directly as an executable. The first line tells the kernel which interpreter to use. Get it wrong and nothing runs.",
+                "lesson": (
+                    "Shebang line — the first line of a script that specifies the interpreter.\n\n"
+                    "Syntax: #!interpreter_path\n\n"
+                    "Common shebangs:\n"
+                    "  #!/bin/bash          → run with bash\n"
+                    "  #!/bin/sh            → run with POSIX sh\n"
+                    "  #!/usr/bin/env bash  → find bash in PATH (more portable)\n"
+                    "  #!/usr/bin/env python3\n\n"
+                    "Without a shebang:\n"
+                    "  The script runs with the current shell (/bin/sh default).\n"
+                    "  Bash-specific syntax may fail if sh is not bash.\n\n"
+                    "Making a script executable:\n"
+                    "  chmod +x script.sh\n"
+                    "  ./script.sh\n\n"
+                    "Best practice: always include a shebang and chmod +x your scripts."
+                ),
+                "question": (
+                    "Complete the shebang line to specify bash as the interpreter:\n\n"
+                    "___/bin/bash"
+                ),
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["#!", "#!/"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Hash followed by exclamation mark.",
+                    "#!",
+                    "The answer is: #!",
+                ],
+            },
+            {
+                "id": "bash_2",
+                "type": "quiz",
+                "title": "Script Arguments",
+                "flavor": "The exfil script needs to accept a target host as its first argument at runtime. Inside the script, how do you reference it?",
+                "lesson": (
+                    "Bash positional parameters — accessing script arguments.\n\n"
+                    "  $0   script name itself\n"
+                    "  $1   first argument\n"
+                    "  $2   second argument\n"
+                    "  $@   all arguments as separate words\n"
+                    "  $*   all arguments as a single word\n"
+                    "  $#   number of arguments\n\n"
+                    "Example script:\n"
+                    "  #!/bin/bash\n"
+                    "  HOST=$1\n"
+                    "  echo \"Connecting to $HOST\"\n"
+                    "  ssh operative@$HOST\n\n"
+                    "Called as: ./connect.sh 10.0.1.88\n"
+                    "Result: Connecting to 10.0.1.88\n\n"
+                    "Validate arguments:\n"
+                    "  if [ -z \"$1\" ]; then\n"
+                    "    echo \"Usage: $0 <host>\"\n"
+                    "    exit 1\n"
+                    "  fi"
+                ),
+                "question": "Inside a bash script, what variable holds the first command-line argument passed to the script?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["$1"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Positional parameters use $ followed by position number.",
+                    "First argument: $1",
+                    "The answer is: $1",
+                ],
+            },
+            {
+                "id": "bash_3",
+                "type": "fill_blank",
+                "title": "Exit Codes",
+                "flavor": "The deployment script needs to stop immediately if the archive step fails. Exit codes are how programs signal success or failure. Zero means clean.",
+                "lesson": (
+                    "Exit codes — every command returns a numeric exit status.\n\n"
+                    "  0     success\n"
+                    "  1-255 failure (non-zero)\n\n"
+                    "Checking exit codes:\n"
+                    "  $?   holds the exit code of the last command\n\n"
+                    "set -e — exits the script immediately on any error:\n"
+                    "  #!/bin/bash\n"
+                    "  set -e\n"
+                    "  tar -czf archive.tar.gz /data/    # script stops here if tar fails\n"
+                    "  scp archive.tar.gz user@host:/backup/\n\n"
+                    "Explicit exit:\n"
+                    "  exit 0   → success\n"
+                    "  exit 1   → general error\n\n"
+                    "Conditional on exit code:\n"
+                    "  if ! tar -czf archive.tar.gz /data/; then\n"
+                    "    echo 'Archive failed'\n"
+                    "    exit 1\n"
+                    "  fi"
+                ),
+                "question": (
+                    "What exit code indicates successful completion of a command in bash?\n\n"
+                    "Answer: ___"
+                ),
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["0"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "Success is represented by zero.",
+                    "0",
+                    "The answer is: 0",
+                ],
+            },
+            {
+                "id": "bash_4",
+                "type": "fill_blank",
+                "title": "Conditional Logic",
+                "flavor": "The script needs to check whether the evidence file exists before attempting to compress it. If the file is missing, bail with an error message.",
+                "lesson": (
+                    "if/elif/else — conditional execution in bash.\n\n"
+                    "Syntax:\n"
+                    "  if [ condition ]; then\n"
+                    "    commands\n"
+                    "  elif [ other_condition ]; then\n"
+                    "    commands\n"
+                    "  else\n"
+                    "    commands\n"
+                    "  fi\n\n"
+                    "Common test flags:\n"
+                    "  -f file   file exists and is a regular file\n"
+                    "  -d dir    directory exists\n"
+                    "  -z str    string is empty\n"
+                    "  -n str    string is non-empty\n"
+                    "  -eq       numeric equal\n"
+                    "  -gt       numeric greater than\n\n"
+                    "Example:\n"
+                    "  if [ -f /evidence/data.tar.gz ]; then\n"
+                    "    echo 'Found archive, transferring...'\n"
+                    "  else\n"
+                    "    echo 'Archive missing'\n"
+                    "    exit 1\n"
+                    "  fi"
+                ),
+                "question": (
+                    "Complete the test flag to check if a file exists in a bash conditional:\n\n"
+                    "if [ ___ /evidence/data.tar.gz ]; then"
+                ),
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["-f", "! -f"],
+                "xp": 75,
+                "difficulty": "medium",
+                "hints": [
+                    "File existence test flag: a single letter preceded by dash.",
+                    "-f tests for regular file existence.",
+                    "The answer is: -f",
+                ],
+            },
+            {
+                "id": "bash_5",
+                "type": "quiz",
+                "title": "Loop Over Files",
+                "flavor": "The clean-up script needs to iterate over every .log file in /var/log/nexus/ and compress each one. A for loop with glob expansion handles this cleanly.",
+                "lesson": (
+                    "for loop — iterates over a list of items.\n\n"
+                    "Syntax:\n"
+                    "  for variable in list; do\n"
+                    "    commands\n"
+                    "  done\n\n"
+                    "Glob expansion:\n"
+                    "  for f in /var/log/nexus/*.log; do\n"
+                    "    gzip \"$f\"\n"
+                    "  done\n\n"
+                    "Command substitution:\n"
+                    "  for host in $(cat hosts.txt); do\n"
+                    "    ssh operative@$host 'uname -a'\n"
+                    "  done\n\n"
+                    "Numeric range:\n"
+                    "  for i in {1..10}; do\n"
+                    "    echo \"Step $i\"\n"
+                    "  done\n\n"
+                    "Always quote variables inside loops: \"$f\", \"$host\"\n"
+                    "to handle filenames with spaces correctly."
+                ),
+                "question": "In a bash for loop, what keyword ends the loop body?",
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["done"],
+                "xp": 50,
+                "difficulty": "easy",
+                "hints": [
+                    "The closing keyword for a for/while loop.",
+                    "done",
+                    "The answer is: done",
+                ],
+            },
+            {
+                "id": "bash_boss",
+                "type": "fill_blank",
+                "title": "BOSS: Defensive Script",
+                "flavor": "CIPHER: 'Write the variable assignment that captures the first script argument into a variable named TARGET. Then I can build the rest of the script around it.'",
+                "lesson": (
+                    "Variable assignment and positional parameters — core bash building blocks.\n\n"
+                    "Variable assignment:\n"
+                    "  NAME=value         → assign value (no spaces around =)\n"
+                    "  NAME=\"value\"       → quote if value has spaces\n"
+                    "  NAME=$(command)    → capture command output\n\n"
+                    "Accessing variables:\n"
+                    "  $NAME or ${NAME}   → expand variable value\n"
+                    "  ${NAME:-default}   → use 'default' if NAME is unset\n\n"
+                    "Combining with $1:\n"
+                    "  TARGET=$1                    → capture first argument\n"
+                    "  TARGET=${1:-localhost}        → use localhost if no arg given\n\n"
+                    "Full pattern:\n"
+                    "  #!/bin/bash\n"
+                    "  set -e\n"
+                    "  TARGET=$1\n"
+                    "  if [ -z \"$TARGET\" ]; then\n"
+                    "    echo \"Usage: $0 <host>\"\n"
+                    "    exit 1\n"
+                    "  fi\n"
+                    "  echo \"Connecting to $TARGET\""
+                ),
+                "question": (
+                    "Complete the assignment to store the first script argument in a variable called TARGET:\n\n"
+                    "TARGET=___"
+                ),
+                "url": "https://www.gnu.org/software/bash/manual/bash.html#Shell-Scripts",
+                "answers": ["$1", "${1}"],
+                "xp": 200,
+                "difficulty": "boss",
+                "is_boss": True,
+                "hints": [
+                    "First positional parameter.",
+                    "$1",
+                    "The answer is: $1",
+                ],
+            },
+        ],
+    },
 }
 
 ZONE_ORDER = [
@@ -1608,4 +2475,8 @@ ZONE_ORDER = [
     "shell_configuration",
     "package_management",
     "systemd_services",
+    "text_processing",
+    "archive_and_compression",
+    "cron_and_scheduling",
+    "bash_scripting_basics",
 ]

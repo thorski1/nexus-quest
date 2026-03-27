@@ -15,8 +15,10 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Point the engine at this project's content directories
-_HERE = Path(__file__).parent.parent
+# Point the engine at this project's content directories.
+# _HERE is the nexus_quest/ package directory — works both in development
+# (repo/nexus_quest/) and when installed via uv/pip (site-packages/nexus_quest/).
+_HERE = Path(__file__).parent
 os.environ.setdefault("QUEST_SKILL_PACKS_DIR", str(_HERE / "skill-packs"))
 os.environ.setdefault("QUEST_CAMPAIGNS_DIR", str(_HERE / "campaigns"))
 
@@ -24,7 +26,7 @@ from engine.main import run, run_campaign          # noqa: E402  (after env setu
 from engine.updater import check_and_prompt        # noqa: E402
 
 _PACKAGE = "nexus-quest"
-_PACKS_DIR = str(_HERE / "skill-packs")
+_PACKS_DIR = str(_HERE / "skill-packs")   # nexus_quest/skill-packs/
 
 _WEB = "--web" in sys.argv
 

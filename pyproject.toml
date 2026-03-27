@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-quest"
-version = "1.9.0"
+version = "1.9.1"
 description = "A cyberpunk terminal RPG for learning Bash, Git, Docker, Postgres, Vim, SSH, Python, Regex, Linux, Kubernetes, AWS, and Terraform."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -60,3 +60,6 @@ terraform-quest  = "nexus_quest.main:main_terraform"
 [tool.setuptools.packages.find]
 where   = ["."]
 include = ["nexus_quest*"]
+
+[tool.setuptools.package-data]
+nexus_quest = ["skill-packs/**/*.py", "skill-packs/**/*.json", "skill-packs/**/*.md"]

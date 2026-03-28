@@ -33,6 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
+    "networking",
 ]
 
 
@@ -145,3 +146,11 @@ def main_terraform():
         return
     check_and_prompt(_PACKAGE)
     run("terraform")
+
+
+def main_networking():
+    if _WEB:
+        _web("networking")
+        return
+    check_and_prompt(_PACKAGE)
+    run("networking")

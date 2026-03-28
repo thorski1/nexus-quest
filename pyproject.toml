@@ -56,6 +56,7 @@ linux-quest      = "nexus_quest.main:main_linux"
 kubernetes-quest = "nexus_quest.main:main_kubernetes"
 aws-quest        = "nexus_quest.main:main_aws"
 terraform-quest  = "nexus_quest.main:main_terraform"
+networking-quest = "nexus_quest.main:main_networking"
 
 [tool.setuptools.packages.find]
 where   = ["."]

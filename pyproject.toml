@@ -61,6 +61,7 @@ security-quest   = "nexus_quest.main:main_security"
 cicd-quest       = "nexus_quest.main:main_cicd"
 observability-quest = "nexus_quest.main:main_observability"
 databases-quest    = "nexus_quest.main:main_databases"
+golang-quest       = "nexus_quest.main:main_golang"
 
 [tool.setuptools.packages.find]
 where   = ["."]

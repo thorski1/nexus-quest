@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases",
+    "networking", "security", "cicd", "observability", "databases", "golang",
 ]
 
 
@@ -186,3 +186,11 @@ def main_databases():
         return
     check_and_prompt(_PACKAGE)
     run("databases")
+
+
+def main_golang():
+    if _WEB:
+        _web("golang")
+        return
+    check_and_prompt(_PACKAGE)
+    run("golang")

@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability",
+    "networking", "security", "cicd", "observability", "databases",
 ]
 
 
@@ -178,3 +178,11 @@ def main_observability():
         return
     check_and_prompt(_PACKAGE)
     run("observability")
+
+
+def main_databases():
+    if _WEB:
+        _web("databases")
+        return
+    check_and_prompt(_PACKAGE)
+    run("databases")

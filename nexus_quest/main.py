@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking",
+    "networking", "security", "cicd",
 ]
 
 
@@ -154,3 +154,19 @@ def main_networking():
         return
     check_and_prompt(_PACKAGE)
     run("networking")
+
+
+def main_security():
+    if _WEB:
+        _web("security")
+        return
+    check_and_prompt(_PACKAGE)
+    run("security")
+
+
+def main_cicd():
+    if _WEB:
+        _web("cicd")
+        return
+    check_and_prompt(_PACKAGE)
+    run("cicd")

@@ -59,6 +59,7 @@ terraform-quest  = "nexus_quest.main:main_terraform"
 networking-quest = "nexus_quest.main:main_networking"
 security-quest   = "nexus_quest.main:main_security"
 cicd-quest       = "nexus_quest.main:main_cicd"
+observability-quest = "nexus_quest.main:main_observability"
 
 [tool.setuptools.packages.find]
 where   = ["."]

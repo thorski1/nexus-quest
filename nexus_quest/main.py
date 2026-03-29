@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design",
 ]
 
 
@@ -194,3 +194,11 @@ def main_golang():
         return
     check_and_prompt(_PACKAGE)
     run("golang")
+
+
+def main_api_design():
+    if _WEB:
+        _web("api_design")
+        return
+    check_and_prompt(_PACKAGE)
+    run("api_design")

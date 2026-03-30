@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering",
 ]
 
 
@@ -226,3 +226,11 @@ def main_typescript():
         return
     check_and_prompt(_PACKAGE)
     run("typescript")
+
+
+def main_data_engineering():
+    if _WEB:
+        _web("data_engineering")
+        return
+    check_and_prompt(_PACKAGE)
+    run("data_engineering")

@@ -64,6 +64,7 @@ databases-quest    = "nexus_quest.main:main_databases"
 golang-quest       = "nexus_quest.main:main_golang"
 api-design-quest   = "nexus_quest.main:main_api_design"
 rust-quest         = "nexus_quest.main:main_rust"
+system-design-quest = "nexus_quest.main:main_system_design"
 
 [tool.setuptools.packages.find]
 where   = ["."]

@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design",
 ]
 
 
@@ -210,3 +210,11 @@ def main_rust():
         return
     check_and_prompt(_PACKAGE)
     run("rust")
+
+
+def main_system_design():
+    if _WEB:
+        _web("system_design")
+        return
+    check_and_prompt(_PACKAGE)
+    run("system_design")

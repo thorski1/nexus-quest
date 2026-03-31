@@ -70,6 +70,7 @@ data-engineering-quest = "nexus_quest.main:main_data_engineering"
 shell-scripting-quest = "nexus_quest.main:main_shell_scripting"
 cloud-native-quest   = "nexus_quest.main:main_cloud_native"
 web-dev-quest        = "nexus_quest.main:main_web_dev"
+python-advanced-quest = "nexus_quest.main:main_python_advanced"
 
 [tool.setuptools.packages.find]
 where   = ["."]

@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced",
 ]
 
 
@@ -258,3 +258,11 @@ def main_web_dev():
         return
     check_and_prompt(_PACKAGE)
     run("web_dev")
+
+
+def main_python_advanced():
+    if _WEB:
+        _web("python_advanced")
+        return
+    check_and_prompt(_PACKAGE)
+    run("python_advanced")

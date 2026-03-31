@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev",
 ]
 
 
@@ -250,3 +250,11 @@ def main_cloud_native():
         return
     check_and_prompt(_PACKAGE)
     run("cloud_native")
+
+
+def main_web_dev():
+    if _WEB:
+        _web("web_dev")
+        return
+    check_and_prompt(_PACKAGE)
+    run("web_dev")

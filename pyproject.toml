@@ -68,6 +68,7 @@ system-design-quest = "nexus_quest.main:main_system_design"
 typescript-quest    = "nexus_quest.main:main_typescript"
 data-engineering-quest = "nexus_quest.main:main_data_engineering"
 shell-scripting-quest = "nexus_quest.main:main_shell_scripting"
+cloud-native-quest   = "nexus_quest.main:main_cloud_native"
 
 [tool.setuptools.packages.find]
 where   = ["."]

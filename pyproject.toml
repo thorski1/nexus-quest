@@ -73,6 +73,7 @@ web-dev-quest        = "nexus_quest.main:main_web_dev"
 python-advanced-quest = "nexus_quest.main:main_python_advanced"
 dns-http-quest       = "nexus_quest.main:main_dns_http"
 ml-engineering-quest = "nexus_quest.main:main_ml_engineering"
+linux-internals-quest = "nexus_quest.main:main_linux_internals"
 
 [tool.setuptools.packages.find]
 where   = ["."]

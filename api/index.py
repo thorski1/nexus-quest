@@ -31,7 +31,7 @@ from engine.skill_pack import load_skill_pack  # noqa: E402
 _NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced", "dns_http", "ml_engineering",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced", "dns_http", "ml_engineering", "linux_internals",
 ]
 
 def _make_app():

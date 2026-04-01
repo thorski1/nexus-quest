@@ -33,7 +33,7 @@ _WEB = "--web" in sys.argv
 NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
-    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced", "dns_http",
+    "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced", "dns_http", "ml_engineering",
 ]
 
 
@@ -274,3 +274,11 @@ def main_dns_http():
         return
     check_and_prompt(_PACKAGE)
     run("dns_http")
+
+
+def main_ml_engineering():
+    if _WEB:
+        _web("ml_engineering")
+        return
+    check_and_prompt(_PACKAGE)
+    run("ml_engineering")

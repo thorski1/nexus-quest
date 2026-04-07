@@ -34,7 +34,7 @@ NEXUS_PACKS = [
     "bash", "ssh", "vim", "git", "docker", "postgres",
     "python", "regex", "linux", "kubernetes", "aws", "terraform",
     "networking", "security", "cicd", "observability", "databases", "golang", "api_design", "rust", "system_design", "typescript", "data_engineering", "shell_scripting", "cloud_native", "web_dev", "python_advanced", "dns_http", "ml_engineering", "linux_internals",
-    "redis", "testing", "graphql", "microservices", "message_queues", "git_advanced", "auth", "monitoring", "containers", "iac", "sql_advanced", "devsecops", "platform_eng", "sre", "k8s_advanced",
+    "redis", "testing", "graphql", "microservices", "message_queues", "git_advanced", "auth", "monitoring", "containers", "iac", "sql_advanced", "devsecops", "platform_eng", "sre", "k8s_advanced", "cloud_arch",
 ]
 
 
